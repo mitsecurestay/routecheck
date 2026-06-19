@@ -136,6 +136,17 @@
   }
   .maps-btn:hover { background: var(--accent); color: #fff; }
 
+  .daily-life-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .daily-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius);
+    padding: 12px 14px;
+  }
+  .daily-card-cat { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-light); margin-bottom: 4px; }
+  .daily-card-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .daily-card-name a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed var(--border); }
+  .daily-card-name a:hover { color: var(--accent); }
+  .daily-card-time { font-size: 12px; color: var(--drive); font-weight: 600; }
+
   .cta-bottom { margin-top: 40px; padding: 28px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius); text-align: center; }
   .cta-bottom h3 { font-family: var(--font-head); font-size: 20px; font-weight: 700; margin-bottom: 8px; }
   .cta-bottom p { font-size: 14px; color: var(--ink-light); margin-bottom: 20px; }
@@ -225,6 +236,18 @@
     <div class="section-body" id="body-federal">
       <div class="dest-grid" id="grid-federal"></div>
       <div class="no-results" id="noResults-federal">No federal destinations match this filter.</div>
+    </div>
+  </div>
+
+  <div class="dest-section" id="section-daily">
+    <div class="section-header" onclick="toggleSection('daily')">
+      <span class="section-icon">🛒</span>
+      <h2>Daily Life Nearby</h2>
+      <span class="section-count">7 places</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body" id="body-daily">
+      <div class="daily-life-grid" id="grid-daily"></div>
     </div>
   </div>
 
@@ -567,6 +590,16 @@ const DATA = {
   ]
 };
 
+DATA.daily = [
+  { category: "Grocery", name: "Lidl (Skyland Town Center)", query: "Lidl Skyland Town Center Washington DC", time: "8 min drive" },
+  { category: "Pharmacy", name: "CVS (Skyland Town Center)", query: "CVS Skyland Town Center Washington DC", time: "8 min drive" },
+  { category: "Dining", name: "Jersey Mike's (Skyland Town Center)", query: "Jersey Mike's Skyland Town Center Washington DC", time: "8 min drive" },
+  { category: "Dining", name: "Mezeh Mediterranean Grill (Skyland Town Center)", query: "Mezeh Skyland Town Center Washington DC", time: "8 min drive" },
+  { category: "Coffee", name: "Starbucks Drive-Thru (Skyland Town Center)", query: "Starbucks Skyland Town Center Washington DC", time: "8 min drive" },
+  { category: "Fitness", name: "Planet Fitness (Penn Branch)", query: "Planet Fitness 3200 Pennsylvania Ave SE Washington DC", time: "7 min drive" },
+  { category: "Banking", name: "PNC Bank (Skyland Town Center)", query: "PNC Bank Skyland Town Center Washington DC", time: "8 min drive" }
+];
+
 let currentFilter = 'all';
 let currentMode   = 'transit';
 
@@ -661,12 +694,24 @@ function buildCard(dest, idx, sectionKey) {
   `;
 }
 
+function buildDailyCard(item) {
+  const url = mapsUrl(item.query, 'drive');
+  return `
+    <div class="daily-card">
+      <div class="daily-card-cat">${item.category}</div>
+      <div class="daily-card-name"><a href="${url}" target="_blank" rel="noopener">${item.name} ↗</a></div>
+      <div class="daily-card-time">${item.time}</div>
+    </div>
+  `;
+}
+
 function renderAll() {
   ['universities', 'hospitals', 'federal'].forEach(sectionKey => {
     const grid = document.getElementById(`grid-${sectionKey}`);
     grid.innerHTML = DATA[sectionKey].map((d, i) => buildCard(d, i, sectionKey)).join('');
     updateSectionCount(sectionKey);
   });
+  document.getElementById('grid-daily').innerHTML = DATA.daily.map(buildDailyCard).join('');
   updateSummary();
 }
 
