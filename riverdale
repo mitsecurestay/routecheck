@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5311 59th Ave, Riverdale MD — RouteCheck by MIT Secure Stay</title>
+<style>
+  :root {
+    --ink:        #12110F;
+    --ink-light:  #5A5751;
+    --bg:         #F7F6F3;
+    --surface:    #FFFFFF;
+    --border:     #E2DFD8;
+    --accent:     #1B4FD8;
+    --accent-soft:#EEF2FC;
+    --transit:    #1B4FD8;
+    --drive:      #C8410B;
+    --green:      #1A7A4A;
+    --yellow:     #C48A00;
+    --red:        #C8410B;
+    --pill-radius:6px;
+    --card-radius:10px;
+    --shadow:     0 1px 4px rgba(0,0,0,.08);
+    --font-head:  'Georgia', serif;
+    --font-body:  -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body { font-family: var(--font-body); background: var(--bg); color: var(--ink); min-height: 100vh; }
+  .page-wrap { max-width: 780px; margin: 0 auto; padding: 0 16px 64px; }
+
+  .hero { padding: 40px 0 28px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 10px; }
+  .hero h1 { font-family: var(--font-head); font-size: clamp(22px, 5vw, 32px); font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
+  .hero-sub { font-size: 15px; color: var(--ink-light); margin-bottom: 24px; }
+
+  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .filter-btn {
+    display: flex; align-items: center; gap: 7px; padding: 11px 18px;
+    border: 2px solid var(--border); border-radius: var(--pill-radius);
+    background: var(--surface); font-family: var(--font-body); font-size: 14px;
+    font-weight: 600; color: var(--ink-light); cursor: pointer;
+    transition: border-color .15s, color .15s, background .15s;
+    flex: 1 1 auto; min-width: 140px; justify-content: center;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .filter-btn .emoji { font-size: 18px; }
+
+  .mode-bar {
+    display: flex; align-items: center; gap: 12px; margin: 20px 0 0;
+    padding: 14px 16px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+  }
+  .mode-label { font-size: 13px; font-weight: 600; color: var(--ink-light); }
+  .toggle-wrap { display: flex; background: var(--bg); border-radius: 6px; padding: 3px; gap: 2px; }
+  .toggle-opt {
+    padding: 6px 14px; border-radius: 4px; border: none; background: transparent;
+    font-family: var(--font-body); font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: background .15s, color .15s; color: var(--ink-light);
+  }
+  .toggle-opt.active.transit { background: var(--transit); color: #fff; }
+  .toggle-opt.active.drive   { background: var(--drive);   color: #fff; }
+  .mode-note { font-size: 12px; color: var(--ink-light); margin-left: auto; }
+
+  .summary-panel {
+    background: var(--accent); color: #fff; border-radius: var(--card-radius);
+    padding: 16px 20px; margin: 20px 0; font-size: 14px; line-height: 1.5; transition: background .2s;
+  }
+  .summary-panel strong { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .75; display: block; margin-bottom: 4px; }
+  .summary-verdict { font-size: 15px; font-weight: 700; }
+  .summary-detail  { opacity: .88; margin-top: 3px; font-size: 13px; }
+
+  .cta-inline {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px; font-size: 13px; color: var(--ink-light);
+    margin: -8px 0 0; padding: 0 2px 4px;
+  }
+  .cta-inline a {
+    display: inline-flex; align-items: center; gap: 5px; padding: 7px 16px;
+    background: var(--surface); border: 1.5px solid var(--accent);
+    border-radius: var(--pill-radius); color: var(--accent); font-size: 13px;
+    font-weight: 600; text-decoration: none; white-space: nowrap;
+    transition: background .15s, color .15s;
+  }
+  .cta-inline a:hover { background: var(--accent); color: #fff; }
+
+  .dest-section { margin-top: 28px; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px; padding: 12px 0 10px;
+    border-bottom: 2px solid var(--border); margin-bottom: 12px;
+    cursor: pointer; user-select: none;
+  }
+  .section-header h2 { font-family: var(--font-head); font-size: 16px; font-weight: 700; flex: 1; }
+  .section-icon { font-size: 20px; }
+  .section-count { font-size: 12px; color: var(--ink-light); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; }
+  .chevron { color: var(--ink-light); font-size: 13px; transition: transform .2s; }
+  .section-header.collapsed .chevron { transform: rotate(-90deg); }
+  .section-body { display: block; }
+  .section-body.hidden { display: none; }
+
+  .dest-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .dest-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius); overflow: hidden; transition: box-shadow .15s; }
+  .dest-card:hover { box-shadow: var(--shadow); }
+  .dest-card.filtered { display: none; }
+
+  .card-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; user-select: none; }
+  .card-left { flex: 1; min-width: 0; }
+  .card-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-name a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed var(--border); transition: color .15s, border-color .15s; }
+  .card-name a:hover { color: var(--accent); border-color: var(--accent); }
+  .card-quick { font-size: 13px; color: var(--ink-light); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .time-chip { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; font-size: 13px; padding: 2px 8px; border-radius: 4px; }
+  .time-chip.transit { background: #EEF2FC; color: var(--transit); }
+  .time-chip.drive   { background: #FDF0EB; color: var(--drive); }
+  .card-stars { display: flex; gap: 2px; font-size: 14px; }
+  .star-filled { color: #F5A623; }
+  .star-empty  { color: var(--border); }
+  .card-expand-icon { color: var(--ink-light); font-size: 12px; transition: transform .2s; margin-left: 4px; }
+  .dest-card.open .card-expand-icon { transform: rotate(180deg); }
+
+  .card-details { display: none; padding: 0 16px 16px; border-top: 1px solid var(--bg); animation: fadeIn .15s ease; }
+  .dest-card.open .card-details { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .detail-block { background: var(--bg); border-radius: 6px; padding: 10px 12px; }
+  .detail-block-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-light); margin-bottom: 4px; }
+  .detail-block-val   { font-size: 13px; font-weight: 600; line-height: 1.4; }
+  .route-note { font-size: 13px; color: var(--ink-light); margin-top: 10px; line-height: 1.5; }
+
+  .maps-btn {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 12px;
+    padding: 7px 14px; background: var(--accent-soft); color: var(--accent);
+    border: 1px solid var(--accent); border-radius: var(--pill-radius);
+    font-family: var(--font-body); font-size: 13px; font-weight: 600;
+    text-decoration: none; transition: background .15s, color .15s;
+  }
+  .maps-btn:hover { background: var(--accent); color: #fff; }
+
+  .cta-bottom { margin-top: 40px; padding: 28px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius); text-align: center; }
+  .cta-bottom h3 { font-family: var(--font-head); font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .cta-bottom p { font-size: 14px; color: var(--ink-light); margin-bottom: 20px; }
+  .cta-bottom a { display: inline-flex; align-items: center; gap: 6px; padding: 12px 28px; background: var(--accent); color: #fff; border-radius: var(--pill-radius); font-size: 15px; font-weight: 700; text-decoration: none; transition: opacity .15s; }
+  .cta-bottom a:hover { opacity: .88; }
+
+  .disclaimer { margin-top: 40px; font-size: 12px; color: var(--ink-light); border-top: 1px solid var(--border); padding-top: 16px; line-height: 1.6; }
+  .disclaimer a { color: var(--accent); }
+  .no-results { font-size: 14px; color: var(--ink-light); padding: 16px 0; display: none; }
+
+  @media (max-width: 480px) {
+    .filter-btn { min-width: 100px; padding: 10px 12px; font-size: 13px; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .mode-note { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="hero">
+    <div class="hero-eyebrow">RouteCheck by MIT Secure Stay · 5311 59th Ave · Riverdale, MD 20737</div>
+    <h1>Does this commute work for you?</h1>
+    <p class="hero-sub">Check your commute to universities, hospitals, and federal hubs in under 10 seconds.</p>
+
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all"><span class="emoji">🗂</span> Show All</button>
+      <button class="filter-btn" data-filter="student"><span class="emoji">🏫</span> Student</button>
+      <button class="filter-btn" data-filter="healthcare"><span class="emoji">🏥</span> Healthcare Worker</button>
+      <button class="filter-btn" data-filter="federal"><span class="emoji">🏛</span> Federal / Intern / Pro</button>
+      <button class="filter-btn" data-filter="contractor"><span class="emoji">🪖</span> Contractor / Defense</button>
+    </div>
+
+    <div class="mode-bar">
+      <span class="mode-label">Commute mode:</span>
+      <div class="toggle-wrap">
+        <button class="toggle-opt active transit" data-mode="transit">🚇 Transit</button>
+        <button class="toggle-opt drive" data-mode="drive">🚗 Driving</button>
+      </div>
+      <span class="mode-note">Times are typical off-peak estimates</span>
+    </div>
+  </div>
+
+  <div class="summary-panel" id="summaryPanel">
+    <strong>Quick verdict</strong>
+    <div class="summary-verdict" id="summaryVerdict">Strong location for UMD students, PG County federal staff, and Northeast DC hospital commuters.</div>
+    <div class="summary-detail" id="summaryDetail">Riverdale sits on the Green Line corridor — College Park, downtown DC, and major medical centers are all within reach.</div>
+  </div>
+  <div class="cta-inline">
+    <span>Applications are accepted through the official listing form.</span>
+    <a href="https://mitsecurestay.carrd.co/" target="_blank" rel="noopener">Apply for 5311 59th Ave →</a>
+  </div>
+
+  <div class="dest-section" id="section-universities">
+    <div class="section-header" onclick="toggleSection('universities')">
+      <span class="section-icon">🏫</span>
+      <h2>Universities</h2>
+      <span class="section-count" id="count-universities"></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body" id="body-universities">
+      <div class="dest-grid" id="grid-universities"></div>
+      <div class="no-results" id="noResults-universities">No universities match this filter.</div>
+    </div>
+  </div>
+
+  <div class="dest-section" id="section-hospitals">
+    <div class="section-header" onclick="toggleSection('hospitals')">
+      <span class="section-icon">🏥</span>
+      <h2>Hospitals & Medical Centers</h2>
+      <span class="section-count" id="count-hospitals"></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body" id="body-hospitals">
+      <div class="dest-grid" id="grid-hospitals"></div>
+      <div class="no-results" id="noResults-hospitals">No hospitals match this filter.</div>
+    </div>
+  </div>
+
+  <div class="dest-section" id="section-federal">
+    <div class="section-header" onclick="toggleSection('federal')">
+      <span class="section-icon">🏛</span>
+      <h2>Federal, Internship & Contractor Hubs</h2>
+      <span class="section-count" id="count-federal"></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body" id="body-federal">
+      <div class="dest-grid" id="grid-federal"></div>
+      <div class="no-results" id="noResults-federal">No federal destinations match this filter.</div>
+    </div>
+  </div>
+
+  <div class="cta-bottom">
+    <h3>Ready to apply?</h3>
+    <p>If this commute works for you, you can apply for this property here.</p>
+    <a href="https://mitsecurestay.carrd.co/" target="_blank" rel="noopener">Apply Now →</a>
+  </div>
+
+  <div class="disclaimer">
+    <strong>Data note:</strong> Commute times are estimated off-peak averages based on DC Metro, MARC, and typical driving patterns. Real-time conditions vary.
+    Always verify with <a href="https://maps.google.com" target="_blank" rel="noopener">Google Maps</a> before committing.
+    Route summaries reflect typical Metro + walk patterns from Riverdale / College Park–U of Md station (Green Line).
+  </div>
+
+</div>
+
+<script>
+const ORIGIN = '5311+59th+Ave+Riverdale+MD+20737';
+
+function mapsUrl(query, mode) {
+  const travelmode = mode === 'drive' ? 'driving' : 'transit';
+  return `https://www.google.com/maps/dir/${ORIGIN}/${encodeURIComponent(query)}/?travelmode=${travelmode}`;
+}
+
+const DATA = {
+  universities: [
+    {
+      name: "University of Maryland College Park",
+      mapsQuery: "University of Maryland College Park MD",
+      tags: ["student"],
+      transit: { time: "8–14 min", transfers: 0, route: "Green Line → College Park–U of Md (1–2 stops)" },
+      drive:   { time: "6–12 min", route: "Kenilworth Ave → Paint Branch Pkwy → Campus Dr" },
+      friction: 5,
+      note: "Best university commute from Riverdale. College Park station is practically next door — under 10 min by Metro or car."
+    },
+    {
+      name: "Georgetown Law Center",
+      mapsQuery: "Georgetown Law Center 600 New Jersey Ave NW Washington DC",
+      tags: ["student"],
+      transit: { time: "28–40 min", transfers: 0, route: "Green Line → Union Station area via Gallery Place, walk 8 min" },
+      drive:   { time: "18–28 min", route: "Baltimore Ave → New York Ave → New Jersey Ave NW" },
+      friction: 4,
+      note: "Georgetown Law's Capitol Hill campus — much more accessible than the Foggy Bottom main campus. Green Line gets you close with no transfer."
+    },
+    {
+      name: "Trinity Washington University",
+      mapsQuery: "Trinity Washington University Washington DC",
+      tags: ["student"],
+      transit: { time: "35–48 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Rhode Island Ave, bus" },
+      drive:   { time: "20–32 min", route: "Baltimore Ave → Rhode Island Ave NE → Michigan Ave NE" },
+      friction: 3,
+      note: "One transfer needed. Driving via Rhode Island Ave is more direct."
+    },
+    {
+      name: "Howard University",
+      mapsQuery: "Howard University Washington DC",
+      tags: ["student"],
+      transit: { time: "28–40 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Shaw–Howard U" },
+      drive:   { time: "20–30 min", route: "Baltimore Ave → Rhode Island Ave NE → Georgia Ave NW" },
+      friction: 3,
+      note: "One transfer at Fort Totten onto the Red Line. Manageable daily commute."
+    },
+    {
+      name: "Catholic University of America",
+      mapsQuery: "Catholic University of America Washington DC",
+      tags: ["student"],
+      transit: { time: "22–32 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Brookland–CUA" },
+      drive:   { time: "15–24 min", route: "Baltimore Ave → Rhode Island Ave NE → Michigan Ave NE" },
+      friction: 3,
+      note: "One transfer at Fort Totten. Brookland–CUA is one Red Line stop from Fort Totten — fast connection."
+    },
+    {
+      name: "Gallaudet University",
+      mapsQuery: "Gallaudet University Washington DC",
+      tags: ["student"],
+      transit: { time: "30–42 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Red Line → Union Station area" },
+      drive:   { time: "18–28 min", route: "Baltimore Ave → New York Ave NE → Florida Ave NE" },
+      friction: 3,
+      note: "One transfer. Green Line runs directly through downtown — clean connection."
+    },
+    {
+      name: "Johns Hopkins SAIS",
+      mapsQuery: "Johns Hopkins SAIS 1740 Massachusetts Ave NW Washington DC",
+      tags: ["student"],
+      transit: { time: "38–52 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Dupont Circle" },
+      drive:   { time: "25–38 min", route: "Baltimore Ave → New York Ave → Massachusetts Ave NW" },
+      friction: 3,
+      note: "One transfer at Fort Totten. Red Line runs direct to Dupont Circle from there."
+    },
+    {
+      name: "George Washington University",
+      mapsQuery: "George Washington University Foggy Bottom Washington DC",
+      tags: ["student"],
+      transit: { time: "42–55 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Blue/Orange → Foggy Bottom" },
+      drive:   { time: "28–42 min", route: "Baltimore Ave → New York Ave → I-395 Bridge" },
+      friction: 3,
+      note: "One transfer at L'Enfant. Green Line gets you downtown quickly; Blue/Orange finishes the trip."
+    },
+  ],
+
+  hospitals: [
+    {
+      name: "UM Capital Region Medical Center",
+      mapsQuery: "University of Maryland Capital Region Medical Center Largo MD",
+      tags: ["healthcare"],
+      transit: { time: "22–34 min", transfers: 1, route: "Green Line → Suitland or transfer to Blue/Silver → Largo Town Center" },
+      drive:   { time: "14–22 min", route: "Kenilworth Ave → US-50 East → Largo" },
+      friction: 4,
+      note: "Top hospital commute from Riverdale. Much closer than from DC — straightforward drive on US-50."
+    },
+    {
+      name: "MedStar Washington Hospital Center",
+      mapsQuery: "MedStar Washington Hospital Center Washington DC",
+      tags: ["healthcare"],
+      transit: { time: "30–42 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → NoMa, bus Irving St NW" },
+      drive:   { time: "20–30 min", route: "Baltimore Ave → Rhode Island Ave NE → Michigan Ave NE → Irving St NW" },
+      friction: 3,
+      note: "One transfer. Michigan Ave NE corridor makes driving straightforward."
+    },
+    {
+      name: "Children's National Hospital",
+      mapsQuery: "Children's National Hospital Washington DC",
+      tags: ["healthcare"],
+      transit: { time: "32–44 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Brookland, bus H2" },
+      drive:   { time: "18–28 min", route: "Baltimore Ave → Rhode Island Ave NE → Michigan Ave NE" },
+      friction: 3,
+      note: "Michigan Ave NE is the direct driving route. One transfer via Fort Totten by Metro."
+    },
+    {
+      name: "Howard University Hospital",
+      mapsQuery: "Howard University Hospital Washington DC",
+      tags: ["healthcare"],
+      transit: { time: "30–42 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Shaw–Howard U, walk 5 min" },
+      drive:   { time: "20–30 min", route: "Baltimore Ave → Rhode Island Ave NE → Georgia Ave NW" },
+      friction: 3,
+      note: "One transfer at Fort Totten. Shaw–Howard station is walkable to the hospital entrance."
+    },
+    {
+      name: "Adventist HealthCare White Oak Medical Center",
+      mapsQuery: "Adventist HealthCare White Oak Medical Center 11890 Healing Way Silver Spring MD",
+      tags: ["healthcare"],
+      transit: { time: "30–44 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Silver Spring, bus to White Oak" },
+      drive:   { time: "18–28 min", route: "Kenilworth Ave → Eastern Ave → New Hampshire Ave → White Oak" },
+      friction: 3,
+      note: "Adjacent to the FDA White Oak campus. Active travel nurse placement hospital. Closer from Riverdale than from DC — New Hampshire Ave is a direct driving route."
+    },
+    {
+      name: "Holy Cross Hospital",
+      mapsQuery: "Holy Cross Hospital Silver Spring MD",
+      tags: ["healthcare"],
+      transit: { time: "28–40 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Silver Spring, bus or rideshare" },
+      drive:   { time: "16–26 min", route: "Kenilworth Ave → Eastern Ave → Colesville Rd → Silver Spring" },
+      friction: 3,
+      note: "High travel nurse volume hospital. Easier from Riverdale than from DC — Silver Spring is a short drive up Eastern Ave."
+    },
+    {
+      name: "Veterans Affairs Medical Center",
+      mapsQuery: "Washington DC VA Medical Center 50 Irving St NW",
+      tags: ["healthcare"],
+      transit: { time: "35–48 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Yellow/Green → Waterfront area" },
+      drive:   { time: "22–34 min", route: "Pennsylvania Ave SE → Irving St SW" },
+      friction: 3,
+      note: "One transfer at L'Enfant. Green Line is your main artery for this commute."
+    },
+    {
+      name: "Kaiser Permanente Capitol Hill",
+      mapsQuery: "Kaiser Permanente Capitol Hill Medical Center Washington DC",
+      tags: ["healthcare"],
+      transit: { time: "28–40 min", transfers: 0, route: "Green Line → Capitol South or Navy Yard area, walk or bus" },
+      drive:   { time: "18–28 min", route: "Baltimore Ave → New York Ave → Constitution Ave" },
+      friction: 4,
+      note: "Green Line runs directly through Capitol Hill — no transfer needed. Solid commute."
+    }
+  ],
+
+  federal: [
+    {
+      name: "U.S. Capitol",
+      mapsQuery: "United States Capitol Building Washington DC",
+      tags: ["federal"],
+      transit: { time: "22–34 min", transfers: 0, route: "Green Line → Capitol South (direct, no transfer)" },
+      drive:   { time: "16–26 min", route: "Baltimore Ave → New York Ave → Constitution Ave" },
+      friction: 5,
+      note: "Green Line runs straight to Capitol South — no transfer. One of the best federal commutes from Riverdale."
+    },
+    {
+      name: "Department of Justice",
+      mapsQuery: "US Department of Justice 950 Pennsylvania Ave NW Washington DC",
+      tags: ["federal"],
+      transit: { time: "28–38 min", transfers: 0, route: "Green Line → Archives–Navy Memorial or L'Enfant Plaza, walk 5 min" },
+      drive:   { time: "18–28 min", route: "Baltimore Ave → New York Ave NW → Pennsylvania Ave NW" },
+      friction: 5,
+      note: "Direct Green Line. Archives station puts you steps from the DOJ building."
+    },
+    {
+      name: "FBI Headquarters",
+      mapsQuery: "FBI Headquarters 935 Pennsylvania Ave NW Washington DC",
+      tags: ["federal"],
+      transit: { time: "28–38 min", transfers: 0, route: "Green Line → Archives–Navy Memorial, walk 8 min" },
+      drive:   { time: "18–28 min", route: "New York Ave NW → Pennsylvania Ave NW" },
+      friction: 5,
+      note: "Same Green Line run as DOJ. Pennsylvania Ave corridor is direct from Riverdale."
+    },
+    {
+      name: "Library of Congress",
+      mapsQuery: "Library of Congress Washington DC",
+      tags: ["federal"],
+      transit: { time: "24–34 min", transfers: 0, route: "Green Line → Capitol South, walk 8 min" },
+      drive:   { time: "16–24 min", route: "Baltimore Ave → Constitution Ave → 1st St SE" },
+      friction: 5,
+      note: "Direct Green Line to Capitol South. Strong commute — Capitol Hill is Riverdale's best corridor."
+    },
+    {
+      name: "Union Station / NoMa–Capitol Hill Jobs",
+      mapsQuery: "Union Station Washington DC",
+      tags: ["federal"],
+      transit: { time: "20–30 min", transfers: 0, route: "Green Line → Gallery Place, transfer Red Line → Union Station or walk NoMa" },
+      drive:   { time: "14–22 min", route: "Baltimore Ave → New York Ave NE → Florida Ave NE" },
+      friction: 5,
+      note: "Strong commute anchor for this corridor. Green Line puts you in NoMa–Capitol Hill in under 30 min."
+    },
+    {
+      name: "White House / OEOB",
+      mapsQuery: "White House 1600 Pennsylvania Ave NW Washington DC",
+      tags: ["federal"],
+      transit: { time: "32–44 min", transfers: 0, route: "Green Line → L'Enfant Plaza, walk or transfer Blue/Orange → McPherson Square" },
+      drive:   { time: "22–34 min", route: "New York Ave NW → Pennsylvania Ave NW" },
+      friction: 4,
+      note: "Green Line gets you close. One easy Metro hop or short walk from L'Enfant completes the trip."
+    },
+    {
+      name: "FDA Headquarters",
+      mapsQuery: "FDA White Oak Campus Silver Spring MD",
+      tags: ["federal", "contractor"],
+      transit: { time: "35–50 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Silver Spring, bus or rideshare to White Oak" },
+      drive:   { time: "18–28 min", route: "Kenilworth Ave → Eastern Ave → New Hampshire Ave → White Oak" },
+      friction: 3,
+      note: "Riverdale is significantly closer to FDA White Oak than DC properties. New Hampshire Ave is the direct driving route — under 25 min off-peak."
+    },
+    {
+      name: "USDA / Beltsville Agricultural Research Center",
+      mapsQuery: "USDA Beltsville Agricultural Research Center Beltsville MD",
+      tags: ["federal", "contractor"],
+      transit: { time: "30–45 min", transfers: 1, route: "Green Line → College Park, bus 17K or rideshare to BARC" },
+      drive:   { time: "10–18 min", route: "Kenilworth Ave → Baltimore Ave → Powder Mill Rd → BARC" },
+      friction: 4,
+      note: "Closest major federal research campus to Riverdale. Under 15 min by car — a standout commute that no DC property can match."
+    },
+    {
+      name: "Suitland Federal Center (Census Bureau / USCIS)",
+      mapsQuery: "Suitland Federal Center 4600 Silver Hill Road Suitland MD",
+      tags: ["federal", "contractor"],
+      transit: { time: "32–44 min", transfers: 0, route: "Green Line → Suitland station (direct, longer ride), bus P12/P60 or rideshare to the Federal Center" },
+      drive:   { time: "20–30 min", route: "Baltimore Ave → Pennsylvania Ave SE → Suitland Pkwy → Silver Hill Rd" },
+      friction: 3,
+      note: "Home to U.S. Census Bureau HQ and USCIS headquarters. Direct Green Line, no transfer — the Federal Center itself needs a short bus or rideshare connection from Suitland station."
+    },
+    {
+      name: "NASA Goddard Space Flight Center",
+      mapsQuery: "NASA Goddard Space Flight Center 8800 Greenbelt Rd Greenbelt MD",
+      tags: ["federal", "contractor"],
+      transit: { time: "18–28 min", transfers: 0, route: "Green Line → Greenbelt (direct, 2 stops), shuttle or short rideshare to campus" },
+      drive:   { time: "10–16 min", route: "Kenilworth Ave → Greenbelt Rd direct" },
+      friction: 5,
+      note: "Goddard sits right off the Green Line at Greenbelt station — 2 stops from College Park. One of the best federal research commutes in the entire DC area. Major hub for engineers, scientists, and aerospace contractors."
+    },
+    {
+      name: "Pentagon",
+      mapsQuery: "The Pentagon Arlington VA",
+      tags: ["federal", "contractor"],
+      transit: { time: "38–52 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Blue/Yellow → Pentagon" },
+      drive:   { time: "25–40 min", route: "I-295 South → I-395 → Pentagon exit" },
+      friction: 3,
+      note: "One transfer at L'Enfant. Green Line is your express into downtown before the Blue/Yellow connection."
+    },
+    {
+      name: "Washington Navy Yard",
+      mapsQuery: "Washington Navy Yard Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "25–35 min", transfers: 0, route: "Green Line → Navy Yard–Ballpark (direct, no transfer)" },
+      drive:   { time: "16–24 min", route: "Baltimore Ave → Pennsylvania Ave SE → M St SE" },
+      friction: 5,
+      note: "Direct Green Line — no transfer. Navy Yard station is steps from the gate. Excellent contractor commute from Riverdale."
+    },
+    {
+      name: "Fort McNair (NDW)",
+      mapsQuery: "Fort Lesley J. McNair Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "32–44 min", transfers: 0, route: "Green Line → Waterfront, walk 12 min" },
+      drive:   { time: "18–28 min", route: "Pennsylvania Ave SE → South Capitol St → P St SW" },
+      friction: 4,
+      note: "Direct Green Line to Waterfront station. Short walk to the base — no transfer needed."
+    },
+    {
+      name: "Joint Base Anacostia–Bolling (JBAB)",
+      mapsQuery: "Joint Base Anacostia-Bolling Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "32–45 min", transfers: 0, route: "Green Line → Congress Heights, rideshare to gate" },
+      drive:   { time: "16–26 min", route: "Pennsylvania Ave SE → South Capitol St → Bolling gate" },
+      friction: 3,
+      note: "Direct Green Line to Congress Heights. Short rideshare to the gate from there. Driving on South Capitol St is also straightforward."
+    },
+    {
+      name: "Joint Base Andrews",
+      mapsQuery: "Joint Base Andrews Camp Springs MD",
+      tags: ["federal", "contractor"],
+      transit: { time: "40–58 min", transfers: 1, route: "Green Line → Suitland, rideshare or bus to Andrews" },
+      drive:   { time: "16–26 min", route: "Kenilworth Ave → MD-202 → MD-4 → Andrews" },
+      friction: 3,
+      note: "Much closer from Riverdale than from DC. Suitland is on the Green Line — easier Metro access than most DC properties offer."
+    },
+    {
+      name: "NIH Main Campus",
+      mapsQuery: "National Institutes of Health 9000 Rockville Pike Bethesda MD",
+      tags: ["federal", "contractor", "healthcare"],
+      transit: { time: "42–56 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Medical Center (direct)" },
+      drive:   { time: "28–42 min", route: "Kenilworth Ave → Eastern Ave → 16th St NW → Wisconsin Ave NW → Rockville Pike" },
+      friction: 3,
+      note: "One transfer at Fort Totten onto the Red Line. Medical Center station exits directly onto the NIH campus. Reliable commute for researchers and clinical staff."
+    },
+    {
+      name: "NOAA Headquarters",
+      mapsQuery: "NOAA Headquarters 1315 East-West Highway Silver Spring MD",
+      tags: ["federal", "contractor"],
+      transit: { time: "30–42 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Silver Spring, walk 10 min to East-West Hwy" },
+      drive:   { time: "18–28 min", route: "Kenilworth Ave → Eastern Ave → Colesville Rd → Silver Spring" },
+      friction: 3,
+      note: "One transfer at Fort Totten. NOAA's Silver Spring campus is a short walk from the station. Closer from Riverdale than from most DC properties."
+    },
+    {
+      name: "Downtown Silver Spring",
+      mapsQuery: "Silver Spring Metro Station Maryland",
+      tags: ["federal", "contractor"],
+      transit: { time: "28–38 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Silver Spring (1 stop)" },
+      drive:   { time: "16–26 min", route: "Kenilworth Ave → Eastern Ave → Colesville Rd" },
+      friction: 4,
+      note: "Silver Spring anchors a major federal and private employer cluster — NOAA, FDA-adjacent offices, and dozens of contractors. Fort Totten is a fast, clean transfer point."
+    },
+    {
+      name: "Walter Reed Nat'l Military Medical Center",
+      mapsQuery: "Walter Reed National Military Medical Center Bethesda MD",
+      tags: ["federal", "contractor", "healthcare"],
+      transit: { time: "40–55 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Medical Center (direct)" },
+      drive:   { time: "28–42 min", route: "Baltimore Ave → 16th St NW → Wisconsin Ave NW" },
+      friction: 3,
+      note: "Fort Totten to Medical Center is a direct Red Line ride. Medical Center station is at the hospital entrance — no further transfer or walk needed."
+    },
+    {
+      name: "L'Enfant Plaza Federal Campus",
+      mapsQuery: "L'Enfant Plaza Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "28–40 min", transfers: 0, route: "Green Line → L'Enfant Plaza (direct, no transfer)" },
+      drive:   { time: "18–28 min", route: "Baltimore Ave → Pennsylvania Ave SE → D St SW" },
+      friction: 5,
+      note: "Home to Dept of Energy, HUD, Dept of Education, and Dept of Transportation — all within a 5 min walk. Direct Green Line from Riverdale, no transfer."
+    },
+    {
+      name: "Federal Triangle / National Mall Corridor",
+      mapsQuery: "Federal Triangle Metro Station Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "28–40 min", transfers: 0, route: "Green Line → Archives or L'Enfant Plaza (direct)" },
+      drive:   { time: "18–28 min", route: "Baltimore Ave → Pennsylvania Ave → Independence Ave SW" },
+      friction: 5,
+      note: "Covers Treasury, EPA, USDA, and Commerce along Independence Ave and Pennsylvania Ave SW. Direct Green Line — Archives and L'Enfant stations bracket the whole corridor."
+    },
+    {
+      name: "Dept of Labor / Judiciary Square",
+      mapsQuery: "US Department of Labor 200 Constitution Ave NW Washington DC",
+      tags: ["federal"],
+      transit: { time: "32–44 min", transfers: 1, route: "Green Line → Gallery Place, transfer Red Line → Judiciary Square" },
+      drive:   { time: "20–30 min", route: "Baltimore Ave → New York Ave NW → Constitution Ave NW" },
+      friction: 4,
+      note: "Dept of Labor is one block from Judiciary Square. One clean transfer at Gallery Place onto the Red Line."
+    },
+    {
+      name: "World Bank / IMF",
+      mapsQuery: "World Bank Headquarters 1818 H St NW Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "38–52 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Blue/Orange → Farragut West or walk from L'Enfant" },
+      drive:   { time: "24–36 min", route: "Baltimore Ave → New York Ave → K St NW → 18th St NW" },
+      friction: 3,
+      note: "World Bank (1818 H St NW) and IMF (700 19th St NW) are major employers of J-1 visa holders and international staff. One transfer at L'Enfant onto Blue/Orange line."
+    }
+  ]
+};
+
+let currentFilter = 'all';
+let currentMode   = 'transit';
+
+const SUMMARIES = {
+  all: {
+    verdict: "Strong location for UMD students, PG County federal staff, and Northeast DC hospital commuters.",
+    detail:  "Riverdale sits on the Green Line corridor — College Park, downtown DC, and major medical centers are all within reach."
+  },
+  student: {
+    verdict: "Best for: University of Maryland College Park students. Catholic U and Howard are reachable with one transfer.",
+    detail:  "UMD College Park is 1–2 Metro stops away. Fort Totten gives you Red Line access to DC universities."
+  },
+  healthcare: {
+    verdict: "Best for: UM Capital Region, Holy Cross, and Capitol Hill healthcare staff.",
+    detail:  "UM Capital Region is a short drive on US-50. Green Line gives direct access to Capitol Hill medical facilities."
+  },
+  federal: {
+    verdict: "Best for: Capitol Hill, DOJ, Navy Yard, and FDA White Oak staff.",
+    detail:  "Green Line runs direct to Capitol South and Navy Yard. FDA and USDA are closer from Riverdale than any DC property."
+  },
+  contractor: {
+    verdict: "Best for: Navy Yard, JBAB, Joint Base Andrews, and FDA contractors.",
+    detail:  "Andrews and USDA/Beltsville are significantly closer from Riverdale. Navy Yard is a direct Green Line ride."
+  }
+};
+
+function renderStars(n) {
+  let s = '';
+  for (let i = 1; i <= 5; i++) s += `<span class="${i <= n ? 'star-filled' : 'star-empty'}">★</span>`;
+  return s;
+}
+
+function frictionLabel(n) {
+  if (n === 5) return 'Excellent commute';
+  if (n === 4) return 'Good commute';
+  if (n === 3) return 'Moderate — 1 transfer';
+  if (n === 2) return 'Difficult — multiple legs';
+  return 'Not recommended via transit';
+}
+
+function buildCard(dest, idx, sectionKey) {
+  const t = dest.transit;
+  const d = dest.drive;
+  const isTransit = currentMode === 'transit';
+  const visibleTime = isTransit ? t.time : d.time;
+  const visibleChip = isTransit ? 'transit' : 'drive';
+  const visibleXfer = isTransit ? (t.transfers === 0 ? 'Direct — no transfer' : `${t.transfers} transfer${t.transfers > 1 ? 's' : ''}`) : '—';
+  const isFiltered = currentFilter !== 'all' && !dest.tags.includes(currentFilter);
+  const url = mapsUrl(dest.mapsQuery, currentMode);
+
+  return `
+    <div class="dest-card ${isFiltered ? 'filtered' : ''} friction-${dest.friction}"
+         id="card-${sectionKey}-${idx}" onclick="toggleCard('${sectionKey}',${idx})">
+      <div class="card-header">
+        <div class="card-left">
+          <div class="card-name">
+            <a href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${dest.name} ↗</a>
+          </div>
+          <div class="card-quick">
+            <span class="time-chip ${visibleChip}">${isTransit ? '🚇' : '🚗'} ${visibleTime}</span>
+            <span class="card-stars">${renderStars(dest.friction)}</span>
+          </div>
+        </div>
+        <span class="card-expand-icon">▼</span>
+      </div>
+      <div class="card-details">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <div class="detail-block-label">🚇 Transit time</div>
+            <div class="detail-block-val">${t.time}</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-block-label">🚗 Driving time</div>
+            <div class="detail-block-val">${d.time}</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-block-label">Transfers</div>
+            <div class="detail-block-val">${visibleXfer}</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-block-label">Commute quality</div>
+            <div class="detail-block-val">${frictionLabel(dest.friction)}</div>
+          </div>
+        </div>
+        <div class="route-note">📍 ${isTransit ? t.route : d.route}</div>
+        <div class="route-note" style="margin-top:6px; color:#12110F; font-weight:500;">${dest.note}</div>
+        <a class="maps-btn" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+          🗺 Open in Google Maps
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+function renderAll() {
+  ['universities', 'hospitals', 'federal'].forEach(sectionKey => {
+    const grid = document.getElementById(`grid-${sectionKey}`);
+    grid.innerHTML = DATA[sectionKey].map((d, i) => buildCard(d, i, sectionKey)).join('');
+    updateSectionCount(sectionKey);
+  });
+  updateSummary();
+}
+
+function updateSectionCount(sectionKey) {
+  const cards = document.querySelectorAll(`#grid-${sectionKey} .dest-card:not(.filtered)`);
+  document.getElementById(`count-${sectionKey}`).textContent = `${cards.length} destinations`;
+  document.getElementById(`noResults-${sectionKey}`).style.display = cards.length === 0 ? 'block' : 'none';
+}
+
+function updateSummary() {
+  const s = SUMMARIES[currentFilter];
+  document.getElementById('summaryVerdict').textContent = s.verdict;
+  document.getElementById('summaryDetail').textContent  = s.detail;
+}
+
+function toggleCard(sectionKey, idx) {
+  document.getElementById(`card-${sectionKey}-${idx}`).classList.toggle('open');
+}
+
+function toggleSection(key) {
+  document.querySelector(`#section-${key} .section-header`).classList.toggle('collapsed');
+  document.getElementById(`body-${key}`).classList.toggle('hidden');
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderAll();
+  });
+});
+
+document.querySelectorAll('.toggle-opt').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.toggle-opt').forEach(b => b.classList.remove('active', 'transit', 'drive'));
+    btn.classList.add('active', btn.dataset.mode);
+    currentMode = btn.dataset.mode;
+    renderAll();
+  });
+});
+
+renderAll();
+</script>
+</body>
+</html>
