@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>14843 Hammersmith Cir, Silver Spring MD — RouteCheck by MIT Secure Stay</title>
+<style>
+  :root {
+    --ink:        #12110F;
+    --ink-light:  #5A5751;
+    --bg:         #F7F6F3;
+    --surface:    #FFFFFF;
+    --border:     #E2DFD8;
+    --accent:     #1B4FD8;
+    --accent-soft:#EEF2FC;
+    --transit:    #1B4FD8;
+    --drive:      #C8410B;
+    --green:      #1A7A4A;
+    --pill-radius:6px;
+    --card-radius:10px;
+    --shadow:     0 1px 4px rgba(0,0,0,.08);
+    --font-head:  'Georgia', serif;
+    --font-body:  -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body { font-family: var(--font-body); background: var(--bg); color: var(--ink); min-height: 100vh; }
+  .page-wrap { max-width: 780px; margin: 0 auto; padding: 0 16px 64px; }
+
+  .hero { padding: 40px 0 28px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 10px; }
+  .hero h1 { font-family: var(--font-head); font-size: clamp(22px, 5vw, 32px); font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
+  .hero-sub { font-size: 15px; color: var(--ink-light); margin-bottom: 24px; }
+
+  .transit-callout {
+    background: var(--surface); border: 1.5px solid var(--accent); border-radius: var(--card-radius);
+    padding: 16px 18px; margin-bottom: 20px;
+  }
+  .transit-callout-title { font-size: 13px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .transit-steps { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; }
+  .transit-step { background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 14px; }
+  .transit-arrow { color: var(--ink-light); font-size: 13px; }
+  .transit-detail { font-size: 13px; color: var(--ink-light); line-height: 1.6; }
+  .transit-detail b { color: var(--ink); }
+
+  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .filter-btn {
+    display: flex; align-items: center; gap: 7px; padding: 11px 18px;
+    border: 2px solid var(--border); border-radius: var(--pill-radius);
+    background: var(--surface); font-family: var(--font-body); font-size: 14px;
+    font-weight: 600; color: var(--ink-light); cursor: pointer;
+    transition: border-color .15s, color .15s, background .15s;
+    flex: 1 1 auto; min-width: 140px; justify-content: center;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .filter-btn .emoji { font-size: 18px; }
+
+  .mode-bar {
+    display: flex; align-items: center; gap: 12px; margin: 20px 0 0;
+    padding: 14px 16px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+  }
+  .mode-label { font-size: 13px; font-weight: 600; color: var(--ink-light); }
+  .toggle-wrap { display: flex; background: var(--bg); border-radius: 6px; padding: 3px; gap: 2px; }
+  .toggle-opt {
+    padding: 6px 14px; border-radius: 4px; border: none; background: transparent;
+    font-family: var(--font-body); font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: background .15s, color .15s; color: var(--ink-light);
+  }
+  .toggle-opt.active.transit { background: var(--transit); color: #fff; }
+  .toggle-opt.active.drive   { background: var(--drive);   color: #fff; }
+  .mode-note { font-size: 12px; color: var(--ink-light); margin-left: auto; }
+
+  .summary-panel {
+    background: var(--accent); color: #fff; border-radius: var(--card-radius);
+    padding: 16px 20px; margin: 20px 0; font-size: 14px; line-height: 1.5; transition: background .2s;
+  }
+  .summary-panel strong { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .75; display: block; margin-bottom: 4px; }
+  .summary-verdict { font-size: 15px; font-weight: 700; }
+  .summary-detail  { opacity: .88; margin-top: 3px; font-size: 13px; }
+
+  .cta-inline {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px; font-size: 13px; color: var(--ink-light);
+    margin: -8px 0 0; padding: 0 2px 4px;
+  }
+  .cta-inline a {
+    display: inline-flex; align-items: center; gap: 5px; padding: 7px 16px;
+    background: var(--surface); border: 1.5px solid var(--accent);
+    border-radius: var(--pill-radius); color: var(--accent); font-size: 13px;
+    font-weight: 600; text-decoration: none; white-space: nowrap;
+    transition: background .15s, color .15s;
+  }
+  .cta-inline a:hover { background: var(--accent); color: #fff; }
+
+  .dest-section { margin-top: 28px; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px; padding: 12px 0 10px;
+    border-bottom: 2px solid var(--border); margin-bottom: 12px;
+    cursor: pointer; user-select: none;
+  }
+  .section-header h2 { font-family: var(--font-head); font-size: 16px; font-weight: 700; flex: 1; }
+  .section-icon { font-size: 20px; }
+  .section-count { font-size: 12px; color: var(--ink-light); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; }
+  .chevron { color: var(--ink-light); font-size: 13px; transition: transform .2s; }
+  .section-header.collapsed .chevron { transform: rotate(-90deg); }
+  .section-body { display: block; }
+  .section-body.hidden { display: none; }
+
+  .dest-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .dest-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius); overflow: hidden; transition: box-shadow .15s; }
+  .dest-card:hover { box-shadow: var(--shadow); }
+  .dest-card.filtered { display: none; }
+
+  .card-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; user-select: none; }
+  .card-left { flex: 1; min-width: 0; }
+  .card-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-name a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed var(--border); transition: color .15s, border-color .15s; }
+  .card-name a:hover { color: var(--accent); border-color: var(--accent); }
+  .card-quick { font-size: 13px; color: var(--ink-light); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .time-chip { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; font-size: 13px; padding: 2px 8px; border-radius: 4px; }
+  .time-chip.transit { background: #EEF2FC; color: var(--transit); }
+  .time-chip.drive   { background: #FDF0EB; color: var(--drive); }
+  .card-stars { display: flex; gap: 2px; font-size: 14px; }
+  .star-filled { color: #F5A623; }
+  .star-empty  { color: var(--border); }
+  .card-expand-icon { color: var(--ink-light); font-size: 12px; transition: transform .2s; margin-left: 4px; }
+  .dest-card.open .card-expand-icon { transform: rotate(180deg); }
+
+  .card-details { display: none; padding: 0 16px 16px; border-top: 1px solid var(--bg); animation: fadeIn .15s ease; }
+  .dest-card.open .card-details { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .detail-block { background: var(--bg); border-radius: 6px; padding: 10px 12px; }
+  .detail-block-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-light); margin-bottom: 4px; }
+  .detail-block-val   { font-size: 13px; font-weight: 600; line-height: 1.4; }
+  .route-note { font-size: 13px; color: var(--ink-light); margin-top: 10px; line-height: 1.5; }
+
+  .maps-btn {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 12px;
+    padding: 7px 14px; background: var(--accent-soft); color: var(--accent);
+    border: 1px solid var(--accent); border-radius: var(--pill-radius);
+    font-family: var(--font-body); font-size: 13px; font-weight: 600;
+    text-decoration: none; transition: background .15s, color .15s;
+  }
+  .maps-btn:hover { background: var(--accent); color: #fff; }
+
+  .daily-life-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .daily-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius);
+    padding: 12px 14px;
+  }
+  .daily-card-cat { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-light); margin-bottom: 4px; }
+  .daily-card-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .daily-card-name a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed var(--border); }
+  .daily-card-name a:hover { color: var(--accent); }
+  .daily-card-time { font-size: 12px; color: var(--drive); font-weight: 600; }
+
+  .cta-bottom { margin-top: 40px; padding: 28px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius); text-align: center; }
+  .cta-bottom h3 { font-family: var(--font-head); font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .cta-bottom p { font-size: 14px; color: var(--ink-light); margin-bottom: 20px; }
+  .cta-bottom a { display: inline-flex; align-items: center; gap: 6px; padding: 12px 28px; background: var(--accent); color: #fff; border-radius: var(--pill-radius); font-size: 15px; font-weight: 700; text-decoration: none; transition: opacity .15s; }
+  .cta-bottom a:hover { opacity: .88; }
+
+  .disclaimer { margin-top: 40px; font-size: 12px; color: var(--ink-light); border-top: 1px solid var(--border); padding-top: 16px; line-height: 1.6; }
+  .disclaimer a { color: var(--accent); }
+  .no-results { font-size: 14px; color: var(--ink-light); padding: 16px 0; display: none; }
+
+  @media (max-width: 480px) {
+    .filter-btn { min-width: 100px; padding: 10px 12px; font-size: 13px; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .mode-note { display: none; }
+    .daily-life-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="hero">
+    <div class="hero-eyebrow">RouteCheck by MIT Secure Stay · 14843 Hammersmith Cir · Silver Spring, MD 20906</div>
+    <h1>Does this commute work for you?</h1>
+    <p class="hero-sub">Convenient access to NIH, the NRC, and Montgomery County's biotech corridor — plus a short Red Line ride into downtown DC.</p>
+
+    <div class="transit-callout">
+      <div class="transit-callout-title">🚌 Transit Access</div>
+      <div class="transit-steps">
+        <span class="transit-step">Walk (5 min)</span>
+        <span class="transit-arrow">→</span>
+        <span class="transit-step">Ride On 26 bus</span>
+        <span class="transit-arrow">→</span>
+        <span class="transit-step">Glenmont Metro</span>
+        <span class="transit-arrow">→</span>
+        <span class="transit-step">Red Line (no transfer)</span>
+      </div>
+      <div class="transit-detail">
+        The Ride On <b>Route 26</b> stops near Layhill Rd &amp; Bel Pre Rd, a short walk from the property, and
+        runs directly to <b>Glenmont station</b> — the Red Line terminus. The same Route 26 bus also passes
+        <b>North Bethesda station</b>, directly across the street from <b>NRC Headquarters</b> on Rockville Pike.
+        Once on the Red Line at Glenmont, it's a direct ride with no transfer to <b>NIH</b> (Medical Center station),
+        Union Station, Judiciary Square, Gallery Place, Metro Center, Farragut North, and Dupont Circle.
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all"><span class="emoji">🗂</span> Show All</button>
+      <button class="filter-btn" data-filter="healthcare"><span class="emoji">🏥</span> Healthcare Worker</button>
+      <button class="filter-btn" data-filter="federal"><span class="emoji">🏛</span> Federal / Pro</button>
+      <button class="filter-btn" data-filter="contractor"><span class="emoji">🪖</span> Contractor / Defense</button>
+    </div>
+
+    <div class="mode-bar">
+      <span class="mode-label">Commute mode:</span>
+      <div class="toggle-wrap">
+        <button class="toggle-opt transit active" data-mode="transit">🚇 Transit</button>
+        <button class="toggle-opt drive" data-mode="drive">🚗 Driving</button>
+      </div>
+      <span class="mode-note">Times are typical off-peak estimates</span>
+    </div>
+  </div>
+
+  <div class="summary-panel" id="summaryPanel">
+    <strong>Quick verdict</strong>
+    <div class="summary-verdict" id="summaryVerdict">Excellent Red Line access via a short bus connection — strong for NIH, NRC, and downtown DC commuters.</div>
+    <div class="summary-detail" id="summaryDetail">A short walk to Ride On Route 26 provides direct service to Glenmont Metro and NRC. Once on the Red Line, many downtown DC destinations can be reached without transfers.</div>
+  </div>
+  <div class="cta-inline">
+    <span>Applications are accepted through the official listing form.</span>
+    <a href="https://mitsecurestay.carrd.co/" target="_blank" rel="noopener">Apply for 14843 Hammersmith Cir →</a>
+  </div>
+
+  <div class="dest-section" id="section-hospitals">
+    <div class="section-header" onclick="toggleSection('hospitals')">
+      <span class="section-icon">🏥</span>
+      <h2>Hospitals & Medical Centers</h2>
+      <span class="section-count" id="count-hospitals"></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body" id="body-hospitals">
+      <div class="dest-grid" id="grid-hospitals"></div>
+      <div class="no-results" id="noResults-hospitals">No hospitals match this filter.</div>
+    </div>
+  </div>
+
+  <div class="dest-section" id="section-federal">
+    <div class="section-header" onclick="toggleSection('federal')">
+      <span class="section-icon">🏛</span>
+      <h2>Federal, Research & Contractor Hubs</h2>
+      <span class="section-count" id="count-federal"></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body" id="body-federal">
+      <div class="dest-grid" id="grid-federal"></div>
+      <div class="no-results" id="noResults-federal">No federal destinations match this filter.</div>
+    </div>
+  </div>
+
+  <div class="dest-section" id="section-biotech">
+    <div class="section-header" onclick="toggleSection('biotech')">
+      <span class="section-icon">🧬</span>
+      <h2>Biotech & Research Corridor</h2>
+      <span class="section-count" id="count-biotech"></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body" id="body-biotech">
+      <div class="dest-grid" id="grid-biotech"></div>
+      <div class="no-results" id="noResults-biotech">No biotech destinations match this filter.</div>
+    </div>
+  </div>
+
+  <div class="dest-section" id="section-daily">
+    <div class="section-header" onclick="toggleSection('daily')">
+      <span class="section-icon">🛒</span>
+      <h2>Daily Life Nearby</h2>
+      <span class="section-count">7 places</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body" id="body-daily">
+      <div class="daily-life-grid" id="grid-daily"></div>
+    </div>
+  </div>
+
+  <div class="cta-bottom">
+    <h3>Ready to apply?</h3>
+    <p>If this commute works for you, you can apply for this property here.</p>
+    <a href="https://mitsecurestay.carrd.co/" target="_blank" rel="noopener">Apply Now →</a>
+  </div>
+
+  <div class="disclaimer">
+    <strong>Data note:</strong> Commute times are estimated off-peak averages based on Ride On bus schedules, WMATA Red Line service, and typical driving patterns.
+    Real-time conditions vary. Always verify with <a href="https://maps.google.com" target="_blank" rel="noopener">Google Maps</a> before committing.
+  </div>
+
+</div>
+
+<script>
+const ORIGIN = '14843+Hammersmith+Cir+Silver+Spring+MD+20906';
+
+function mapsUrl(query, mode) {
+  const travelmode = mode === 'drive' ? 'driving' : 'transit';
+  return `https://www.google.com/maps/dir/${ORIGIN}/${encodeURIComponent(query)}/?travelmode=${travelmode}`;
+}
+
+const DATA = {
+  hospitals: [
+    {
+      name: "Holy Cross Hospital",
+      mapsQuery: "Holy Cross Hospital Silver Spring MD",
+      tags: ["healthcare"],
+      transit: { time: "30–42 min", transfers: 1, route: "Walk → Ride On 26 → Glenmont, Red Line → Silver Spring, bus or rideshare to hospital" },
+      drive:   { time: "16–24 min", route: "Layhill Rd → Georgia Ave → Colesville Rd → Silver Spring" },
+      friction: 4,
+      note: "Major travel nurse placement hospital. Driving down Georgia Ave is direct. Transit works via Glenmont but adds a Silver Spring connection."
+    },
+    {
+      name: "Adventist HealthCare Shady Grove Medical Center",
+      mapsQuery: "Adventist HealthCare Shady Grove Medical Center 9901 Medical Center Drive Rockville MD",
+      tags: ["healthcare"],
+      transit: { time: "35–48 min", transfers: 1, route: "Walk → Ride On 26 → North Bethesda or Twinbrook, Ride On bus to campus" },
+      drive:   { time: "22–34 min", route: "Layhill Rd → MD-200 (ICC) → I-270 South → Shady Grove Rd" },
+      friction: 4,
+      note: "Full-service hospital with Level III NICU and pediatric ED. Route 26 actually passes near this corridor on its way to Montgomery Mall — a genuinely useful overlap."
+    },
+    {
+      name: "MedStar Montgomery Medical Center",
+      mapsQuery: "MedStar Montgomery Medical Center 18101 Prince Philip Drive Olney MD",
+      tags: ["healthcare"],
+      transit: { time: "55–75 min", transfers: 2, route: "Bus and rail connections exist but are impractical for regular shifts" },
+      drive:   { time: "18–28 min", route: "Georgia Ave (Route 97) South to Olney" },
+      friction: 3,
+      note: "138-bed MedStar teaching hospital. Georgia Avenue is a direct drive. Driving is the realistic option for shift work — transit is not practical here."
+    },
+    {
+      name: "Suburban Hospital (Johns Hopkins Medicine)",
+      mapsQuery: "Suburban Hospital 8600 Old Georgetown Road Bethesda MD",
+      tags: ["healthcare"],
+      transit: { time: "30–42 min", transfers: 0, route: "Walk → Ride On 26 → Medical Center station (direct, same Red Line run as NIH)" },
+      drive:   { time: "20–30 min", route: "Layhill Rd → I-495 → Old Georgetown Rd" },
+      friction: 4,
+      note: "Johns Hopkins-affiliated hospital, located right next to the NIH/Medical Center Red Line stop. Same one-seat ride as NIH — strong commute for clinical staff."
+    },
+    {
+      name: "Holy Cross Hospital Health Center Aspen Hill",
+      mapsQuery: "Holy Cross Hospital Health Center 13415 Connecticut Avenue Aspen Hill MD",
+      tags: ["healthcare"],
+      transit: { time: "20–30 min", transfers: 1, route: "Walk → Ride On 26 toward Aspen Hill Rd corridor, short bus or walk" },
+      drive:   { time: "10–16 min", route: "Layhill Rd → Connecticut Ave → Aspen Hill" },
+      friction: 5,
+      note: "Closest healthcare facility to Hammersmith Cir — under 16 min by car. Outpatient clinic, not a full hospital, but a strong nearby option for clinical and admin staff."
+    },
+  ],
+
+  federal: [
+    {
+      name: "NIH Main Campus",
+      mapsQuery: "National Institutes of Health 9000 Rockville Pike Bethesda MD",
+      tags: ["federal", "contractor", "healthcare"],
+      transit: { time: "28–38 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Medical Center (direct, no transfer)" },
+      drive:   { time: "22–32 min", route: "Layhill Rd → I-495 → Wisconsin Ave NW → Rockville Pike" },
+      friction: 5,
+      note: "One of the strongest commutes on this list. Glenmont sits at the Red Line terminus — once aboard, Medical Center station is a direct ride with no transfer. Major employer of researchers, fellows, and contractors."
+    },
+    {
+      name: "U.S. Nuclear Regulatory Commission (NRC)",
+      mapsQuery: "Nuclear Regulatory Commission 11555 Rockville Pike Rockville MD",
+      tags: ["federal", "contractor"],
+      transit: { time: "25–35 min", transfers: 0, route: "Walk → Ride On 26 → North Bethesda station (NRC is directly across the street)" },
+      drive:   { time: "20–30 min", route: "Layhill Rd → I-495 → Old Georgetown Rd → Rockville Pike" },
+      friction: 5,
+      note: "The same Route 26 bus that connects to Glenmont also runs to North Bethesda station, which sits directly across the street from NRC Headquarters. A genuine one-bus commute for NRC staff and contractors."
+    },
+    {
+      name: "FDA White Oak Campus",
+      mapsQuery: "FDA White Oak Campus Silver Spring MD",
+      tags: ["federal", "contractor"],
+      transit: { time: "38–52 min", transfers: 1, route: "Walk → Ride On 26 → Glenmont, Red Line → Silver Spring, bus or rideshare to White Oak" },
+      drive:   { time: "20–30 min", route: "New Hampshire Ave South to White Oak" },
+      friction: 4,
+      note: "Major FDA research and regulatory campus. New Hampshire Ave is a fairly direct driving route. Transit works via Glenmont with one additional connection."
+    },
+    {
+      name: "NOAA Headquarters",
+      mapsQuery: "NOAA Headquarters 1315 East-West Highway Silver Spring MD",
+      tags: ["federal", "contractor"],
+      transit: { time: "32–45 min", transfers: 1, route: "Walk → Ride On 26 → Glenmont, Red Line → Silver Spring, walk 10 min" },
+      drive:   { time: "18–28 min", route: "Layhill Rd → Georgia Ave → Colesville Rd → Silver Spring" },
+      friction: 4,
+      note: "NOAA's Silver Spring campus is reachable via Glenmont and a short Red Line ride, then a walk from Silver Spring station."
+    },
+    {
+      name: "National Cancer Institute (NCI) Shady Grove",
+      mapsQuery: "National Cancer Institute Shady Grove 9609 Medical Center Drive Rockville MD",
+      tags: ["federal", "contractor"],
+      transit: { time: "40–55 min", transfers: 1, route: "Walk → Ride On 26 → Twinbrook station, short walk or shuttle" },
+      drive:   { time: "22–32 min", route: "Layhill Rd → MD-200 (ICC) → I-270 South → Shady Grove Rd" },
+      friction: 4,
+      note: "Major NIH-affiliated research campus. Route 26 passes near Twinbrook, close to this campus — a workable transit option alongside the direct ICC/I-270 drive."
+    },
+    {
+      name: "Walter Reed Nat'l Military Medical Center",
+      mapsQuery: "Walter Reed National Military Medical Center Bethesda MD",
+      tags: ["federal", "contractor", "healthcare"],
+      transit: { time: "28–38 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Medical Center (same stop as NIH)" },
+      drive:   { time: "26–38 min", route: "Layhill Rd → I-495 → Wisconsin Ave NW" },
+      friction: 5,
+      note: "Shares the Medical Center Red Line stop with NIH — same direct, no-transfer commute. Strong option for military medical staff and researchers."
+    },
+    {
+      name: "NSA / Fort Meade",
+      mapsQuery: "Fort Meade Maryland",
+      tags: ["federal", "contractor"],
+      transit: { time: "60–80 min", transfers: 2, route: "Bus and rail connections exist but are long and impractical for regular commuting" },
+      drive:   { time: "28–40 min", route: "I-495 East → Baltimore-Washington Pkwy (MD-295) North → Fort Meade Rd" },
+      friction: 3,
+      note: "Closer from this property than from any DC location in this portfolio. I-495 to MD-295 is a steady highway route — driving is the realistic commute option."
+    },
+  ],
+
+  biotech: [
+    {
+      name: "Rockville Town Center / Rockville Station",
+      mapsQuery: "Rockville Town Square Rockville MD",
+      tags: ["federal", "contractor", "healthcare"],
+      transit: { time: "32–44 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Rockville (direct, no transfer)" },
+      drive:   { time: "20–30 min", route: "Layhill Rd → I-495 → MD-200 (ICC) → Rockville Pike" },
+      friction: 4,
+      note: "Major biotech and life sciences employment hub. Direct Red Line ride from Glenmont — no transfer required once aboard."
+    },
+    {
+      name: "Twinbrook Research Area",
+      mapsQuery: "Twinbrook Station Rockville MD",
+      tags: ["federal", "contractor", "healthcare"],
+      transit: { time: "30–42 min", transfers: 0, route: "Walk → Ride On 26 → Twinbrook station (the same Route 26 bus serves this stop directly)" },
+      drive:   { time: "20–30 min", route: "Layhill Rd → I-495 → I-270 South → Rockville Pike" },
+      friction: 5,
+      note: "Home to numerous biotech and CRO firms. Genuinely convenient — the same Route 26 bus that connects to Glenmont also serves Twinbrook station directly, no extra transfer needed."
+    },
+    {
+      name: "Shady Grove Life Sciences Center",
+      mapsQuery: "Shady Grove Life Sciences Center Rockville MD",
+      tags: ["federal", "contractor", "healthcare"],
+      transit: { time: "38–52 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Shady Grove (direct, terminus station)" },
+      drive:   { time: "25–38 min", route: "Layhill Rd → MD-200 (ICC) → I-270 South → Shady Grove Rd" },
+      friction: 4,
+      note: "Core of the I-270 biotech corridor — home to NCI Shady Grove and Johns Hopkins Montgomery County campus. Direct Red Line ride to the terminus station, plus a short shuttle or walk."
+    },
+  ],
+
+  daily: [
+    { category: "Grocery", name: "Aldi (Hammersmith Cir)", query: "Aldi Hammersmith Cir Silver Spring MD", time: "2 min walk" },
+    { category: "Grocery", name: "Giant Food (Layhill Shopping Center)", query: "Giant Food Layhill Shopping Center Silver Spring MD", time: "5 min drive" },
+    { category: "Warehouse", name: "Costco Wholesale (Wheaton)", query: "Costco Wholesale Wheaton MD", time: "10 min drive" },
+    { category: "Shopping", name: "Westfield Wheaton", query: "Westfield Wheaton Mall MD", time: "10 min drive" },
+    { category: "Shopping", name: "Downtown Silver Spring", query: "Downtown Silver Spring MD", time: "15 min drive" },
+    { category: "Fitness", name: "LA Fitness (Layhill)", query: "LA Fitness Layhill Shopping Center Silver Spring MD", time: "5 min walk" },
+    { category: "Fitness", name: "Gold's Gym (Layhill)", query: "Gold's Gym Layhill Shopping Center Silver Spring MD", time: "5 min walk" },
+  ]
+};
+
+let currentFilter = 'all';
+let currentMode   = 'transit';
+
+const SUMMARIES = {
+  all: {
+    verdict: "Excellent Red Line access via a short bus connection — strong for NIH, NRC, and downtown DC commuters.",
+    detail:  "A short walk to Ride On Route 26 provides direct service to Glenmont Metro and NRC. Once on the Red Line, many downtown DC destinations can be reached without transfers."
+  },
+  healthcare: {
+    verdict: "Best for: Holy Cross, Shady Grove, Suburban Hospital, and MedStar Montgomery staff.",
+    detail:  "Suburban Hospital shares the same direct Red Line stop as NIH. Holy Cross and Shady Grove are reachable by car or via Glenmont with one connection."
+  },
+  federal: {
+    verdict: "Best for: NIH, NRC, FDA White Oak, and NOAA employees.",
+    detail:  "NIH and the NRC are both one bus + one direct Red Line ride from this property — no transfers required once aboard at Glenmont."
+  },
+  contractor: {
+    verdict: "Best for: NIH, NRC, and Fort Meade contractors.",
+    detail:  "NRC contractors get a genuine one-bus commute via North Bethesda station. Fort Meade is closer from here than from any DC property in the portfolio."
+  }
+};
+
+function renderStars(n) {
+  let s = '';
+  for (let i = 1; i <= 5; i++) s += `<span class="${i <= n ? 'star-filled' : 'star-empty'}">★</span>`;
+  return s;
+}
+
+function frictionLabel(n) {
+  if (n === 5) return 'Excellent commute';
+  if (n === 4) return 'Good commute';
+  if (n === 3) return 'Moderate — driving recommended';
+  if (n === 2) return 'Difficult — driving required';
+  return 'Not recommended via transit';
+}
+
+function buildCard(dest, idx, sectionKey) {
+  const t = dest.transit;
+  const d = dest.drive;
+  const isTransit = currentMode === 'transit';
+  const visibleTime = isTransit ? t.time : d.time;
+  const visibleChip = isTransit ? 'transit' : 'drive';
+  const visibleXfer = isTransit ? (t.transfers === 0 ? 'Direct — no transfer' : `${t.transfers} transfer${t.transfers > 1 ? 's' : ''}`) : '—';
+  const isFiltered = currentFilter !== 'all' && !dest.tags.includes(currentFilter);
+  const url = mapsUrl(dest.mapsQuery, currentMode);
+
+  return `
+    <div class="dest-card ${isFiltered ? 'filtered' : ''} friction-${dest.friction}"
+         id="card-${sectionKey}-${idx}" onclick="toggleCard('${sectionKey}',${idx})">
+      <div class="card-header">
+        <div class="card-left">
+          <div class="card-name">
+            <a href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${dest.name} ↗</a>
+          </div>
+          <div class="card-quick">
+            <span class="time-chip ${visibleChip}">${isTransit ? '🚇' : '🚗'} ${visibleTime}</span>
+            <span class="card-stars">${renderStars(dest.friction)}</span>
+          </div>
+        </div>
+        <span class="card-expand-icon">▼</span>
+      </div>
+      <div class="card-details">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <div class="detail-block-label">🚇 Transit time</div>
+            <div class="detail-block-val">${t.time}</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-block-label">🚗 Driving time</div>
+            <div class="detail-block-val">${d.time}</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-block-label">Transfers</div>
+            <div class="detail-block-val">${visibleXfer}</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-block-label">Commute quality</div>
+            <div class="detail-block-val">${frictionLabel(dest.friction)}</div>
+          </div>
+        </div>
+        <div class="route-note">📍 ${isTransit ? t.route : d.route}</div>
+        <div class="route-note" style="margin-top:6px; color:#12110F; font-weight:500;">${dest.note}</div>
+        <a class="maps-btn" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+          🗺 Open in Google Maps
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+function buildDailyCard(item) {
+  const url = mapsUrl(item.query, 'drive');
+  return `
+    <div class="daily-card">
+      <div class="daily-card-cat">${item.category}</div>
+      <div class="daily-card-name"><a href="${url}" target="_blank" rel="noopener">${item.name} ↗</a></div>
+      <div class="daily-card-time">${item.time}</div>
+    </div>
+  `;
+}
+
+function renderAll() {
+  ['hospitals', 'federal', 'biotech'].forEach(sectionKey => {
+    const grid = document.getElementById(`grid-${sectionKey}`);
+    grid.innerHTML = DATA[sectionKey].map((d, i) => buildCard(d, i, sectionKey)).join('');
+    updateSectionCount(sectionKey);
+  });
+  document.getElementById('grid-daily').innerHTML = DATA.daily.map(buildDailyCard).join('');
+  updateSummary();
+}
+
+function updateSectionCount(sectionKey) {
+  const cards = document.querySelectorAll(`#grid-${sectionKey} .dest-card:not(.filtered)`);
+  document.getElementById(`count-${sectionKey}`).textContent = `${cards.length} destinations`;
+  document.getElementById(`noResults-${sectionKey}`).style.display = cards.length === 0 ? 'block' : 'none';
+}
+
+function updateSummary() {
+  const s = SUMMARIES[currentFilter];
+  document.getElementById('summaryVerdict').textContent = s.verdict;
+  document.getElementById('summaryDetail').textContent  = s.detail;
+}
+
+function toggleCard(sectionKey, idx) {
+  document.getElementById(`card-${sectionKey}-${idx}`).classList.toggle('open');
+}
+
+function toggleSection(key) {
+  document.querySelector(`#section-${key} .section-header`).classList.toggle('collapsed');
+  document.getElementById(`body-${key}`).classList.toggle('hidden');
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderAll();
+  });
+});
+
+document.querySelectorAll('.toggle-opt').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.toggle-opt').forEach(b => b.classList.remove('active', 'transit', 'drive'));
+    btn.classList.add('active', btn.dataset.mode);
+    currentMode = btn.dataset.mode;
+    renderAll();
+  });
+});
+
+renderAll();
+</script>
+</body>
+</html>
