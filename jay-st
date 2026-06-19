@@ -363,6 +363,7 @@
     <div class="hero-eyebrow">RouteCheck by MIT Secure Stay · 5521 Jay St NE · Washington, DC</div>
     <h1>Does this commute work for you?</h1>
     <p class="hero-sub">Check your commute to universities, hospitals, and federal hubs in under 10 seconds.</p>
+    <p class="hero-sub" style="margin-top:-4px; opacity:0.85;">🚇 Three Metro stations within walking distance — Benning Road and Capitol Heights (Blue/Silver Line) plus Deanwood (Orange Line). Built-in backup if one line has delays.</p>
 
     <div class="filter-row">
       <button class="filter-btn active" data-filter="all">
@@ -396,7 +397,7 @@
   <div class="summary-panel" id="summaryPanel">
     <strong>Quick verdict</strong>
     <div class="summary-verdict" id="summaryVerdict">Solid location for students, healthcare staff, and Capitol Hill commuters.</div>
-    <div class="summary-detail" id="summaryDetail">Jay St NE sits between the Red and Green lines — most destinations reach in 20–40 min.</div>
+    <div class="summary-detail" id="summaryDetail">Jay St NE is within walking distance of three Metro stations across two lines (Blue/Silver and Orange) — most downtown destinations reach in 20–40 min.</div>
   </div>
   <div class="cta-inline">
     <span>Applications are accepted through the official listing form.</span>
@@ -454,7 +455,7 @@
   <div class="disclaimer">
     <strong>Data note:</strong> Commute times are estimated off-peak averages based on DC Metro and typical driving patterns. Real-time conditions vary.
     Always verify with <a href="https://maps.google.com" target="_blank" rel="noopener">Google Maps</a> before committing.
-    Route summaries reflect typical Metro + walk patterns from Jay St NE / Rhode Island Ave–Brentwood station (Red Line).
+    Route summaries reflect typical Metro + walk patterns from Jay St NE / Benning Road station (Blue/Silver Line).
   </div>
 
 </div>
@@ -479,91 +480,91 @@ const DATA = {
       name: "Howard University",
       mapsQuery: "Howard University Washington DC",
       tags: ["student"],
-      transit: { time: "12–18 min", transfers: 0, route: "Red Line → Shaw–Howard U (direct, 2 stops)" },
-      drive:   { time: "8–15 min", route: "Rhode Island Ave NE → 5th St NW" },
-      friction: 5,
-      note: "Best university commute from Jay St. Direct Red Line with no transfers."
+      transit: { time: "30–40 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green/Yellow → Shaw–Howard U" },
+      drive:   { time: "20–28 min", route: "Nannie Helen Burroughs Ave NE → Florida Ave NE → Georgia Ave NW" },
+      friction: 3,
+      note: "One transfer at L'Enfant Plaza onto the Green/Yellow Line. A longer ride than the Red Line corridor, but manageable."
     },
     {
       name: "Catholic University of America",
       mapsQuery: "Catholic University of America Washington DC",
       tags: ["student"],
-      transit: { time: "10–16 min", transfers: 0, route: "Red Line → Brookland–CUA (direct, 1 stop)" },
-      drive:   { time: "7–12 min", route: "Rhode Island Ave NE → Michigan Ave NE" },
-      friction: 5,
-      note: "Closest university. Practically a neighborhood commute."
+      transit: { time: "35–45 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Brookland–CUA" },
+      drive:   { time: "20–28 min", route: "Nannie Helen Burroughs Ave NE → South Dakota Ave NE → Michigan Ave NE" },
+      friction: 3,
+      note: "One transfer at Metro Center onto the Red Line. Driving is the faster option for most schedules."
     },
     {
       name: "Gallaudet University",
       mapsQuery: "Gallaudet University Washington DC",
       tags: ["student"],
-      transit: { time: "14–20 min", transfers: 0, route: "Red Line → Union Station, walk 10 min or bus 90" },
-      drive:   { time: "8–14 min", route: "Rhode Island Ave NE → Florida Ave NE" },
-      friction: 4,
-      note: "Easy Red Line ride. Short walk from Union Station or a single bus hop."
+      transit: { time: "30–40 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → NoMa–Gallaudet U" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → Benning Rd NE → Florida Ave NE" },
+      friction: 3,
+      note: "One transfer at Metro Center. Florida Ave NE is a fairly direct drive."
     },
     {
       name: "George Washington University",
       mapsQuery: "George Washington University Foggy Bottom Washington DC",
       tags: ["student"],
-      transit: { time: "30–42 min", transfers: 1, route: "Red Line → Metro Center, transfer to Blue/Orange → Foggy Bottom" },
-      drive:   { time: "20–35 min", route: "Brentwood Pkwy → New York Ave → I-395 Bridge" },
-      friction: 3,
-      note: "One transfer at Metro Center is the standard route. Manageable daily commute."
+      transit: { time: "25–35 min", transfers: 0, route: "Blue/Silver Line direct to Foggy Bottom–GWU (no transfer)" },
+      drive:   { time: "25–35 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW" },
+      friction: 4,
+      note: "Direct ride on the Blue/Silver Line all the way to Foggy Bottom — no transfer needed despite the distance."
     },
     {
       name: "University of the District of Columbia",
       mapsQuery: "University of the District of Columbia Washington DC",
       tags: ["student"],
-      transit: { time: "35–48 min", transfers: 1, route: "Red Line → Tenleytown–AU (Van Ness area)" },
-      drive:   { time: "22–35 min", route: "16th St NW to Connecticut Ave NW" },
-      friction: 3,
-      note: "Red Line works. Slightly north of Georgetown area — easier than AU."
+      transit: { time: "45–58 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Van Ness–UDC" },
+      drive:   { time: "28–40 min", route: "Nannie Helen Burroughs Ave NE → Michigan Ave NE → Connecticut Ave NW" },
+      friction: 2,
+      note: "One transfer, but Van Ness is far out on the Red Line from this side of the system. Budget extra time."
     },
     {
       name: "Johns Hopkins SAIS",
-      mapsQuery: "Johns Hopkins SAIS 1740 Massachusetts Ave NW Washington DC",
+      mapsQuery: "Johns Hopkins Bloomberg Center 555 Pennsylvania Ave NW Washington DC",
       tags: ["student"],
-      transit: { time: "22–32 min", transfers: 0, route: "Red Line → Dupont Circle (direct, 5 stops), walk 5 min" },
-      drive:   { time: "15–25 min", route: "Massachusetts Ave NE → NW corridor" },
-      friction: 4,
-      note: "Massachusetts Ave campus is well-connected via Red Line. Solid commute."
+      transit: { time: "22–30 min", transfers: 0, route: "Blue/Silver Line direct to Federal Triangle (13 min walk to 555 Pennsylvania Ave NW)" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW" },
+      friction: 5,
+      note: "SAIS relocated to the Hopkins Bloomberg Center at 555 Pennsylvania Ave NW in 2023 — now a direct, no-transfer ride from Jay St NE. One of the strongest commutes on this list."
     },
     {
       name: "Virginia Tech DC (Potomac Yard)",
       mapsQuery: "Virginia Tech Innovation Campus Potomac Yard Arlington VA",
       tags: ["student"],
-      transit: { time: "40–55 min", transfers: 1, route: "Red Line → L'Enfant, transfer to Yellow Line → Potomac Yard" },
-      drive:   { time: "25–40 min", route: "395 South across Potomac" },
-      friction: 3,
-      note: "New Yellow Line extension helps. One clean transfer at L'Enfant Plaza."
+      transit: { time: "45–55 min", transfers: 0, route: "Blue/Silver Line direct to Potomac Yard (no transfer, long ride)" },
+      drive:   { time: "30–42 min", route: "Minnesota Ave NE → DC-295 South → I-395 South → Potomac Yard exit" },
+      friction: 4,
+      note: "Potomac Yard sits on the same Blue/Silver Line as Jay St's home station — no transfer, just a longer ride."
     },
     {
       name: "Georgetown Law Center",
       mapsQuery: "Georgetown Law Center 600 New Jersey Ave NW Washington DC",
       tags: ["student"],
-      transit: { time: "18–26 min", transfers: 0, route: "Red Line → Union Station, walk 8 min to 600 New Jersey Ave NW" },
-      drive:   { time: "12–20 min", route: "Rhode Island Ave NE → New York Ave → New Jersey Ave NW" },
-      friction: 5,
-      note: "Georgetown Law's Capitol Hill campus — totally different commute from the Foggy Bottom main campus. Direct Red Line to Union Station. Much more accessible than Georgetown University."
+      transit: { time: "30–40 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Union Station, walk 8 min" },
+      drive:   { time: "20–28 min", route: "Minnesota Ave NE → Benning Rd NE → New York Ave NE → New Jersey Ave NW" },
+      friction: 4,
+      note: "Georgetown Law's Capitol Hill campus is a separate commute from the main Foggy Bottom campus. One transfer at Metro Center."
     },
     {
       name: "Trinity Washington University",
       mapsQuery: "Trinity Washington University Washington DC",
       tags: ["student"],
-      transit: { time: "10–16 min", transfers: 0, route: "Bus 80 or short drive along Michigan Ave NE — no Metro needed" },
-      drive:   { time: "6–10 min", route: "Michigan Ave NE direct, 1.5 miles" },
-      friction: 5,
-      note: "Closest university to Jay St by road. 1.5 miles on Michigan Ave — bike, bus, or drive. Easiest commute on this list."
+      transit: { time: "35–45 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Brookland–CUA, bus or 15 min walk" },
+      drive:   { time: "20–28 min", route: "Nannie Helen Burroughs Ave NE → Michigan Ave NE" },
+      friction: 3,
+      note: "Off the Metro grid — driving along Michigan Ave NE is the practical option. Further from this address than from the Brookland/Rhode Island Ave side of NE DC."
     },
     {
       name: "University of Maryland College Park",
       mapsQuery: "University of Maryland College Park MD",
       tags: ["student"],
-      transit: { time: "30–42 min", transfers: 1, route: "Red Line → Fort Totten, transfer to Green Line → College Park–U of Md" },
-      drive:   { time: "20–32 min", route: "Rhode Island Ave NE → US-1 North → College Park" },
-      friction: 4,
-      note: "One transfer at Fort Totten onto the Green Line. Straightforward and reliable — one of the better suburban university commutes from Northeast DC."
+      transit: { time: "45–58 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green Line → College Park–U of Md" },
+      drive:   { time: "25–35 min", route: "Minnesota Ave NE → DC-295 → Kenilworth Ave NE → US-1 North" },
+      friction: 3,
+      note: "One transfer at L'Enfant Plaza onto the Green Line. A long ride either way — driving via Kenilworth Ave is usually faster."
     }
   ],
 
@@ -572,82 +573,82 @@ const DATA = {
       name: "MedStar Washington Hospital Center",
       mapsQuery: "MedStar Washington Hospital Center Washington DC",
       tags: ["healthcare"],
-      transit: { time: "15–24 min", transfers: 0, route: "Red Line → NoMa or bus 80 along Irving St NW" },
-      drive:   { time: "10–18 min", route: "Michigan Ave NE → Irving St NW" },
-      friction: 5,
-      note: "One of the best hospital commutes from Jay St. Michigan Ave NE runs almost door to door."
+      transit: { time: "35–45 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green/Yellow toward Georgia Ave, bus or walk" },
+      drive:   { time: "22–30 min", route: "Nannie Helen Burroughs Ave NE → South Dakota Ave NE → Michigan Ave NE → Irving St NW" },
+      friction: 3,
+      note: "One transfer plus a short bus/walk leg. Driving via Michigan Ave NE is the more reliable option for shift work."
     },
     {
       name: "Children's National Hospital",
       mapsQuery: "Children's National Hospital Washington DC",
       tags: ["healthcare"],
-      transit: { time: "15–22 min", transfers: 0, route: "Red Line → Brookland–CUA, bus H2 or walk 15 min" },
-      drive:   { time: "8–14 min", route: "Michigan Ave NE direct" },
-      friction: 5,
-      note: "On Michigan Ave — driving is under 15 min. Red Line + short walk or bus is also straightforward."
+      transit: { time: "35–45 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green/Yellow toward Georgia Ave, bus or 15 min walk" },
+      drive:   { time: "20–28 min", route: "Nannie Helen Burroughs Ave NE → South Dakota Ave NE → Michigan Ave NE" },
+      friction: 3,
+      note: "Same corridor as MedStar. Driving along Michigan Ave NE is faster and more predictable than transit from this address."
     },
     {
       name: "Howard University Hospital",
       mapsQuery: "Howard University Hospital Washington DC",
       tags: ["healthcare"],
-      transit: { time: "12–20 min", transfers: 0, route: "Red Line → Shaw–Howard U, walk 5 min" },
-      drive:   { time: "8–15 min", route: "Rhode Island Ave NE → Georgia Ave NW" },
-      friction: 5,
-      note: "Direct Red Line. Howard University Hospital is immediately walkable from Shaw–Howard station."
+      transit: { time: "32–42 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green/Yellow → Shaw–Howard U, walk 5 min" },
+      drive:   { time: "22–30 min", route: "Nannie Helen Burroughs Ave NE → Florida Ave NE → Georgia Ave NW" },
+      friction: 3,
+      note: "One transfer at L'Enfant Plaza. Manageable for regular shifts, though not a direct ride."
     },
     {
       name: "George Washington University Hospital",
       mapsQuery: "GW University Hospital 900 23rd St NW Washington DC",
       tags: ["healthcare"],
-      transit: { time: "32–44 min", transfers: 1, route: "Red Line → Metro Center, transfer Blue/Orange → Foggy Bottom" },
-      drive:   { time: "22–38 min", route: "New York Ave → I-395 → 23rd St NW" },
-      friction: 3,
-      note: "One transfer needed. Manageable for travel nurses on longer assignments."
+      transit: { time: "25–35 min", transfers: 0, route: "Blue/Silver Line direct to Foggy Bottom–GWU (no transfer)" },
+      drive:   { time: "25–35 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW → 23rd St NW" },
+      friction: 4,
+      note: "Direct Blue/Silver ride straight to Foggy Bottom, right at the hospital's doorstep. No transfer needed."
     },
     {
       name: "Veterans Affairs Medical Center",
       mapsQuery: "Washington DC VA Medical Center 50 Irving St NW",
       tags: ["healthcare"],
-      transit: { time: "25–35 min", transfers: 1, route: "Red Line → L'Enfant, transfer Yellow/Green → VA Medical" },
-      drive:   { time: "18–28 min", route: "Pennsylvania Ave SE → Irving St SW" },
+      transit: { time: "35–45 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green/Yellow toward Georgia Ave, bus or walk" },
+      drive:   { time: "22–30 min", route: "Nannie Helen Burroughs Ave NE → South Dakota Ave NE → Michigan Ave NE → Irving St NW" },
       friction: 3,
-      note: "VA Medical on Irving St SW. One transfer at L'Enfant; smooth connection."
+      note: "Same Georgia Ave/Irving St corridor as MedStar and Children's National. One transfer; driving is the steadier option."
     },
     {
       name: "Kaiser Permanente Capitol Hill",
       mapsQuery: "Kaiser Permanente Capitol Hill Medical Center Washington DC",
       tags: ["healthcare"],
-      transit: { time: "18–26 min", transfers: 0, route: "Red Line → Union Station, walk 10 min or bus" },
-      drive:   { time: "12–18 min", route: "Rhode Island Ave NE → Constitution Ave" },
+      transit: { time: "28–38 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Union Station, walk 8–10 min" },
+      drive:   { time: "15–22 min", route: "Minnesota Ave NE → Benning Rd NE → H St NE" },
       friction: 4,
-      note: "Constitution Ave and Capitol Hill area are well within reach on Red Line."
+      note: "One transfer at Metro Center, or a quick drive along Benning Rd and H St NE — one of the easier hospital commutes on this list."
     },
     {
       name: "UM Capital Region Medical Center",
       mapsQuery: "University of Maryland Capital Region Medical Center Largo MD",
       tags: ["healthcare"],
-      transit: { time: "35–50 min", transfers: 1, route: "Red Line → Metro Center, transfer to Blue/Silver → Largo Town Center" },
-      drive:   { time: "20–32 min", route: "Rhode Island Ave NE → US-50 East → Largo" },
-      friction: 3,
-      note: "Largo Town Center station is the closest Metro stop. One transfer at Metro Center — manageable for travel nurses on assignment."
+      transit: { time: "20–30 min", transfers: 0, route: "Blue/Silver Line direct to Largo Town Center (no transfer)" },
+      drive:   { time: "15–25 min", route: "Minnesota Ave NE → DC-295 → MD-202 East → Harry S Truman Dr" },
+      friction: 5,
+      note: "Largo Town Center sits on the same Blue/Silver Line that runs through Benning Road — a direct ride east, no transfer. One of the strongest hospital commutes from Jay St."
     },
     {
       name: "Adventist HealthCare White Oak Medical Center",
       mapsQuery: "Adventist HealthCare White Oak Medical Center 11890 Healing Way Silver Spring MD",
       tags: ["healthcare"],
-      transit: { time: "38–52 min", transfers: 1, route: "Red Line → Silver Spring, bus Z6 or Ride On toward White Oak" },
-      drive:   { time: "22–34 min", route: "Rhode Island Ave NE → Eastern Ave → New Hampshire Ave → White Oak" },
-      friction: 3,
-      note: "Adjacent to the FDA White Oak campus in Silver Spring. Active travel nurse placement hospital. Red Line to Silver Spring, then a short bus connection."
+      transit: { time: "48–60 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Silver Spring, bus Z6 or Ride On toward White Oak" },
+      drive:   { time: "28–38 min", route: "Minnesota Ave NE → East Capitol St → New Hampshire Ave" },
+      friction: 2,
+      note: "One transfer plus a bus connection adds up. Driving along New Hampshire Ave is the more realistic option for regular shifts."
     },
     {
       name: "Holy Cross Hospital",
       mapsQuery: "Holy Cross Hospital Silver Spring MD",
       tags: ["healthcare"],
-      transit: { time: "38–52 min", transfers: 1, route: "Red Line → Silver Spring, bus Z6 or Ride On toward Holy Cross" },
-      drive:   { time: "22–35 min", route: "Rhode Island Ave NE → Eastern Ave → Colesville Rd" },
-      friction: 3,
-      note: "High travel nurse volume hospital in Silver Spring. Red Line to Silver Spring station, then a short bus ride. Manageable for regular shifts."
+      transit: { time: "48–60 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Silver Spring, bus Z6 or Ride On toward Holy Cross" },
+      drive:   { time: "28–38 min", route: "Minnesota Ave NE → East Capitol St → Colesville Rd" },
+      friction: 2,
+      note: "Same transfer-plus-bus pattern as White Oak. Plan around driving for predictable shift timing."
     }
   ],
 
@@ -656,181 +657,181 @@ const DATA = {
       name: "U.S. Capitol",
       mapsQuery: "United States Capitol Building Washington DC",
       tags: ["federal"],
-      transit: { time: "18–26 min", transfers: 0, route: "Red Line → Union Station, walk or bus to Capitol" },
-      drive:   { time: "12–20 min", route: "Rhode Island Ave NE → Constitution Ave" },
+      transit: { time: "18–26 min", transfers: 0, route: "Blue/Silver Line direct to Capitol South (no transfer)" },
+      drive:   { time: "15–22 min", route: "Minnesota Ave NE → Benning Rd NE → East Capitol St" },
       friction: 5,
-      note: "One of the strongest commutes on this list. Union Station is one Red Line stop from Rhode Island Ave."
+      note: "Direct ride to Capitol South — one of the strongest commutes on this list, no transfer required."
     },
     {
       name: "Department of Justice",
       mapsQuery: "US Department of Justice 950 Pennsylvania Ave NW Washington DC",
       tags: ["federal"],
-      transit: { time: "20–28 min", transfers: 0, route: "Red Line → Judiciary Square (direct, 3 stops), walk 5 min" },
-      drive:   { time: "12–18 min", route: "New York Ave NW → Pennsylvania Ave NW" },
+      transit: { time: "22–30 min", transfers: 0, route: "Blue/Silver Line direct to Federal Triangle, walk 5 min" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW" },
       friction: 5,
-      note: "Judiciary Square station is named for this corridor. Direct Red Line, no transfer."
+      note: "Federal Triangle station sits right at this corridor. Direct ride, no transfer."
     },
     {
       name: "FBI Headquarters",
       mapsQuery: "FBI Headquarters 935 Pennsylvania Ave NW Washington DC",
       tags: ["federal"],
-      transit: { time: "22–30 min", transfers: 0, route: "Red Line → Judiciary Square or Archives, walk 8 min" },
-      drive:   { time: "14–22 min", route: "New York Ave NW → Pennsylvania Ave NW" },
+      transit: { time: "22–30 min", transfers: 0, route: "Blue/Silver Line direct to Federal Triangle, walk 5 min" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW" },
       friction: 5,
-      note: "Pennsylvania Ave corridor — same Red Line run as DOJ. Direct and straightforward."
+      note: "Same Federal Triangle stop as DOJ — direct, no transfer."
     },
     {
       name: "Department of Homeland Security",
-      mapsQuery: "Department of Homeland Security Nebraska Ave Complex Washington DC",
+      mapsQuery: "DHS Headquarters St Elizabeths West Campus Washington DC",
       tags: ["federal"],
-      transit: { time: "30–44 min", transfers: 1, route: "Red Line → L'Enfant, transfer Yellow/Green → Navy Yard area" },
-      drive:   { time: "18–30 min", route: "Pennsylvania Ave SE → M St SE" },
-      friction: 3,
-      note: "DHS Nebraska Ave campus is across town. One transfer needed; allow extra time."
+      transit: { time: "30–40 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green Line → Congress Heights, short walk/shuttle" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → DC-295 South → South Capitol St" },
+      friction: 4,
+      note: "DHS consolidated its headquarters at the St. Elizabeths West Campus near Congress Heights — one transfer at L'Enfant Plaza onto the Green Line."
     },
     {
       name: "Library of Congress",
       mapsQuery: "Library of Congress Washington DC",
       tags: ["federal"],
-      transit: { time: "18–26 min", transfers: 0, route: "Red Line → Capitol South or Union Station, walk 8 min" },
-      drive:   { time: "12–18 min", route: "Constitution Ave → 1st St SE" },
+      transit: { time: "20–28 min", transfers: 0, route: "Blue/Silver Line direct to Capitol South, walk 5 min" },
+      drive:   { time: "15–22 min", route: "Minnesota Ave NE → Benning Rd NE → East Capitol St" },
       friction: 5,
-      note: "Capitol Hill location makes this one of the most accessible destinations from Jay St."
+      note: "Same direct run as the Capitol — no transfer, one of the most accessible destinations on this list."
     },
     {
       name: "Union Station / NoMa–Capitol Hill Jobs",
       mapsQuery: "Union Station Washington DC",
       tags: ["federal"],
-      transit: { time: "10–16 min", transfers: 0, route: "Red Line → Union Station (direct, 2 stops)" },
-      drive:   { time: "8–14 min", route: "Rhode Island Ave NE → Florida Ave NE" },
-      friction: 5,
-      note: "Union Station is the employment anchor for this whole corridor. Best overall commute from Jay St."
+      transit: { time: "26–36 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Union Station (1 stop)" },
+      drive:   { time: "16–24 min", route: "Minnesota Ave NE → Benning Rd NE → Florida Ave NE" },
+      friction: 4,
+      note: "One transfer at Metro Center onto the Red Line. A short, predictable hop from there."
     },
     {
       name: "White House / OEOB",
       mapsQuery: "White House 1600 Pennsylvania Ave NW Washington DC",
       tags: ["federal"],
-      transit: { time: "22–30 min", transfers: 0, route: "Red Line → McPherson Square or Farragut North (direct)" },
-      drive:   { time: "15–25 min", route: "New York Ave NW → Pennsylvania Ave NW" },
+      transit: { time: "26–36 min", transfers: 0, route: "Blue/Silver Line direct to McPherson Square or Farragut West" },
+      drive:   { time: "20–28 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW" },
       friction: 5,
-      note: "Direct Red Line to McPherson Square or Farragut North. Strong commute for White House interns and OEOB staff."
+      note: "Direct Blue/Silver ride to McPherson Square or Farragut West — no transfer needed. Strong commute for White House interns and OEOB staff."
     },
     {
       name: "Pentagon",
       mapsQuery: "The Pentagon Arlington VA",
       tags: ["federal", "contractor"],
-      transit: { time: "35–48 min", transfers: 1, route: "Red Line → L'Enfant Plaza, transfer to Blue/Yellow → Pentagon" },
-      drive:   { time: "22–38 min", route: "I-295 South → I-395 → Pentagon exit" },
-      friction: 3,
-      note: "One transfer at L'Enfant. Direct Blue/Yellow Line ride from there. Standard commute for contractors and DoD staff."
+      transit: { time: "30–40 min", transfers: 0, route: "Blue/Silver Line direct to Pentagon (no transfer)" },
+      drive:   { time: "20–30 min", route: "Minnesota Ave NE → DC-295 South → I-395 South → Pentagon exit" },
+      friction: 5,
+      note: "The Pentagon sits on the same Blue/Silver Line as Jay St's home station — a direct ride, no transfer. Strong commute for contractors and DoD staff."
     },
     {
       name: "Joint Base Anacostia–Bolling (JBAB)",
       mapsQuery: "Joint Base Anacostia-Bolling Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "30–42 min", transfers: 1, route: "Red Line → L'Enfant Plaza, transfer Green Line → Congress Heights, rideshare to gate" },
-      drive:   { time: "14–22 min", route: "Pennsylvania Ave SE → South Capitol St → Bolling gate" },
-      friction: 3,
-      note: "Closest military installation to Jay St. South Capitol St is a straight shot — under 20 min by car. Metro gets you within a short rideshare of the gate."
+      transit: { time: "30–40 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green Line → Congress Heights, rideshare to gate" },
+      drive:   { time: "15–22 min", route: "Minnesota Ave NE → DC-295 South → South Capitol St → Bolling gate" },
+      friction: 4,
+      note: "One transfer at L'Enfant Plaza onto the Green Line. DC-295 makes the drive quick and direct."
     },
     {
       name: "Washington Navy Yard",
       mapsQuery: "Washington Navy Yard Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "22–32 min", transfers: 1, route: "Red Line → L'Enfant Plaza, transfer Green Line → Navy Yard–Ballpark, walk 5 min" },
-      drive:   { time: "12–18 min", route: "Pennsylvania Ave SE → M St SE → 11th St SE" },
+      transit: { time: "26–36 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green Line → Navy Yard–Ballpark, walk 5 min" },
+      drive:   { time: "16–24 min", route: "Minnesota Ave NE → DC-295 South → M St SE" },
       friction: 4,
-      note: "One of the cleaner contractor commutes from Jay St. Green Line has a station named for it — walk straight to the gate."
+      note: "One transfer at L'Enfant Plaza, then straight to the gate. A clean contractor commute either way."
     },
     {
       name: "Fort McNair (NDW)",
       mapsQuery: "Fort Lesley J. McNair Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "28–40 min", transfers: 1, route: "Red Line → L'Enfant Plaza, transfer Green Line → Waterfront, walk 12 min" },
-      drive:   { time: "14–22 min", route: "Pennsylvania Ave SE → South Capitol St → P St SW" },
+      transit: { time: "32–42 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green Line → Waterfront, walk 12 min" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → DC-295 South → South Capitol St → P St SW" },
       friction: 3,
-      note: "Home of the National Defense University. Waterfront station is the closest Metro stop — short walk from there."
+      note: "Home of the National Defense University. One transfer at L'Enfant Plaza, then a short walk from Waterfront station."
     },
     {
       name: "Walter Reed Nat'l Military Medical Center",
       mapsQuery: "Walter Reed National Military Medical Center Bethesda MD",
       tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "35–48 min", transfers: 0, route: "Red Line → Medical Center station (direct, 8 stops)" },
-      drive:   { time: "22–35 min", route: "Rhode Island Ave NE → 16th St NW → Wisconsin Ave NW" },
-      friction: 4,
-      note: "Direct Red Line — no transfer needed. Medical Center station is literally at the entrance. Strong commute for military medical staff and travel nurses."
+      transit: { time: "48–60 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Medical Center (8 stops out)" },
+      drive:   { time: "30–42 min", route: "Minnesota Ave NE → East Capitol St → 16th St NW → Wisconsin Ave NW" },
+      friction: 2,
+      note: "One transfer at Metro Center, then a long ride out the Red Line. Budget extra time for shift starts."
     },
     {
       name: "NIH Main Campus",
       mapsQuery: "National Institutes of Health 9000 Rockville Pike Bethesda MD",
       tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "35–48 min", transfers: 0, route: "Red Line → Medical Center station (direct, 8 stops) — NIH entrance is steps from the platform" },
-      drive:   { time: "22–35 min", route: "Rhode Island Ave NE → 16th St NW → Wisconsin Ave NW → Rockville Pike" },
-      friction: 4,
-      note: "Medical Center station exits directly onto the NIH campus. Same Red Line run as Walter Reed — no transfer. Strong commute for researchers, contractors, and clinical staff."
+      transit: { time: "48–60 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Medical Center (8 stops out)" },
+      drive:   { time: "30–42 min", route: "Minnesota Ave NE → East Capitol St → 16th St NW → Wisconsin Ave NW → Rockville Pike" },
+      friction: 2,
+      note: "Same Medical Center stop as Walter Reed, one transfer at Metro Center. A long commute from this side of the system — plan accordingly."
     },
     {
       name: "NOAA Headquarters",
       mapsQuery: "NOAA Headquarters 1315 East-West Highway Silver Spring MD",
       tags: ["federal", "contractor"],
-      transit: { time: "28–40 min", transfers: 0, route: "Red Line → Silver Spring station (direct, 5 stops), walk 10 min or bus to East-West Hwy" },
-      drive:   { time: "18–28 min", route: "Rhode Island Ave NE → Eastern Ave → Colesville Rd → Silver Spring" },
-      friction: 4,
-      note: "Direct Red Line to Silver Spring. NOAA's campus is a short walk or bus ride from the station on East-West Highway."
+      transit: { time: "42–55 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Silver Spring, walk 10 min or bus to East-West Hwy" },
+      drive:   { time: "26–36 min", route: "Minnesota Ave NE → East Capitol St → New Hampshire Ave → East-West Hwy" },
+      friction: 2,
+      note: "One transfer at Metro Center, then a long ride out to Silver Spring. Driving is usually faster from this address."
     },
     {
       name: "Downtown Silver Spring",
       mapsQuery: "Silver Spring Metro Station Maryland",
       tags: ["federal", "contractor"],
-      transit: { time: "25–35 min", transfers: 0, route: "Red Line → Silver Spring (direct, 5 stops)" },
-      drive:   { time: "16–26 min", route: "Rhode Island Ave NE → Eastern Ave → Colesville Rd" },
-      friction: 4,
-      note: "Silver Spring anchors a major federal and private employer cluster — NOAA, Discovery HQ, and dozens of contractors. Direct Red Line, no transfer."
+      transit: { time: "38–50 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Silver Spring" },
+      drive:   { time: "24–34 min", route: "Minnesota Ave NE → East Capitol St → Colesville Rd" },
+      friction: 3,
+      note: "One transfer at Metro Center. Silver Spring anchors a major employer cluster — NOAA, Discovery HQ, and dozens of contractors."
     },
     {
       name: "L'Enfant Plaza Federal Campus",
       mapsQuery: "L'Enfant Plaza Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "22–32 min", transfers: 1, route: "Red Line → Gallery Place, transfer Green/Yellow → L'Enfant Plaza" },
-      drive:   { time: "14–22 min", route: "New York Ave NW → Pennsylvania Ave NW → D St SW" },
-      friction: 4,
-      note: "Home to Dept of Energy, HUD, Dept of Education, and Dept of Transportation — all within a 5 min walk of L'Enfant Plaza station. One transfer at Gallery Place."
+      transit: { time: "22–32 min", transfers: 0, route: "Blue/Silver Line direct to L'Enfant Plaza (no transfer)" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → DC-295 South → D St SW" },
+      friction: 5,
+      note: "Home to Dept of Energy, HUD, Dept of Education, and Dept of Transportation — all within a 5 min walk. Direct Blue/Silver ride, no transfer."
     },
     {
       name: "Foggy Bottom Federal Campus",
       mapsQuery: "Foggy Bottom GWU Metro Station Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "30–42 min", transfers: 1, route: "Red Line → Metro Center, transfer Blue/Orange/Silver → Foggy Bottom–GWU" },
-      drive:   { time: "20–32 min", route: "New York Ave → K St NW → 23rd St NW" },
-      friction: 3,
-      note: "Covers State Department (2201 C St NW), Dept of Interior (1849 C St NW), and related agencies. One transfer at Metro Center onto Blue/Orange/Silver line."
+      transit: { time: "28–38 min", transfers: 0, route: "Blue/Silver Line direct to Foggy Bottom–GWU (no transfer)" },
+      drive:   { time: "22–32 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW → 23rd St NW" },
+      friction: 4,
+      note: "Covers State Department (2201 C St NW), Dept of Interior (1849 C St NW), and related agencies. Direct ride, no transfer."
     },
     {
       name: "Federal Triangle / National Mall Corridor",
       mapsQuery: "Federal Triangle Metro Station Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "20–30 min", transfers: 1, route: "Red Line → Gallery Place, transfer Green/Yellow → Archives or L'Enfant" },
-      drive:   { time: "14–22 min", route: "New York Ave NW → Pennsylvania Ave NW → Independence Ave SW" },
-      friction: 4,
-      note: "Covers Treasury, EPA, USDA, and Commerce along Independence Ave and Pennsylvania Ave SW. One transfer at Gallery Place."
+      transit: { time: "22–32 min", transfers: 0, route: "Blue/Silver Line direct to Federal Triangle (no transfer)" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW → Independence Ave SW" },
+      friction: 5,
+      note: "Covers Treasury, EPA, USDA, and Commerce along Independence Ave and Pennsylvania Ave SW. Direct ride, no transfer."
     },
     {
       name: "Dept of Labor / Judiciary Square",
       mapsQuery: "US Department of Labor 200 Constitution Ave NW Washington DC",
       tags: ["federal"],
-      transit: { time: "20–28 min", transfers: 0, route: "Red Line → Judiciary Square (direct, 3 stops)" },
-      drive:   { time: "12–20 min", route: "Rhode Island Ave NE → New York Ave NW → Constitution Ave NW" },
-      friction: 5,
-      note: "Dept of Labor is one block from Judiciary Square station. Direct Red Line from Jay St — same run as DOJ. No transfer needed."
+      transit: { time: "26–36 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Judiciary Square (1 stop)" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → Benning Rd NE → New York Ave NW → Constitution Ave NW" },
+      friction: 4,
+      note: "Dept of Labor is one block from Judiciary Square station. One transfer at Metro Center — same run as Union Station."
     },
     {
       name: "World Bank / IMF",
       mapsQuery: "World Bank Headquarters 1818 H St NW Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "28–40 min", transfers: 1, route: "Red Line → Farragut North or Metro Center, walk to 18th–19th St NW" },
-      drive:   { time: "18–28 min", route: "Rhode Island Ave NE → K St NW → 18th St NW" },
+      transit: { time: "28–38 min", transfers: 0, route: "Blue/Silver Line direct to Farragut West, walk to 18th–19th St NW" },
+      drive:   { time: "22–32 min", route: "Minnesota Ave NE → East Capitol St → K St NW → 18th St NW" },
       friction: 4,
-      note: "World Bank (1818 H St NW) and IMF (700 19th St NW) are one block apart near Foggy Bottom/Downtown. Major employer of J-1 visa holders and international staff. One transfer via Red Line."
+      note: "World Bank (1818 H St NW) and IMF (700 19th St NW) sit one block apart near Farragut West/Foggy Bottom. Direct ride, no transfer."
     }
   ]
 };
@@ -842,24 +843,24 @@ let currentMode   = 'transit';
 // ── SUMMARY TEXT ─────────────────────────────────────────────
 const SUMMARIES = {
   all: {
-    verdict: "Strong location for Capitol Hill, Howard, and Northeast hospital commuters.",
-    detail:  "Jay St NE's Red Line access puts downtown DC and major medical centers within 20–40 min for most residents."
+    verdict: "Strong location for Capitol Hill, federal, and Largo-area commuters — direct Blue/Silver Line access.",
+    detail:  "Jay St NE is within walking distance of three Metro stations across two lines — Benning Road and Capitol Heights (Blue/Silver) plus Deanwood (Orange). Federal Triangle, Capitol South, and McPherson Square are direct rides; points further out the Red and Green Lines need one transfer."
   },
   student: {
-    verdict: "Best for: Howard University, Catholic University, and SAIS students.",
-    detail:  "Two universities within 2 stops. Georgetown and AU are reachable but budget 45–60 min."
+    verdict: "Best for: SAIS, GWU, and Virginia Tech DC students — direct, no-transfer rides.",
+    detail:  "SAIS at 555 Pennsylvania Ave NW and GWU's Foggy Bottom campus are both direct on the Blue/Silver Line. Howard, Catholic, and Gallaudet need one transfer."
   },
   healthcare: {
-    verdict: "Best for: Washington Hospital Center, Children's National, and Howard University Hospital staff.",
-    detail:  "Three major medical centers within a direct, no-transfer commute. Strong fit for travel nurses."
+    verdict: "Best for: UM Capital Region Medical Center and Kaiser Permanente Capitol Hill staff.",
+    detail:  "UM Capital Region (Largo) is a direct ride on the same line. Most NW DC and Silver Spring hospitals require a transfer or are faster by car."
   },
   federal: {
-    verdict: "Best for: Capitol Hill interns, DOJ staff, and Union Station area employers.",
-    detail:  "The Red Line deposits you at Judiciary Square or Union Station in under 30 min. Excellent federal hub access."
+    verdict: "Best for: Capitol Hill, DOJ/FBI, White House, and L'Enfant Plaza employees.",
+    detail:  "Federal Triangle, Capitol South, and McPherson Square are all direct stops on the same line as Jay St's home station — no transfer required for most of downtown."
   },
   contractor: {
-    verdict: "Best for: Navy Yard, Walter Reed, Pentagon, and Fort McNair contractors.",
-    detail:  "Navy Yard and Walter Reed are Metro-accessible with no or one transfer. NRL, Belvoir, Andrews, and Fort Meade are driving-only practical commutes."
+    verdict: "Best for: Pentagon, Navy Yard, and JBAB contractors.",
+    detail:  "The Pentagon is a direct ride with zero transfers — same Blue/Silver Line straight through. Navy Yard and JBAB need one transfer at L'Enfant Plaza onto the Green Line."
   }
 };
 
