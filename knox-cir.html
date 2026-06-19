@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>5311 59th Ave, Riverdale MD — RouteCheck by MIT Secure Stay</title>
+<title>12 Knox Cir SE, Washington DC — RouteCheck by MIT Secure Stay</title>
 <style>
   :root {
     --ink:        #12110F;
@@ -16,8 +16,6 @@
     --transit:    #1B4FD8;
     --drive:      #C8410B;
     --green:      #1A7A4A;
-    --yellow:     #C48A00;
-    --red:        #C8410B;
     --pill-radius:6px;
     --card-radius:10px;
     --shadow:     0 1px 4px rgba(0,0,0,.08);
@@ -159,7 +157,7 @@
 <div class="page-wrap">
 
   <div class="hero">
-    <div class="hero-eyebrow">RouteCheck by MIT Secure Stay · 5311 59th Ave · Riverdale, MD 20737</div>
+    <div class="hero-eyebrow">RouteCheck by MIT Secure Stay · 12 Knox Cir SE · Washington, DC 20020</div>
     <h1>Does this commute work for you?</h1>
     <p class="hero-sub">Check your commute to universities, hospitals, and federal hubs in under 10 seconds.</p>
 
@@ -183,12 +181,12 @@
 
   <div class="summary-panel" id="summaryPanel">
     <strong>Quick verdict</strong>
-    <div class="summary-verdict" id="summaryVerdict">Strong location for UMD students, PG County federal staff, and Northeast DC hospital commuters.</div>
-    <div class="summary-detail" id="summaryDetail">Riverdale sits on the Green Line corridor — College Park, downtown DC, and major medical centers are all within reach.</div>
+    <div class="summary-verdict" id="summaryVerdict">Outstanding location for federal contractors, Capitol Hill staff, and Southeast DC hospital commuters.</div>
+    <div class="summary-detail" id="summaryDetail">Knox Cir SE sits on the Green Line corridor — Navy Yard, Capitol Hill, and JBAB are all within 20 minutes.</div>
   </div>
   <div class="cta-inline">
     <span>Applications are accepted through the official listing form.</span>
-    <a href="https://mitsecurestay.carrd.co/" target="_blank" rel="noopener">Apply for 5311 59th Ave →</a>
+    <a href="https://mitsecurestay.carrd.co/" target="_blank" rel="noopener">Apply for 12 Knox Cir SE →</a>
   </div>
 
   <div class="dest-section" id="section-universities">
@@ -237,15 +235,15 @@
   </div>
 
   <div class="disclaimer">
-    <strong>Data note:</strong> Commute times are estimated off-peak averages based on DC Metro, MARC, and typical driving patterns. Real-time conditions vary.
+    <strong>Data note:</strong> Commute times are estimated off-peak averages based on DC Metro and typical driving patterns. Real-time conditions vary.
     Always verify with <a href="https://maps.google.com" target="_blank" rel="noopener">Google Maps</a> before committing.
-    Route summaries reflect typical Metro + walk patterns from Riverdale / College Park–U of Md station (Green Line).
+    Route summaries reflect typical Metro + walk patterns from Knox Cir SE / Congress Heights station (Green Line).
   </div>
 
 </div>
 
 <script>
-const ORIGIN = '5311+59th+Ave+Riverdale+MD+20737';
+const ORIGIN = '12+Knox+Cir+SE+Washington+DC+20020';
 
 function mapsUrl(query, mode) {
   const travelmode = mode === 'drive' ? 'driving' : 'transit';
@@ -255,361 +253,316 @@ function mapsUrl(query, mode) {
 const DATA = {
   universities: [
     {
-      name: "University of Maryland College Park",
-      mapsQuery: "University of Maryland College Park MD",
-      tags: ["student"],
-      transit: { time: "8–14 min", transfers: 0, route: "Green Line → College Park–U of Md (1–2 stops)" },
-      drive:   { time: "6–12 min", route: "Kenilworth Ave → Paint Branch Pkwy → Campus Dr" },
-      friction: 5,
-      note: "Best university commute from Riverdale. College Park station is practically next door — under 10 min by Metro or car."
-    },
-    {
-      name: "Georgetown Law Center",
-      mapsQuery: "Georgetown Law Center 600 New Jersey Ave NW Washington DC",
-      tags: ["student"],
-      transit: { time: "28–40 min", transfers: 0, route: "Green Line → Union Station area via Gallery Place, walk 8 min" },
-      drive:   { time: "18–28 min", route: "Baltimore Ave → New York Ave → New Jersey Ave NW" },
-      friction: 4,
-      note: "Georgetown Law's Capitol Hill campus — much more accessible than the Foggy Bottom main campus. Green Line gets you close with no transfer."
-    },
-    {
-      name: "Trinity Washington University",
-      mapsQuery: "Trinity Washington University Washington DC",
-      tags: ["student"],
-      transit: { time: "35–48 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Rhode Island Ave, bus" },
-      drive:   { time: "20–32 min", route: "Baltimore Ave → Rhode Island Ave NE → Michigan Ave NE" },
-      friction: 3,
-      note: "One transfer needed. Driving via Rhode Island Ave is more direct."
-    },
-    {
       name: "Howard University",
       mapsQuery: "Howard University Washington DC",
       tags: ["student"],
-      transit: { time: "28–40 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Shaw–Howard U" },
-      drive:   { time: "20–30 min", route: "Baltimore Ave → Rhode Island Ave NE → Georgia Ave NW" },
-      friction: 3,
-      note: "One transfer at Fort Totten onto the Red Line. Manageable daily commute."
-    },
-    {
-      name: "Catholic University of America",
-      mapsQuery: "Catholic University of America Washington DC",
-      tags: ["student"],
-      transit: { time: "22–32 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Brookland–CUA" },
-      drive:   { time: "15–24 min", route: "Baltimore Ave → Rhode Island Ave NE → Michigan Ave NE" },
-      friction: 3,
-      note: "One transfer at Fort Totten. Brookland–CUA is one Red Line stop from Fort Totten — fast connection."
+      transit: { time: "22–32 min", transfers: 0, route: "Green Line → Shaw–Howard U (direct, no transfer)" },
+      drive:   { time: "14–22 min", route: "South Capitol St → Georgia Ave NW" },
+      friction: 5,
+      note: "Direct Green Line — no transfer. Shaw–Howard station is walkable to the main campus."
     },
     {
       name: "Gallaudet University",
       mapsQuery: "Gallaudet University Washington DC",
       tags: ["student"],
-      transit: { time: "30–42 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Red Line → Union Station area" },
-      drive:   { time: "18–28 min", route: "Baltimore Ave → New York Ave NE → Florida Ave NE" },
-      friction: 3,
-      note: "One transfer. Green Line runs directly through downtown — clean connection."
+      transit: { time: "20–30 min", transfers: 0, route: "Green Line → Union Station area via Gallery Place" },
+      drive:   { time: "12–20 min", route: "Pennsylvania Ave SE → Florida Ave NE" },
+      friction: 4,
+      note: "Green Line runs straight through downtown — clean ride with no transfer needed."
     },
     {
-      name: "Johns Hopkins SAIS",
-      mapsQuery: "Johns Hopkins SAIS 1740 Massachusetts Ave NW Washington DC",
+      name: "Catholic University of America",
+      mapsQuery: "Catholic University of America Washington DC",
       tags: ["student"],
-      transit: { time: "38–52 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Dupont Circle" },
-      drive:   { time: "25–38 min", route: "Baltimore Ave → New York Ave → Massachusetts Ave NW" },
+      transit: { time: "28–40 min", transfers: 1, route: "Green Line → Gallery Place, transfer Red Line → Brookland–CUA" },
+      drive:   { time: "18–28 min", route: "South Capitol St → Michigan Ave NE" },
       friction: 3,
-      note: "One transfer at Fort Totten. Red Line runs direct to Dupont Circle from there."
+      note: "One transfer at Gallery Place onto the Red Line. Brookland–CUA is two stops from there."
+    },
+    {
+      name: "Trinity Washington University",
+      mapsQuery: "Trinity Washington University Washington DC",
+      tags: ["student"],
+      transit: { time: "30–42 min", transfers: 1, route: "Green Line → Gallery Place, transfer Red Line → Rhode Island Ave, bus Michigan Ave" },
+      drive:   { time: "18–28 min", route: "South Capitol St → Michigan Ave NE" },
+      friction: 3,
+      note: "One transfer. Michigan Ave NE is the direct driving corridor."
     },
     {
       name: "George Washington University",
       mapsQuery: "George Washington University Foggy Bottom Washington DC",
       tags: ["student"],
-      transit: { time: "42–55 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Blue/Orange → Foggy Bottom" },
-      drive:   { time: "28–42 min", route: "Baltimore Ave → New York Ave → I-395 Bridge" },
+      transit: { time: "30–42 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Blue/Orange → Foggy Bottom" },
+      drive:   { time: "18–28 min", route: "Pennsylvania Ave SE → I-395 → 23rd St NW" },
       friction: 3,
-      note: "One transfer at L'Enfant. Green Line gets you downtown quickly; Blue/Orange finishes the trip."
+      note: "One clean transfer at L'Enfant Plaza. Strong commute for a cross-town trip."
     },
+    {
+      name: "Johns Hopkins SAIS",
+      mapsQuery: "Johns Hopkins SAIS 1740 Massachusetts Ave NW Washington DC",
+      tags: ["student"],
+      transit: { time: "35–48 min", transfers: 1, route: "Green Line → Gallery Place, transfer Red Line → Dupont Circle" },
+      drive:   { time: "22–34 min", route: "Pennsylvania Ave → Massachusetts Ave NW" },
+      friction: 3,
+      note: "Transfer at Gallery Place onto the Red Line. Dupont Circle is a short ride from there."
+    },
+    {
+      name: "Georgetown Law Center",
+      mapsQuery: "Georgetown Law Center 600 New Jersey Ave NW Washington DC",
+      tags: ["student"],
+      transit: { time: "16–24 min", transfers: 0, route: "Green Line → Union Station area, walk 8 min to 600 New Jersey Ave NW" },
+      drive:   { time: "10–16 min", route: "Pennsylvania Ave SE → New Jersey Ave NW" },
+      friction: 5,
+      note: "Georgetown Law's Capitol Hill campus is practically next door to Knox Cir SE. Green Line, no transfer — one of the easiest law school commutes in DC."
+    },
+    {
+      name: "Virginia Tech DC (Potomac Yard)",
+      mapsQuery: "Virginia Tech Innovation Campus Potomac Yard Arlington VA",
+      tags: ["student"],
+      transit: { time: "28–40 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Yellow Line → Potomac Yard" },
+      drive:   { time: "16–26 min", route: "I-295 South → I-395 → Potomac Yard exit" },
+      friction: 4,
+      note: "L'Enfant is a fast, easy transfer point. Yellow Line runs direct to Potomac Yard from there."
+    }
   ],
 
   hospitals: [
     {
-      name: "UM Capital Region Medical Center",
-      mapsQuery: "University of Maryland Capital Region Medical Center Largo MD",
+      name: "Cedar Hill Regional Medical Center (GW Health)",
+      mapsQuery: "Cedar Hill Regional Medical Center 1200 Pecan St SE Washington DC",
       tags: ["healthcare"],
-      transit: { time: "22–34 min", transfers: 1, route: "Green Line → Suitland or transfer to Blue/Silver → Largo Town Center" },
-      drive:   { time: "14–22 min", route: "Kenilworth Ave → US-50 East → Largo" },
-      friction: 4,
-      note: "Top hospital commute from Riverdale. Much closer than from DC — straightforward drive on US-50."
-    },
-    {
-      name: "MedStar Washington Hospital Center",
-      mapsQuery: "MedStar Washington Hospital Center Washington DC",
-      tags: ["healthcare"],
-      transit: { time: "30–42 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → NoMa, bus Irving St NW" },
-      drive:   { time: "20–30 min", route: "Baltimore Ave → Rhode Island Ave NE → Michigan Ave NE → Irving St NW" },
-      friction: 3,
-      note: "One transfer. Michigan Ave NE corridor makes driving straightforward."
-    },
-    {
-      name: "Children's National Hospital",
-      mapsQuery: "Children's National Hospital Washington DC",
-      tags: ["healthcare"],
-      transit: { time: "32–44 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Brookland, bus H2" },
-      drive:   { time: "18–28 min", route: "Baltimore Ave → Rhode Island Ave NE → Michigan Ave NE" },
-      friction: 3,
-      note: "Michigan Ave NE is the direct driving route. One transfer via Fort Totten by Metro."
+      transit: { time: "4–8 min", transfers: 0, route: "Green Line → Congress Heights, walk 5 min — hospital is steps from the station" },
+      drive:   { time: "3–6 min", route: "South Capitol St → Pecan St SE — under 1 mile" },
+      friction: 5,
+      note: "Opened April 2025. The closest hospital to Knox Cir SE by far — a 5 min walk from Congress Heights station. Full-service acute care, trauma center, and pediatric ED. Travel nurses: this is your anchor destination from this property."
     },
     {
       name: "Howard University Hospital",
       mapsQuery: "Howard University Hospital Washington DC",
       tags: ["healthcare"],
-      transit: { time: "30–42 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Shaw–Howard U, walk 5 min" },
-      drive:   { time: "20–30 min", route: "Baltimore Ave → Rhode Island Ave NE → Georgia Ave NW" },
-      friction: 3,
-      note: "One transfer at Fort Totten. Shaw–Howard station is walkable to the hospital entrance."
+      transit: { time: "22–32 min", transfers: 0, route: "Green Line → Shaw–Howard U, walk 5 min" },
+      drive:   { time: "14–22 min", route: "South Capitol St → Georgia Ave NW" },
+      friction: 5,
+      note: "Direct Green Line — no transfer. Shaw–Howard station is immediately walkable to the hospital."
     },
     {
-      name: "Adventist HealthCare White Oak Medical Center",
-      mapsQuery: "Adventist HealthCare White Oak Medical Center 11890 Healing Way Silver Spring MD",
+      name: "MedStar Washington Hospital Center",
+      mapsQuery: "MedStar Washington Hospital Center Washington DC",
       tags: ["healthcare"],
-      transit: { time: "30–44 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Silver Spring, bus to White Oak" },
-      drive:   { time: "18–28 min", route: "Kenilworth Ave → Eastern Ave → New Hampshire Ave → White Oak" },
+      transit: { time: "28–40 min", transfers: 1, route: "Green Line → Gallery Place, transfer Red Line → NoMa, bus Irving St NW" },
+      drive:   { time: "18–28 min", route: "South Capitol St → Michigan Ave NE → Irving St NW" },
       friction: 3,
-      note: "Adjacent to the FDA White Oak campus. Active travel nurse placement hospital. Closer from Riverdale than from DC — New Hampshire Ave is a direct driving route."
+      note: "One transfer. Michigan Ave corridor makes driving a strong alternative for early shifts."
     },
     {
-      name: "Holy Cross Hospital",
-      mapsQuery: "Holy Cross Hospital Silver Spring MD",
+      name: "Children's National Hospital",
+      mapsQuery: "Children's National Hospital Washington DC",
       tags: ["healthcare"],
-      transit: { time: "28–40 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Silver Spring, bus or rideshare" },
-      drive:   { time: "16–26 min", route: "Kenilworth Ave → Eastern Ave → Colesville Rd → Silver Spring" },
+      transit: { time: "30–42 min", transfers: 1, route: "Green Line → Gallery Place, transfer Red Line → Brookland, bus H2" },
+      drive:   { time: "18–28 min", route: "South Capitol St → Michigan Ave NE direct" },
       friction: 3,
-      note: "High travel nurse volume hospital. Easier from Riverdale than from DC — Silver Spring is a short drive up Eastern Ave."
+      note: "Michigan Ave NE is the direct driving route. One transfer via Gallery Place by Metro."
     },
     {
-      name: "Veterans Affairs Medical Center",
-      mapsQuery: "Washington DC VA Medical Center 50 Irving St NW",
+      name: "George Washington University Hospital",
+      mapsQuery: "GW University Hospital 900 23rd St NW Washington DC",
       tags: ["healthcare"],
-      transit: { time: "35–48 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Yellow/Green → Waterfront area" },
-      drive:   { time: "22–34 min", route: "Pennsylvania Ave SE → Irving St SW" },
+      transit: { time: "30–42 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Blue/Orange → Foggy Bottom" },
+      drive:   { time: "18–30 min", route: "I-395 North → 23rd St NW" },
       friction: 3,
-      note: "One transfer at L'Enfant. Green Line is your main artery for this commute."
+      note: "One transfer at L'Enfant. I-395 is the fastest driving route from Southeast DC."
     },
     {
       name: "Kaiser Permanente Capitol Hill",
       mapsQuery: "Kaiser Permanente Capitol Hill Medical Center Washington DC",
       tags: ["healthcare"],
-      transit: { time: "28–40 min", transfers: 0, route: "Green Line → Capitol South or Navy Yard area, walk or bus" },
-      drive:   { time: "18–28 min", route: "Baltimore Ave → New York Ave → Constitution Ave" },
+      transit: { time: "14–22 min", transfers: 0, route: "Green Line → Capitol South or Navy Yard, walk or bus" },
+      drive:   { time: "8–14 min", route: "Pennsylvania Ave SE → Capitol Hill" },
+      friction: 5,
+      note: "Capitol Hill is minutes away — direct Green Line, no transfer. One of the best hospital commutes on this list."
+    },
+    {
+      name: "Veterans Affairs Medical Center",
+      mapsQuery: "Washington DC VA Medical Center 50 Irving St NW",
+      tags: ["healthcare"],
+      transit: { time: "18–28 min", transfers: 0, route: "Green Line → Waterfront, walk 12 min to Irving St SW" },
+      drive:   { time: "10–18 min", route: "South Capitol St → P St SW → Irving St SW" },
       friction: 4,
-      note: "Green Line runs directly through Capitol Hill — no transfer needed. Solid commute."
+      note: "Direct Green Line to Waterfront. Short walk to the VA campus — no transfer needed."
+    },
+    {
+      name: "UM Capital Region Medical Center",
+      mapsQuery: "University of Maryland Capital Region Medical Center Largo MD",
+      tags: ["healthcare"],
+      transit: { time: "35–50 min", transfers: 1, route: "Green Line → Branch Ave or transfer to Blue/Silver → Largo Town Center" },
+      drive:   { time: "22–34 min", route: "Pennsylvania Ave SE → MD-4 → US-50 East → Largo" },
+      friction: 3,
+      note: "Pennsylvania Ave SE is the direct driving corridor to Largo. One Metro transfer needed for transit."
+    },
+    {
+      name: "Walter Reed Nat'l Military Medical Center",
+      mapsQuery: "Walter Reed National Military Medical Center Bethesda MD",
+      tags: ["healthcare", "contractor"],
+      transit: { time: "45–58 min", transfers: 1, route: "Green Line → Gallery Place, transfer Red Line → Medical Center" },
+      drive:   { time: "28–42 min", route: "South Capitol St → 16th St NW → Wisconsin Ave NW" },
+      friction: 3,
+      note: "One transfer at Gallery Place. Red Line runs direct to Medical Center station, which exits at the hospital entrance."
     }
   ],
 
   federal: [
     {
-      name: "U.S. Capitol",
-      mapsQuery: "United States Capitol Building Washington DC",
-      tags: ["federal"],
-      transit: { time: "22–34 min", transfers: 0, route: "Green Line → Capitol South (direct, no transfer)" },
-      drive:   { time: "16–26 min", route: "Baltimore Ave → New York Ave → Constitution Ave" },
-      friction: 5,
-      note: "Green Line runs straight to Capitol South — no transfer. One of the best federal commutes from Riverdale."
-    },
-    {
-      name: "Department of Justice",
-      mapsQuery: "US Department of Justice 950 Pennsylvania Ave NW Washington DC",
-      tags: ["federal"],
-      transit: { time: "28–38 min", transfers: 0, route: "Green Line → Archives–Navy Memorial or L'Enfant Plaza, walk 5 min" },
-      drive:   { time: "18–28 min", route: "Baltimore Ave → New York Ave NW → Pennsylvania Ave NW" },
-      friction: 5,
-      note: "Direct Green Line. Archives station puts you steps from the DOJ building."
-    },
-    {
-      name: "FBI Headquarters",
-      mapsQuery: "FBI Headquarters 935 Pennsylvania Ave NW Washington DC",
-      tags: ["federal"],
-      transit: { time: "28–38 min", transfers: 0, route: "Green Line → Archives–Navy Memorial, walk 8 min" },
-      drive:   { time: "18–28 min", route: "New York Ave NW → Pennsylvania Ave NW" },
-      friction: 5,
-      note: "Same Green Line run as DOJ. Pennsylvania Ave corridor is direct from Riverdale."
-    },
-    {
-      name: "Library of Congress",
-      mapsQuery: "Library of Congress Washington DC",
-      tags: ["federal"],
-      transit: { time: "24–34 min", transfers: 0, route: "Green Line → Capitol South, walk 8 min" },
-      drive:   { time: "16–24 min", route: "Baltimore Ave → Constitution Ave → 1st St SE" },
-      friction: 5,
-      note: "Direct Green Line to Capitol South. Strong commute — Capitol Hill is Riverdale's best corridor."
-    },
-    {
-      name: "Union Station / NoMa–Capitol Hill Jobs",
-      mapsQuery: "Union Station Washington DC",
-      tags: ["federal"],
-      transit: { time: "20–30 min", transfers: 0, route: "Green Line → Gallery Place, transfer Red Line → Union Station or walk NoMa" },
-      drive:   { time: "14–22 min", route: "Baltimore Ave → New York Ave NE → Florida Ave NE" },
-      friction: 5,
-      note: "Strong commute anchor for this corridor. Green Line puts you in NoMa–Capitol Hill in under 30 min."
-    },
-    {
-      name: "White House / OEOB",
-      mapsQuery: "White House 1600 Pennsylvania Ave NW Washington DC",
-      tags: ["federal"],
-      transit: { time: "32–44 min", transfers: 0, route: "Green Line → L'Enfant Plaza, walk or transfer Blue/Orange → McPherson Square" },
-      drive:   { time: "22–34 min", route: "New York Ave NW → Pennsylvania Ave NW" },
-      friction: 4,
-      note: "Green Line gets you close. One easy Metro hop or short walk from L'Enfant completes the trip."
-    },
-    {
-      name: "FDA Headquarters",
-      mapsQuery: "FDA White Oak Campus Silver Spring MD",
+      name: "Joint Base Anacostia–Bolling (JBAB)",
+      mapsQuery: "Joint Base Anacostia-Bolling Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "35–50 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Silver Spring, bus or rideshare to White Oak" },
-      drive:   { time: "18–28 min", route: "Kenilworth Ave → Eastern Ave → New Hampshire Ave → White Oak" },
-      friction: 3,
-      note: "Riverdale is significantly closer to FDA White Oak than DC properties. New Hampshire Ave is the direct driving route — under 25 min off-peak."
-    },
-    {
-      name: "USDA / Beltsville Agricultural Research Center",
-      mapsQuery: "USDA Beltsville Agricultural Research Center Beltsville MD",
-      tags: ["federal", "contractor"],
-      transit: { time: "30–45 min", transfers: 1, route: "Green Line → College Park, bus 17K or rideshare to BARC" },
-      drive:   { time: "10–18 min", route: "Kenilworth Ave → Baltimore Ave → Powder Mill Rd → BARC" },
-      friction: 4,
-      note: "Closest major federal research campus to Riverdale. Under 15 min by car — a standout commute that no DC property can match."
-    },
-    {
-      name: "Suitland Federal Center (Census Bureau / USCIS)",
-      mapsQuery: "Suitland Federal Center 4600 Silver Hill Road Suitland MD",
-      tags: ["federal", "contractor"],
-      transit: { time: "32–44 min", transfers: 0, route: "Green Line → Suitland station (direct, longer ride), bus P12/P60 or rideshare to the Federal Center" },
-      drive:   { time: "20–30 min", route: "Baltimore Ave → Pennsylvania Ave SE → Suitland Pkwy → Silver Hill Rd" },
-      friction: 3,
-      note: "Home to U.S. Census Bureau HQ and USCIS headquarters. Direct Green Line, no transfer — the Federal Center itself needs a short bus or rideshare connection from Suitland station."
-    },
-    {
-      name: "NASA Goddard Space Flight Center",
-      mapsQuery: "NASA Goddard Space Flight Center 8800 Greenbelt Rd Greenbelt MD",
-      tags: ["federal", "contractor"],
-      transit: { time: "18–28 min", transfers: 0, route: "Green Line → Greenbelt (direct, 2 stops), shuttle or short rideshare to campus" },
-      drive:   { time: "10–16 min", route: "Kenilworth Ave → Greenbelt Rd direct" },
+      transit: { time: "8–14 min", transfers: 0, route: "Green Line → Congress Heights, short rideshare or walk to gate" },
+      drive:   { time: "5–10 min", route: "South Capitol St → Bolling gate — under 2 miles" },
       friction: 5,
-      note: "Goddard sits right off the Green Line at Greenbelt station — 2 stops from College Park. One of the best federal research commutes in the entire DC area. Major hub for engineers, scientists, and aerospace contractors."
-    },
-    {
-      name: "Pentagon",
-      mapsQuery: "The Pentagon Arlington VA",
-      tags: ["federal", "contractor"],
-      transit: { time: "38–52 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Blue/Yellow → Pentagon" },
-      drive:   { time: "25–40 min", route: "I-295 South → I-395 → Pentagon exit" },
-      friction: 3,
-      note: "One transfer at L'Enfant. Green Line is your express into downtown before the Blue/Yellow connection."
+      note: "Closest military installation to Knox Cir SE. Essentially a neighborhood commute — under 10 min by car. Best base access of any MIT Secure Stay property."
     },
     {
       name: "Washington Navy Yard",
       mapsQuery: "Washington Navy Yard Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "25–35 min", transfers: 0, route: "Green Line → Navy Yard–Ballpark (direct, no transfer)" },
-      drive:   { time: "16–24 min", route: "Baltimore Ave → Pennsylvania Ave SE → M St SE" },
+      transit: { time: "10–18 min", transfers: 0, route: "Green Line → Navy Yard–Ballpark (direct, 2 stops)" },
+      drive:   { time: "8–14 min", route: "South Capitol St → M St SE → 11th St SE" },
       friction: 5,
-      note: "Direct Green Line — no transfer. Navy Yard station is steps from the gate. Excellent contractor commute from Riverdale."
+      note: "Direct Green Line, 2 stops. Navy Yard station is steps from the gate. Exceptional contractor commute."
+    },
+    {
+      name: "U.S. Capitol",
+      mapsQuery: "United States Capitol Building Washington DC",
+      tags: ["federal"],
+      transit: { time: "14–22 min", transfers: 0, route: "Green Line → Capitol South (direct, 3 stops)" },
+      drive:   { time: "8–15 min", route: "Pennsylvania Ave SE → Constitution Ave" },
+      friction: 5,
+      note: "Direct Green Line to Capitol South. Capitol Hill is the strongest federal commute from Knox Cir SE."
+    },
+    {
+      name: "Library of Congress",
+      mapsQuery: "Library of Congress Washington DC",
+      tags: ["federal"],
+      transit: { time: "14–22 min", transfers: 0, route: "Green Line → Capitol South, walk 8 min" },
+      drive:   { time: "8–14 min", route: "Pennsylvania Ave SE → 1st St SE" },
+      friction: 5,
+      note: "Same Green Line run as Capitol. Library of Congress is a short walk from Capitol South station."
+    },
+    {
+      name: "Department of Justice",
+      mapsQuery: "US Department of Justice 950 Pennsylvania Ave NW Washington DC",
+      tags: ["federal"],
+      transit: { time: "18–28 min", transfers: 0, route: "Green Line → Archives–Navy Memorial, walk 5 min" },
+      drive:   { time: "12–20 min", route: "Pennsylvania Ave SE → NW → DOJ" },
+      friction: 5,
+      note: "Direct Green Line. Archives station is steps from the DOJ building."
+    },
+    {
+      name: "FBI Headquarters",
+      mapsQuery: "FBI Headquarters 935 Pennsylvania Ave NW Washington DC",
+      tags: ["federal"],
+      transit: { time: "18–28 min", transfers: 0, route: "Green Line → Archives–Navy Memorial or L'Enfant, walk 8 min" },
+      drive:   { time: "12–20 min", route: "Pennsylvania Ave SE → NW corridor" },
+      friction: 5,
+      note: "Pennsylvania Ave is one straight corridor from Knox Cir to FBI HQ. Direct Green Line."
+    },
+    {
+      name: "Suitland Federal Center (Census Bureau / USCIS)",
+      mapsQuery: "Suitland Federal Center 4600 Silver Hill Road Suitland MD",
+      tags: ["federal", "contractor"],
+      transit: { time: "22–32 min", transfers: 0, route: "Green Line → Suitland station (direct, 3 stops), bus P12/P60 or short rideshare to the Federal Center" },
+      drive:   { time: "14–22 min", route: "South Capitol St → Suitland Pkwy → Silver Hill Rd" },
+      friction: 4,
+      note: "Home to U.S. Census Bureau HQ and USCIS headquarters. Direct Green Line to Suitland station — the Federal Center itself needs a short bus or rideshare from there, but no transfer required to get close."
     },
     {
       name: "Fort McNair (NDW)",
       mapsQuery: "Fort Lesley J. McNair Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "32–44 min", transfers: 0, route: "Green Line → Waterfront, walk 12 min" },
-      drive:   { time: "18–28 min", route: "Pennsylvania Ave SE → South Capitol St → P St SW" },
-      friction: 4,
-      note: "Direct Green Line to Waterfront station. Short walk to the base — no transfer needed."
+      transit: { time: "14–22 min", transfers: 0, route: "Green Line → Waterfront, walk 12 min" },
+      drive:   { time: "8–14 min", route: "South Capitol St → P St SW" },
+      friction: 5,
+      note: "Direct Green Line to Waterfront. Very short drive on South Capitol St. One of the strongest base commutes from Knox Cir SE."
     },
     {
-      name: "Joint Base Anacostia–Bolling (JBAB)",
-      mapsQuery: "Joint Base Anacostia-Bolling Washington DC",
+      name: "Union Station / NoMa–Capitol Hill Jobs",
+      mapsQuery: "Union Station Washington DC",
+      tags: ["federal"],
+      transit: { time: "18–28 min", transfers: 0, route: "Green Line → Gallery Place, walk or transfer Red Line → Union Station" },
+      drive:   { time: "12–20 min", route: "Pennsylvania Ave SE → New York Ave NE" },
+      friction: 4,
+      note: "Direct Green Line into downtown. Strong access to the NoMa–Union Station employer corridor."
+    },
+    {
+      name: "White House / OEOB",
+      mapsQuery: "White House 1600 Pennsylvania Ave NW Washington DC",
+      tags: ["federal"],
+      transit: { time: "22–32 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Blue/Orange → McPherson Square" },
+      drive:   { time: "14–22 min", route: "Pennsylvania Ave SE → NW → 17th St NW" },
+      friction: 4,
+      note: "One easy transfer at L'Enfant. Pennsylvania Ave is a direct driving corridor from Southeast DC."
+    },
+    {
+      name: "Pentagon",
+      mapsQuery: "The Pentagon Arlington VA",
       tags: ["federal", "contractor"],
-      transit: { time: "32–45 min", transfers: 0, route: "Green Line → Congress Heights, rideshare to gate" },
-      drive:   { time: "16–26 min", route: "Pennsylvania Ave SE → South Capitol St → Bolling gate" },
-      friction: 3,
-      note: "Direct Green Line to Congress Heights. Short rideshare to the gate from there. Driving on South Capitol St is also straightforward."
+      transit: { time: "22–32 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Blue/Yellow → Pentagon" },
+      drive:   { time: "12–20 min", route: "I-295 South → I-395 → Pentagon exit" },
+      friction: 4,
+      note: "One transfer at L'Enfant. Among the better Pentagon commutes in the DC area — I-395 is fast from Southeast."
+    },
+    {
+      name: "Naval Research Laboratory",
+      mapsQuery: "Naval Research Laboratory Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "18–28 min", transfers: 0, route: "Green Line → Congress Heights, short rideshare to NRL gate" },
+      drive:   { time: "8–14 min", route: "South Capitol St → Martin Luther King Jr Ave SE → NRL gate" },
+      friction: 4,
+      note: "NRL is in the same Southeast DC corridor as Knox Cir. Driving is the primary option — under 15 min by car."
     },
     {
       name: "Joint Base Andrews",
       mapsQuery: "Joint Base Andrews Camp Springs MD",
       tags: ["federal", "contractor"],
-      transit: { time: "40–58 min", transfers: 1, route: "Green Line → Suitland, rideshare or bus to Andrews" },
-      drive:   { time: "16–26 min", route: "Kenilworth Ave → MD-202 → MD-4 → Andrews" },
+      transit: { time: "38–52 min", transfers: 1, route: "Green Line → Suitland, rideshare or bus to Andrews" },
+      drive:   { time: "18–28 min", route: "Pennsylvania Ave SE → MD-4 South → Andrews" },
       friction: 3,
-      note: "Much closer from Riverdale than from DC. Suitland is on the Green Line — easier Metro access than most DC properties offer."
-    },
-    {
-      name: "NIH Main Campus",
-      mapsQuery: "National Institutes of Health 9000 Rockville Pike Bethesda MD",
-      tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "42–56 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Medical Center (direct)" },
-      drive:   { time: "28–42 min", route: "Kenilworth Ave → Eastern Ave → 16th St NW → Wisconsin Ave NW → Rockville Pike" },
-      friction: 3,
-      note: "One transfer at Fort Totten onto the Red Line. Medical Center station exits directly onto the NIH campus. Reliable commute for researchers and clinical staff."
-    },
-    {
-      name: "NOAA Headquarters",
-      mapsQuery: "NOAA Headquarters 1315 East-West Highway Silver Spring MD",
-      tags: ["federal", "contractor"],
-      transit: { time: "30–42 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Silver Spring, walk 10 min to East-West Hwy" },
-      drive:   { time: "18–28 min", route: "Kenilworth Ave → Eastern Ave → Colesville Rd → Silver Spring" },
-      friction: 3,
-      note: "One transfer at Fort Totten. NOAA's Silver Spring campus is a short walk from the station. Closer from Riverdale than from most DC properties."
-    },
-    {
-      name: "Downtown Silver Spring",
-      mapsQuery: "Silver Spring Metro Station Maryland",
-      tags: ["federal", "contractor"],
-      transit: { time: "28–38 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Silver Spring (1 stop)" },
-      drive:   { time: "16–26 min", route: "Kenilworth Ave → Eastern Ave → Colesville Rd" },
-      friction: 4,
-      note: "Silver Spring anchors a major federal and private employer cluster — NOAA, FDA-adjacent offices, and dozens of contractors. Fort Totten is a fast, clean transfer point."
-    },
-    {
-      name: "Walter Reed Nat'l Military Medical Center",
-      mapsQuery: "Walter Reed National Military Medical Center Bethesda MD",
-      tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "40–55 min", transfers: 1, route: "Green Line → Fort Totten, transfer Red Line → Medical Center (direct)" },
-      drive:   { time: "28–42 min", route: "Baltimore Ave → 16th St NW → Wisconsin Ave NW" },
-      friction: 3,
-      note: "Fort Totten to Medical Center is a direct Red Line ride. Medical Center station is at the hospital entrance — no further transfer or walk needed."
+      note: "Pennsylvania Ave SE is the direct driving route to Andrews. Transit requires one transfer to reach Suitland station."
     },
     {
       name: "L'Enfant Plaza Federal Campus",
       mapsQuery: "L'Enfant Plaza Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "28–40 min", transfers: 0, route: "Green Line → L'Enfant Plaza (direct, no transfer)" },
-      drive:   { time: "18–28 min", route: "Baltimore Ave → Pennsylvania Ave SE → D St SW" },
+      transit: { time: "14–22 min", transfers: 0, route: "Green Line → L'Enfant Plaza (direct, 3 stops)" },
+      drive:   { time: "8–14 min", route: "South Capitol St → D St SW → L'Enfant Plaza" },
       friction: 5,
-      note: "Home to Dept of Energy, HUD, Dept of Education, and Dept of Transportation — all within a 5 min walk. Direct Green Line from Riverdale, no transfer."
+      note: "Home to Dept of Energy, HUD, Dept of Education, and Dept of Transportation — all within a 5 min walk of L'Enfant Plaza station. Direct Green Line, no transfer. One of the strongest federal commutes from Knox Cir SE."
+    },
+    {
+      name: "Foggy Bottom Federal Campus",
+      mapsQuery: "Foggy Bottom GWU Metro Station Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "22–32 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Blue/Orange/Silver → Foggy Bottom–GWU" },
+      drive:   { time: "14–22 min", route: "I-395 North → 23rd St NW" },
+      friction: 4,
+      note: "Covers State Department (2201 C St NW), Dept of Interior (1849 C St NW), and related agencies. One transfer at L'Enfant onto Blue/Orange/Silver line."
     },
     {
       name: "Federal Triangle / National Mall Corridor",
       mapsQuery: "Federal Triangle Metro Station Washington DC",
       tags: ["federal", "contractor"],
-      transit: { time: "28–40 min", transfers: 0, route: "Green Line → Archives or L'Enfant Plaza (direct)" },
-      drive:   { time: "18–28 min", route: "Baltimore Ave → Pennsylvania Ave → Independence Ave SW" },
+      transit: { time: "18–28 min", transfers: 0, route: "Green Line → Archives or L'Enfant Plaza, walk to Independence Ave SW" },
+      drive:   { time: "10–18 min", route: "South Capitol St → Independence Ave SW" },
       friction: 5,
-      note: "Covers Treasury, EPA, USDA, and Commerce along Independence Ave and Pennsylvania Ave SW. Direct Green Line — Archives and L'Enfant stations bracket the whole corridor."
+      note: "Covers Treasury (1500 Pennsylvania Ave NW), EPA (1200 Pennsylvania Ave NW), USDA (1400 Independence Ave SW), and Commerce. Direct Green Line — Archives and L'Enfant stations bracket the whole corridor."
     },
     {
       name: "Dept of Labor / Judiciary Square",
       mapsQuery: "US Department of Labor 200 Constitution Ave NW Washington DC",
       tags: ["federal"],
-      transit: { time: "32–44 min", transfers: 1, route: "Green Line → Gallery Place, transfer Red Line → Judiciary Square" },
-      drive:   { time: "20–30 min", route: "Baltimore Ave → New York Ave NW → Constitution Ave NW" },
+      transit: { time: "22–32 min", transfers: 1, route: "Green Line → Gallery Place, transfer Red Line → Judiciary Square" },
+      drive:   { time: "12–20 min", route: "Pennsylvania Ave SE → Constitution Ave NW" },
       friction: 4,
-      note: "Dept of Labor is one block from Judiciary Square. One clean transfer at Gallery Place onto the Red Line."
-    },
-    {
-      name: "World Bank / IMF",
-      mapsQuery: "World Bank Headquarters 1818 H St NW Washington DC",
-      tags: ["federal", "contractor"],
-      transit: { time: "38–52 min", transfers: 1, route: "Green Line → L'Enfant Plaza, transfer Blue/Orange → Farragut West or walk from L'Enfant" },
-      drive:   { time: "24–36 min", route: "Baltimore Ave → New York Ave → K St NW → 18th St NW" },
-      friction: 3,
-      note: "World Bank (1818 H St NW) and IMF (700 19th St NW) are major employers of J-1 visa holders and international staff. One transfer at L'Enfant onto Blue/Orange line."
+      note: "Dept of Labor sits at Constitution Ave NW and 3rd St — one block from Judiciary Square station. One clean transfer at Gallery Place."
     }
   ]
 };
@@ -619,24 +572,24 @@ let currentMode   = 'transit';
 
 const SUMMARIES = {
   all: {
-    verdict: "Strong location for UMD students, PG County federal staff, and Northeast DC hospital commuters.",
-    detail:  "Riverdale sits on the Green Line corridor — College Park, downtown DC, and major medical centers are all within reach."
+    verdict: "Outstanding location for federal contractors, Capitol Hill staff, and Southeast DC hospital commuters.",
+    detail:  "Knox Cir SE sits on the Green Line corridor — Navy Yard, Capitol Hill, and JBAB are all within 20 minutes."
   },
   student: {
-    verdict: "Best for: University of Maryland College Park students. Catholic U and Howard are reachable with one transfer.",
-    detail:  "UMD College Park is 1–2 Metro stops away. Fort Totten gives you Red Line access to DC universities."
+    verdict: "Best for: Howard University and GWU students. Gallery Place gives you Red Line access for Catholic U and SAIS.",
+    detail:  "Green Line runs direct to Shaw–Howard. One transfer at Gallery Place or L'Enfant opens the rest of the city."
   },
   healthcare: {
-    verdict: "Best for: UM Capital Region, Holy Cross, and Capitol Hill healthcare staff.",
-    detail:  "UM Capital Region is a short drive on US-50. Green Line gives direct access to Capitol Hill medical facilities."
+    verdict: "Best for: Cedar Hill Regional Medical Center, Howard University Hospital, Kaiser Capitol Hill, and VA Medical Center staff.",
+    detail:  "Cedar Hill GW Health is a 5-minute walk from Congress Heights station — opened 2025, right next door. Four more hospitals within a direct or one-transfer Green Line commute."
   },
   federal: {
-    verdict: "Best for: Capitol Hill, DOJ, Navy Yard, and FDA White Oak staff.",
-    detail:  "Green Line runs direct to Capitol South and Navy Yard. FDA and USDA are closer from Riverdale than any DC property."
+    verdict: "Best for: Navy Yard, Capitol Hill, DOJ, FBI, and Fort McNair staff.",
+    detail:  "Green Line connects Knox Cir SE directly to the strongest federal corridor in DC. No transfer needed for most destinations."
   },
   contractor: {
-    verdict: "Best for: Navy Yard, JBAB, Joint Base Andrews, and FDA contractors.",
-    detail:  "Andrews and USDA/Beltsville are significantly closer from Riverdale. Navy Yard is a direct Green Line ride."
+    verdict: "Best for: JBAB, Navy Yard, Naval Research Lab, Pentagon, and Fort McNair contractors.",
+    detail:  "JBAB is a 5–10 min drive. Navy Yard is 2 stops on the Green Line. Southeast DC is the strongest contractor location in the MIT Secure Stay portfolio."
   }
 };
 
