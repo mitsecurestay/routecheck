@@ -138,6 +138,17 @@
   }
   .maps-btn:hover { background: var(--accent); color: #fff; }
 
+  .daily-life-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .daily-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius);
+    padding: 12px 14px;
+  }
+  .daily-card-cat { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-light); margin-bottom: 4px; }
+  .daily-card-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .daily-card-name a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed var(--border); }
+  .daily-card-name a:hover { color: var(--accent); }
+  .daily-card-time { font-size: 12px; color: var(--drive); font-weight: 600; }
+
   .cta-bottom { margin-top: 40px; padding: 28px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius); text-align: center; }
   .cta-bottom h3 { font-family: var(--font-head); font-size: 20px; font-weight: 700; margin-bottom: 8px; }
   .cta-bottom p { font-size: 14px; color: var(--ink-light); margin-bottom: 20px; }
@@ -227,6 +238,18 @@
     <div class="section-body" id="body-federal">
       <div class="dest-grid" id="grid-federal"></div>
       <div class="no-results" id="noResults-federal">No federal destinations match this filter.</div>
+    </div>
+  </div>
+
+  <div class="dest-section" id="section-daily">
+    <div class="section-header" onclick="toggleSection('daily')">
+      <span class="section-icon">🛒</span>
+      <h2>Daily Life Nearby</h2>
+      <span class="section-count">5 places</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body" id="body-daily">
+      <div class="daily-life-grid" id="grid-daily"></div>
     </div>
   </div>
 
@@ -614,6 +637,13 @@ const DATA = {
   ]
 };
 
+DATA.daily = [
+  { category: "Grocery", name: "Whole Foods Market (The Station at Riverdale Park)", query: "Whole Foods Market 6621 Baltimore Ave Riverdale Park MD", time: "5 min drive" },
+  { category: "Pharmacy", name: "CVS (Riverdale Rd)", query: "CVS 5707 Riverdale Rd Riverdale MD", time: "3 min drive" },
+  { category: "Fitness", name: "Gold's Gym (The Station at Riverdale Park)", query: "Gold's Gym Riverdale Park MD", time: "5 min drive" },
+  { category: "Shopping", name: "The Mall at Prince Georges", query: "The Mall at Prince Georges Hyattsville MD", time: "10 min drive" },
+  { category: "Dining", name: "Busboys and Poets (Hyattsville)", query: "Busboys and Poets Hyattsville MD", time: "8 min drive" }
+];
 let currentFilter = 'all';
 let currentMode   = 'transit';
 
@@ -708,12 +738,24 @@ function buildCard(dest, idx, sectionKey) {
   `;
 }
 
+function buildDailyCard(item) {
+  const url = mapsUrl(item.query, 'drive');
+  return `
+    <div class="daily-card">
+      <div class="daily-card-cat">${item.category}</div>
+      <div class="daily-card-name"><a href="${url}" target="_blank" rel="noopener">${item.name} ↗</a></div>
+      <div class="daily-card-time">${item.time}</div>
+    </div>
+  `;
+}
+
 function renderAll() {
   ['universities', 'hospitals', 'federal'].forEach(sectionKey => {
     const grid = document.getElementById(`grid-${sectionKey}`);
     grid.innerHTML = DATA[sectionKey].map((d, i) => buildCard(d, i, sectionKey)).join('');
     updateSectionCount(sectionKey);
   });
+  document.getElementById('grid-daily').innerHTML = DATA.daily.map(buildDailyCard).join('');
   updateSummary();
 }
 
