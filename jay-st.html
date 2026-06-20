@@ -105,6 +105,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--card-radius);
+    flex-wrap: wrap;
   }
   .mode-label { font-size: 13px; font-weight: 600; color: var(--ink-light); }
   .toggle-wrap { display: flex; background: var(--bg); border-radius: 6px; padding: 3px; gap: 2px; }
@@ -196,14 +197,25 @@
     user-select: none;
   }
   .card-left { flex: 1; min-width: 0; }
-  .card-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* FIX #2: name truncates, but the off-page-link icon is now a separate
+     flex-shrink:0 element so it is never clipped by the ellipsis. */
+  .card-name { display: flex; align-items: center; gap: 3px; margin-bottom: 3px; min-width: 0; }
   .card-name a {
+    display: flex; align-items: center; gap: 3px; min-width: 0;
     color: var(--ink);
     text-decoration: none;
-    border-bottom: 1px dashed var(--border);
     transition: color .15s, border-color .15s;
   }
-  .card-name a:hover { color: var(--accent); border-color: var(--accent); }
+  .card-name a:hover { color: var(--accent); }
+  .card-name a:hover .card-name-text { border-color: var(--accent); }
+  .card-name-text {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+    font-size: 14px; font-weight: 700; border-bottom: 1px dashed var(--border);
+  }
+  .card-name-icon { flex-shrink: 0; font-size: 13px; color: var(--ink-light); }
+  .card-name a:hover .card-name-icon { color: var(--accent); }
+
   .maps-btn {
     display: inline-flex;
     align-items: center;
@@ -355,15 +367,19 @@
   }
   .disclaimer a { color: var(--accent); }
 
+  /* ── NO-RESULTS ──────────────────────────────────────────── */
+  .no-results { font-size: 14px; color: var(--ink-light); padding: 16px 0; display: none; }
+  .no-results-link { color: var(--accent); font-weight: 600; cursor: pointer; }
+
   /* ── MOBILE ──────────────────────────────────────────────── */
   @media (max-width: 480px) {
     .filter-btn { min-width: 100px; padding: 10px 12px; font-size: 13px; }
     .detail-grid { grid-template-columns: 1fr; }
-    .mode-note { display: none; }
+    /* FIX #3: previously "display:none" on mobile, which hid the only
+       caveat that these are off-peak estimates, on the device most
+       tenants will actually use. Now wraps to its own line instead. */
+    .mode-note { display: block; width: 100%; margin-left: 0; }
   }
-
-  /* ── NO-RESULTS ──────────────────────────────────────────── */
-  .no-results { font-size: 14px; color: var(--ink-light); padding: 16px 0; display: none; }
 </style>
 </head>
 <body>
@@ -407,8 +423,8 @@
   <!-- SUMMARY -->
   <div class="summary-panel" id="summaryPanel">
     <strong>Quick verdict</strong>
-    <div class="summary-verdict" id="summaryVerdict">Solid location for students, healthcare staff, and Capitol Hill commuters.</div>
-    <div class="summary-detail" id="summaryDetail">Jay St NE is within walking distance of three Metro stations across two lines (Blue/Silver and Orange) — most downtown destinations reach in 20–40 min.</div>
+    <div class="summary-verdict" id="summaryVerdict"></div>
+    <div class="summary-detail" id="summaryDetail"></div>
   </div>
   <div class="cta-inline">
     <span>Applications are accepted through the official listing form.</span>
@@ -425,7 +441,7 @@
     </div>
     <div class="section-body" id="body-universities">
       <div class="dest-grid" id="grid-universities"></div>
-      <div class="no-results" id="noResults-universities">No universities match this filter.</div>
+      <div class="no-results" id="noResults-universities">No universities match this filter. <span class="no-results-link" onclick="resetFilter()">Show all destinations →</span></div>
     </div>
   </div>
 
@@ -439,7 +455,7 @@
     </div>
     <div class="section-body" id="body-hospitals">
       <div class="dest-grid" id="grid-hospitals"></div>
-      <div class="no-results" id="noResults-hospitals">No hospitals match this filter.</div>
+      <div class="no-results" id="noResults-hospitals">No hospitals match this filter. <span class="no-results-link" onclick="resetFilter()">Show all destinations →</span></div>
     </div>
   </div>
 
@@ -453,7 +469,7 @@
     </div>
     <div class="section-body" id="body-federal">
       <div class="dest-grid" id="grid-federal"></div>
-      <div class="no-results" id="noResults-federal">No federal destinations match this filter.</div>
+      <div class="no-results" id="noResults-federal">No federal destinations match this filter. <span class="no-results-link" onclick="resetFilter()">Show all destinations →</span></div>
     </div>
   </div>
 
@@ -461,7 +477,7 @@
     <div class="section-header" onclick="toggleSection('daily')">
       <span class="section-icon">🛒</span>
       <h2>Daily Life Nearby</h2>
-      <span class="section-count">7 places</span>
+      <span class="section-count" id="count-daily"></span>
       <span class="chevron">▼</span>
     </div>
     <div class="section-body" id="body-daily">
@@ -500,6 +516,42 @@ function mapsUrl(query, mode) {
 const DATA = {
   universities: [
     {
+      name: "Johns Hopkins SAIS",
+      mapsQuery: "Johns Hopkins Bloomberg Center 555 Pennsylvania Ave NW Washington DC",
+      tags: ["student"],
+      transit: { time: "22–30 min", transfers: 0, route: "Blue/Silver Line direct to Federal Triangle (13 min walk to 555 Pennsylvania Ave NW)" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW" },
+      friction: 5,
+      note: "SAIS relocated to the Hopkins Bloomberg Center at 555 Pennsylvania Ave NW in 2023 — now a direct, no-transfer ride from Jay St NE. One of the strongest commutes on this list."
+    },
+    {
+      name: "George Washington University",
+      mapsQuery: "George Washington University Foggy Bottom Washington DC",
+      tags: ["student"],
+      transit: { time: "25–35 min", transfers: 0, route: "Blue/Silver Line direct to Foggy Bottom–GWU (no transfer)" },
+      drive:   { time: "25–35 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW" },
+      friction: 4,
+      note: "Direct ride on the Blue/Silver Line all the way to Foggy Bottom — no transfer needed despite the distance."
+    },
+    {
+      name: "Virginia Tech DC (Potomac Yard)",
+      mapsQuery: "Virginia Tech Innovation Campus Potomac Yard Arlington VA",
+      tags: ["student"],
+      transit: { time: "45–55 min", transfers: 0, route: "Blue/Silver Line direct to Potomac Yard (no transfer, long ride)" },
+      drive:   { time: "30–42 min", route: "Minnesota Ave NE → DC-295 South → I-395 South → Potomac Yard exit" },
+      friction: 4,
+      note: "Potomac Yard sits on the same Blue/Silver Line as Jay St's home station — no transfer, just a longer ride."
+    },
+    {
+      name: "Georgetown Law Center",
+      mapsQuery: "Georgetown Law Center 600 New Jersey Ave NW Washington DC",
+      tags: ["student"],
+      transit: { time: "30–40 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Union Station, walk 8 min" },
+      drive:   { time: "20–28 min", route: "Minnesota Ave NE → Benning Rd NE → New York Ave NE → New Jersey Ave NW" },
+      friction: 4,
+      note: "Georgetown Law's Capitol Hill campus is a separate commute from the main Foggy Bottom campus. One transfer at Metro Center."
+    },
+    {
       name: "Howard University",
       mapsQuery: "Howard University Washington DC",
       tags: ["student"],
@@ -527,51 +579,6 @@ const DATA = {
       note: "One transfer at Metro Center. Florida Ave NE is a fairly direct drive."
     },
     {
-      name: "George Washington University",
-      mapsQuery: "George Washington University Foggy Bottom Washington DC",
-      tags: ["student"],
-      transit: { time: "25–35 min", transfers: 0, route: "Blue/Silver Line direct to Foggy Bottom–GWU (no transfer)" },
-      drive:   { time: "25–35 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW" },
-      friction: 4,
-      note: "Direct ride on the Blue/Silver Line all the way to Foggy Bottom — no transfer needed despite the distance."
-    },
-    {
-      name: "University of the District of Columbia",
-      mapsQuery: "University of the District of Columbia Washington DC",
-      tags: ["student"],
-      transit: { time: "45–58 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Van Ness–UDC" },
-      drive:   { time: "28–40 min", route: "Nannie Helen Burroughs Ave NE → Michigan Ave NE → Connecticut Ave NW" },
-      friction: 2,
-      note: "One transfer, but Van Ness is far out on the Red Line from this side of the system. Budget extra time."
-    },
-    {
-      name: "Johns Hopkins SAIS",
-      mapsQuery: "Johns Hopkins Bloomberg Center 555 Pennsylvania Ave NW Washington DC",
-      tags: ["student"],
-      transit: { time: "22–30 min", transfers: 0, route: "Blue/Silver Line direct to Federal Triangle (13 min walk to 555 Pennsylvania Ave NW)" },
-      drive:   { time: "18–26 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW" },
-      friction: 5,
-      note: "SAIS relocated to the Hopkins Bloomberg Center at 555 Pennsylvania Ave NW in 2023 — now a direct, no-transfer ride from Jay St NE. One of the strongest commutes on this list."
-    },
-    {
-      name: "Virginia Tech DC (Potomac Yard)",
-      mapsQuery: "Virginia Tech Innovation Campus Potomac Yard Arlington VA",
-      tags: ["student"],
-      transit: { time: "45–55 min", transfers: 0, route: "Blue/Silver Line direct to Potomac Yard (no transfer, long ride)" },
-      drive:   { time: "30–42 min", route: "Minnesota Ave NE → DC-295 South → I-395 South → Potomac Yard exit" },
-      friction: 4,
-      note: "Potomac Yard sits on the same Blue/Silver Line as Jay St's home station — no transfer, just a longer ride."
-    },
-    {
-      name: "Georgetown Law Center",
-      mapsQuery: "Georgetown Law Center 600 New Jersey Ave NW Washington DC",
-      tags: ["student"],
-      transit: { time: "30–40 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Union Station, walk 8 min" },
-      drive:   { time: "20–28 min", route: "Minnesota Ave NE → Benning Rd NE → New York Ave NE → New Jersey Ave NW" },
-      friction: 4,
-      note: "Georgetown Law's Capitol Hill campus is a separate commute from the main Foggy Bottom campus. One transfer at Metro Center."
-    },
-    {
       name: "Trinity Washington University",
       mapsQuery: "Trinity Washington University Washington DC",
       tags: ["student"],
@@ -588,10 +595,46 @@ const DATA = {
       drive:   { time: "25–35 min", route: "Minnesota Ave NE → DC-295 → Kenilworth Ave NE → US-1 North" },
       friction: 3,
       note: "One transfer at L'Enfant Plaza onto the Green Line. A long ride either way — driving via Kenilworth Ave is usually faster."
+    },
+    {
+      name: "University of the District of Columbia",
+      mapsQuery: "University of the District of Columbia Washington DC",
+      tags: ["student"],
+      transit: { time: "45–58 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Van Ness–UDC" },
+      drive:   { time: "28–40 min", route: "Nannie Helen Burroughs Ave NE → Michigan Ave NE → Connecticut Ave NW" },
+      friction: 2,
+      note: "One transfer, but Van Ness is far out on the Red Line from this side of the system. Budget extra time."
     }
   ],
 
   hospitals: [
+    {
+      name: "UM Capital Region Medical Center",
+      mapsQuery: "University of Maryland Capital Region Medical Center Largo MD",
+      tags: ["healthcare"],
+      transit: { time: "20–30 min", transfers: 0, route: "Blue/Silver Line direct to Largo Town Center (no transfer)" },
+      drive:   { time: "15–25 min", route: "Minnesota Ave NE → DC-295 → MD-202 East → Harry S Truman Dr" },
+      friction: 5,
+      note: "Largo Town Center sits on the same Blue/Silver Line that runs through Benning Road — a direct ride east, no transfer. One of the strongest hospital commutes from Jay St."
+    },
+    {
+      name: "George Washington University Hospital",
+      mapsQuery: "GW University Hospital 900 23rd St NW Washington DC",
+      tags: ["healthcare"],
+      transit: { time: "25–35 min", transfers: 0, route: "Blue/Silver Line direct to Foggy Bottom–GWU (no transfer)" },
+      drive:   { time: "25–35 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW → 23rd St NW" },
+      friction: 4,
+      note: "Direct Blue/Silver ride straight to Foggy Bottom, right at the hospital's doorstep. No transfer needed."
+    },
+    {
+      name: "Kaiser Permanente Capitol Hill",
+      mapsQuery: "Kaiser Permanente Capitol Hill Medical Center Washington DC",
+      tags: ["healthcare"],
+      transit: { time: "28–38 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Union Station, walk 8–10 min" },
+      drive:   { time: "15–22 min", route: "Minnesota Ave NE → Benning Rd NE → H St NE" },
+      friction: 4,
+      note: "One transfer at Metro Center, or a quick drive along Benning Rd and H St NE — one of the easier hospital commutes on this list."
+    },
     {
       name: "MedStar Washington Hospital Center",
       mapsQuery: "MedStar Washington Hospital Center Washington DC",
@@ -620,15 +663,6 @@ const DATA = {
       note: "One transfer at L'Enfant Plaza. Manageable for regular shifts, though not a direct ride."
     },
     {
-      name: "George Washington University Hospital",
-      mapsQuery: "GW University Hospital 900 23rd St NW Washington DC",
-      tags: ["healthcare"],
-      transit: { time: "25–35 min", transfers: 0, route: "Blue/Silver Line direct to Foggy Bottom–GWU (no transfer)" },
-      drive:   { time: "25–35 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW → 23rd St NW" },
-      friction: 4,
-      note: "Direct Blue/Silver ride straight to Foggy Bottom, right at the hospital's doorstep. No transfer needed."
-    },
-    {
       name: "Veterans Affairs Medical Center",
       mapsQuery: "Washington DC VA Medical Center 50 Irving St NW",
       tags: ["healthcare"],
@@ -636,24 +670,6 @@ const DATA = {
       drive:   { time: "22–30 min", route: "Nannie Helen Burroughs Ave NE → South Dakota Ave NE → Michigan Ave NE → Irving St NW" },
       friction: 3,
       note: "Same Georgia Ave/Irving St corridor as MedStar and Children's National. One transfer; driving is the steadier option."
-    },
-    {
-      name: "Kaiser Permanente Capitol Hill",
-      mapsQuery: "Kaiser Permanente Capitol Hill Medical Center Washington DC",
-      tags: ["healthcare"],
-      transit: { time: "28–38 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Union Station, walk 8–10 min" },
-      drive:   { time: "15–22 min", route: "Minnesota Ave NE → Benning Rd NE → H St NE" },
-      friction: 4,
-      note: "One transfer at Metro Center, or a quick drive along Benning Rd and H St NE — one of the easier hospital commutes on this list."
-    },
-    {
-      name: "UM Capital Region Medical Center",
-      mapsQuery: "University of Maryland Capital Region Medical Center Largo MD",
-      tags: ["healthcare"],
-      transit: { time: "20–30 min", transfers: 0, route: "Blue/Silver Line direct to Largo Town Center (no transfer)" },
-      drive:   { time: "15–25 min", route: "Minnesota Ave NE → DC-295 → MD-202 East → Harry S Truman Dr" },
-      friction: 5,
-      note: "Largo Town Center sits on the same Blue/Silver Line that runs through Benning Road — a direct ride east, no transfer. One of the strongest hospital commutes from Jay St."
     },
     {
       name: "Adventist HealthCare White Oak Medical Center",
@@ -704,15 +720,6 @@ const DATA = {
       note: "Same Federal Triangle stop as DOJ — direct, no transfer."
     },
     {
-      name: "Department of Homeland Security",
-      mapsQuery: "DHS Headquarters St Elizabeths West Campus Washington DC",
-      tags: ["federal"],
-      transit: { time: "30–40 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green Line → Congress Heights, short walk/shuttle" },
-      drive:   { time: "18–26 min", route: "Minnesota Ave NE → DC-295 South → South Capitol St" },
-      friction: 4,
-      note: "DHS consolidated its headquarters at the St. Elizabeths West Campus near Congress Heights — one transfer at L'Enfant Plaza onto the Green Line."
-    },
-    {
       name: "Library of Congress",
       mapsQuery: "Library of Congress Washington DC",
       tags: ["federal"],
@@ -720,15 +727,6 @@ const DATA = {
       drive:   { time: "15–22 min", route: "Minnesota Ave NE → Benning Rd NE → East Capitol St" },
       friction: 5,
       note: "Same direct run as the Capitol — no transfer, one of the most accessible destinations on this list."
-    },
-    {
-      name: "Union Station / NoMa–Capitol Hill Jobs",
-      mapsQuery: "Union Station Washington DC",
-      tags: ["federal"],
-      transit: { time: "26–36 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Union Station (1 stop)" },
-      drive:   { time: "16–24 min", route: "Minnesota Ave NE → Benning Rd NE → Florida Ave NE" },
-      friction: 4,
-      note: "One transfer at Metro Center onto the Red Line. A short, predictable hop from there."
     },
     {
       name: "White House / OEOB",
@@ -749,6 +747,51 @@ const DATA = {
       note: "The Pentagon sits on the same Blue/Silver Line as Jay St's home station — a direct ride, no transfer. Strong commute for contractors and DoD staff."
     },
     {
+      name: "Reagan National Airport (DCA)",
+      mapsQuery: "Ronald Reagan Washington National Airport Arlington VA",
+      tags: ["student", "healthcare", "federal", "contractor"],
+      transit: { time: "35–45 min", transfers: 0, route: "Blue/Silver Line direct to Reagan National Airport (no transfer, one stop past Pentagon)" },
+      drive:   { time: "22–32 min", route: "Minnesota Ave NE → DC-295 South → I-395 South → GW Memorial Pkwy" },
+      friction: 5,
+      note: "DCA sits on the same Blue/Silver Line as Jay St's home station — no transfer needed, just a few stops past the Pentagon. A real advantage for J-1 visa holders, traveling nurses, and contractors moving in or out."
+    },
+    {
+      name: "L'Enfant Plaza Federal Campus",
+      mapsQuery: "L'Enfant Plaza Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "22–32 min", transfers: 0, route: "Blue/Silver Line direct to L'Enfant Plaza (no transfer)" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → DC-295 South → D St SW" },
+      friction: 5,
+      note: "Home to Dept of Energy, HUD, Dept of Education, and Dept of Transportation — all within a 5 min walk. Direct Blue/Silver ride, no transfer."
+    },
+    {
+      name: "Federal Triangle / National Mall Corridor",
+      mapsQuery: "Federal Triangle Metro Station Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "22–32 min", transfers: 0, route: "Blue/Silver Line direct to Federal Triangle (no transfer)" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW → Independence Ave SW" },
+      friction: 5,
+      note: "Covers Treasury, EPA, USDA, and Commerce along Independence Ave and Pennsylvania Ave SW. Direct ride, no transfer."
+    },
+    {
+      name: "Department of Homeland Security",
+      mapsQuery: "DHS Headquarters St Elizabeths West Campus Washington DC",
+      tags: ["federal"],
+      transit: { time: "30–40 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green Line → Congress Heights, short walk/shuttle" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → DC-295 South → South Capitol St" },
+      friction: 4,
+      note: "DHS consolidated its headquarters at the St. Elizabeths West Campus near Congress Heights — one transfer at L'Enfant Plaza onto the Green Line."
+    },
+    {
+      name: "Union Station / NoMa–Capitol Hill Jobs",
+      mapsQuery: "Union Station Washington DC",
+      tags: ["federal"],
+      transit: { time: "26–36 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Union Station (1 stop)" },
+      drive:   { time: "16–24 min", route: "Minnesota Ave NE → Benning Rd NE → Florida Ave NE" },
+      friction: 4,
+      note: "One transfer at Metro Center onto the Red Line, or skip the Metro entirely: the D24 bus runs as a single direct ride from Deanwood straight to the Union Station Garage stop, no transfer. Part of WMATA's Frequent Service Network — 20 min or better, 7am–9pm daily."
+    },
+    {
       name: "Joint Base Anacostia–Bolling (JBAB)",
       mapsQuery: "Joint Base Anacostia-Bolling Washington DC",
       tags: ["federal", "contractor"],
@@ -764,7 +807,34 @@ const DATA = {
       transit: { time: "26–36 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green Line → Navy Yard–Ballpark, walk 5 min" },
       drive:   { time: "16–24 min", route: "Minnesota Ave NE → DC-295 South → M St SE" },
       friction: 4,
-      note: "One transfer at L'Enfant Plaza, then straight to the gate. A clean contractor commute either way."
+      note: "One transfer at L'Enfant Plaza, then straight to the gate. Or skip the Metro: the C31 bus runs as a single direct ride along Minnesota Ave straight to Navy Yard–Ballpark station, no transfer — and it's frequent, every 8–12 min during the day, 24 hours a day."
+    },
+    {
+      name: "Foggy Bottom Federal Campus",
+      mapsQuery: "Foggy Bottom GWU Metro Station Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "28–38 min", transfers: 0, route: "Blue/Silver Line direct to Foggy Bottom–GWU (no transfer)" },
+      drive:   { time: "22–32 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW → 23rd St NW" },
+      friction: 4,
+      note: "Covers State Department (2201 C St NW), Dept of Interior (1849 C St NW), and related agencies. Direct ride, no transfer."
+    },
+    {
+      name: "Dept of Labor / Judiciary Square",
+      mapsQuery: "US Department of Labor 200 Constitution Ave NW Washington DC",
+      tags: ["federal"],
+      transit: { time: "26–36 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Judiciary Square (1 stop)" },
+      drive:   { time: "18–26 min", route: "Minnesota Ave NE → Benning Rd NE → New York Ave NW → Constitution Ave NW" },
+      friction: 4,
+      note: "Dept of Labor is one block from Judiciary Square station. One transfer at Metro Center — or take the D24 bus, which runs as a single direct ride from Deanwood straight to Judiciary Square, no transfer needed."
+    },
+    {
+      name: "World Bank / IMF",
+      mapsQuery: "World Bank Headquarters 1818 H St NW Washington DC",
+      tags: ["federal", "contractor"],
+      transit: { time: "28–38 min", transfers: 0, route: "Blue/Silver Line direct to Farragut West, walk to 18th–19th St NW" },
+      drive:   { time: "22–32 min", route: "Minnesota Ave NE → East Capitol St → K St NW → 18th St NW" },
+      friction: 4,
+      note: "World Bank (1818 H St NW) and IMF (700 19th St NW) sit one block apart near Farragut West/Foggy Bottom. Direct ride, no transfer."
     },
     {
       name: "Fort McNair (NDW)",
@@ -774,6 +844,15 @@ const DATA = {
       drive:   { time: "18–26 min", route: "Minnesota Ave NE → DC-295 South → South Capitol St → P St SW" },
       friction: 3,
       note: "Home of the National Defense University. One transfer at L'Enfant Plaza, then a short walk from Waterfront station."
+    },
+    {
+      name: "Downtown Silver Spring",
+      mapsQuery: "Silver Spring Metro Station Maryland",
+      tags: ["federal", "contractor"],
+      transit: { time: "38–50 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Silver Spring" },
+      drive:   { time: "24–34 min", route: "Minnesota Ave NE → East Capitol St → Colesville Rd" },
+      friction: 3,
+      note: "One transfer at Metro Center. Silver Spring anchors a major employer cluster — NOAA, Discovery HQ, and dozens of contractors."
     },
     {
       name: "Walter Reed Nat'l Military Medical Center",
@@ -801,60 +880,6 @@ const DATA = {
       drive:   { time: "26–36 min", route: "Minnesota Ave NE → East Capitol St → New Hampshire Ave → East-West Hwy" },
       friction: 2,
       note: "One transfer at Metro Center, then a long ride out to Silver Spring. Driving is usually faster from this address."
-    },
-    {
-      name: "Downtown Silver Spring",
-      mapsQuery: "Silver Spring Metro Station Maryland",
-      tags: ["federal", "contractor"],
-      transit: { time: "38–50 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Silver Spring" },
-      drive:   { time: "24–34 min", route: "Minnesota Ave NE → East Capitol St → Colesville Rd" },
-      friction: 3,
-      note: "One transfer at Metro Center. Silver Spring anchors a major employer cluster — NOAA, Discovery HQ, and dozens of contractors."
-    },
-    {
-      name: "L'Enfant Plaza Federal Campus",
-      mapsQuery: "L'Enfant Plaza Washington DC",
-      tags: ["federal", "contractor"],
-      transit: { time: "22–32 min", transfers: 0, route: "Blue/Silver Line direct to L'Enfant Plaza (no transfer)" },
-      drive:   { time: "18–26 min", route: "Minnesota Ave NE → DC-295 South → D St SW" },
-      friction: 5,
-      note: "Home to Dept of Energy, HUD, Dept of Education, and Dept of Transportation — all within a 5 min walk. Direct Blue/Silver ride, no transfer."
-    },
-    {
-      name: "Foggy Bottom Federal Campus",
-      mapsQuery: "Foggy Bottom GWU Metro Station Washington DC",
-      tags: ["federal", "contractor"],
-      transit: { time: "28–38 min", transfers: 0, route: "Blue/Silver Line direct to Foggy Bottom–GWU (no transfer)" },
-      drive:   { time: "22–32 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW → 23rd St NW" },
-      friction: 4,
-      note: "Covers State Department (2201 C St NW), Dept of Interior (1849 C St NW), and related agencies. Direct ride, no transfer."
-    },
-    {
-      name: "Federal Triangle / National Mall Corridor",
-      mapsQuery: "Federal Triangle Metro Station Washington DC",
-      tags: ["federal", "contractor"],
-      transit: { time: "22–32 min", transfers: 0, route: "Blue/Silver Line direct to Federal Triangle (no transfer)" },
-      drive:   { time: "18–26 min", route: "Minnesota Ave NE → East Capitol St → Pennsylvania Ave NW → Independence Ave SW" },
-      friction: 5,
-      note: "Covers Treasury, EPA, USDA, and Commerce along Independence Ave and Pennsylvania Ave SW. Direct ride, no transfer."
-    },
-    {
-      name: "Dept of Labor / Judiciary Square",
-      mapsQuery: "US Department of Labor 200 Constitution Ave NW Washington DC",
-      tags: ["federal"],
-      transit: { time: "26–36 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Judiciary Square (1 stop)" },
-      drive:   { time: "18–26 min", route: "Minnesota Ave NE → Benning Rd NE → New York Ave NW → Constitution Ave NW" },
-      friction: 4,
-      note: "Dept of Labor is one block from Judiciary Square station. One transfer at Metro Center — same run as Union Station."
-    },
-    {
-      name: "World Bank / IMF",
-      mapsQuery: "World Bank Headquarters 1818 H St NW Washington DC",
-      tags: ["federal", "contractor"],
-      transit: { time: "28–38 min", transfers: 0, route: "Blue/Silver Line direct to Farragut West, walk to 18th–19th St NW" },
-      drive:   { time: "22–32 min", route: "Minnesota Ave NE → East Capitol St → K St NW → 18th St NW" },
-      friction: 4,
-      note: "World Bank (1818 H St NW) and IMF (700 19th St NW) sit one block apart near Farragut West/Foggy Bottom. Direct ride, no transfer."
     }
   ]
 };
@@ -873,27 +898,60 @@ DATA.daily = [
 let currentFilter = 'all';
 let currentMode   = 'transit';
 
-// ── SUMMARY TEXT ─────────────────────────────────────────────
+/* FIX #1: SUMMARIES is now keyed by [filter][mode] instead of just
+   [filter]. Previously the verdict text was hardcoded to transit
+   language and never changed when the user switched to the Driving
+   toggle — actively misleading anyone checking a driving commute. */
 const SUMMARIES = {
   all: {
-    verdict: "Strong location for Capitol Hill, federal, and Largo-area commuters — direct Blue/Silver Line access.",
-    detail:  "Jay St NE is within walking distance of three Metro stations across two lines — Benning Road and Capitol Heights (Blue/Silver) plus Deanwood (Orange). Federal Triangle, Capitol South, and McPherson Square are direct rides; points further out the Red and Green Lines need one transfer."
+    transit: {
+      verdict: "Strong location for Capitol Hill, federal, and Largo-area commuters — direct Blue/Silver Line access.",
+      detail:  "Jay St NE is within walking distance of three Metro stations across two lines — Benning Road and Capitol Heights (Blue/Silver) plus Deanwood (Orange). Federal Triangle, Capitol South, and McPherson Square are direct rides; points further out the Red and Green Lines need one transfer."
+    },
+    drive: {
+      verdict: "Strong driving access to Capitol Hill, federal hubs, and the Largo medical corridor — most of downtown DC runs 15–30 minutes by car.",
+      detail:  "Minnesota Ave NE and East Capitol St connect quickly to Capitol Hill and Federal Triangle. DC-295 gives fast, direct access south to Navy Yard, JBAB, and east to Largo."
+    }
   },
   student: {
-    verdict: "Best for: SAIS, GWU, and Virginia Tech DC students — direct, no-transfer rides.",
-    detail:  "SAIS at 555 Pennsylvania Ave NW and GWU's Foggy Bottom campus are both direct on the Blue/Silver Line. Howard, Catholic, and Gallaudet need one transfer."
+    transit: {
+      verdict: "Best for: SAIS, GWU, and Virginia Tech DC students — direct, no-transfer rides.",
+      detail:  "SAIS at 555 Pennsylvania Ave NW and GWU's Foggy Bottom campus are both direct on the Blue/Silver Line. Howard, Catholic, and Gallaudet need one transfer."
+    },
+    drive: {
+      verdict: "Best for: SAIS, GWU, and Georgetown Law by car — most run under 30 minutes.",
+      detail:  "Pennsylvania Ave NW and East Capitol St reach SAIS, GWU, and Georgetown Law in 18–28 minutes. UMD and Trinity are further out via Kenilworth Ave and Michigan Ave."
+    }
   },
   healthcare: {
-    verdict: "Best for: UM Capital Region Medical Center and Kaiser Permanente Capitol Hill staff.",
-    detail:  "UM Capital Region (Largo) is a direct ride on the same line. Most NW DC and Silver Spring hospitals require a transfer or are faster by car."
+    transit: {
+      verdict: "Best for: UM Capital Region Medical Center and Kaiser Permanente Capitol Hill staff.",
+      detail:  "UM Capital Region (Largo) is a direct ride on the same line. Most NW DC and Silver Spring hospitals require a transfer or are faster by car."
+    },
+    drive: {
+      verdict: "Best for: Kaiser Permanente Capitol Hill and UM Capital Region (Largo) by car.",
+      detail:  "Benning Rd and H St NE reach Kaiser Permanente in 15–22 minutes; DC-295 and MD-202 reach UM Capital Region in 15–25 minutes — the two fastest hospital commutes on this list."
+    }
   },
   federal: {
-    verdict: "Best for: Capitol Hill, DOJ/FBI, White House, and L'Enfant Plaza employees.",
-    detail:  "Federal Triangle, Capitol South, and McPherson Square are all direct stops on the same line as Jay St's home station — no transfer required for most of downtown."
+    transit: {
+      verdict: "Best for: Capitol Hill, DOJ/FBI, White House, and L'Enfant Plaza employees.",
+      detail:  "Federal Triangle, Capitol South, and McPherson Square are all direct stops on the same line as Jay St's home station — no transfer required for most of downtown."
+    },
+    drive: {
+      verdict: "Best for: Capitol Hill, DOJ/FBI, Navy Yard, and JBAB employees by car.",
+      detail:  "Benning Rd NE and East Capitol St reach most Capitol Hill and downtown federal buildings in 15–26 minutes; DC-295 gives Navy Yard and JBAB a direct, fast drive."
+    }
   },
   contractor: {
-    verdict: "Best for: Pentagon, Navy Yard, and JBAB contractors.",
-    detail:  "The Pentagon is a direct ride with zero transfers — same Blue/Silver Line straight through. Navy Yard and JBAB need one transfer at L'Enfant Plaza onto the Green Line."
+    transit: {
+      verdict: "Best for: Pentagon, Navy Yard, and JBAB contractors.",
+      detail:  "The Pentagon is a direct ride with zero transfers — same Blue/Silver Line straight through. Navy Yard and JBAB need one transfer at L'Enfant Plaza onto the Green Line."
+    },
+    drive: {
+      verdict: "Best for: Pentagon, Navy Yard, and JBAB contractors by car.",
+      detail:  "DC-295 South to I-395 reaches the Pentagon in 20–30 minutes; DC-295 alone reaches Navy Yard and JBAB in 15–24 minutes — some of the fastest driving commutes on this list."
+    }
   }
 };
 
@@ -921,7 +979,6 @@ function buildCard(dest, idx, sectionKey) {
 
   const visibleTime  = isTransit ? t.time  : d.time;
   const visibleChip  = isTransit ? 'transit' : 'drive';
-  const visibleRoute = isTransit ? t.route : d.route;
   const visibleXfer  = isTransit ? (t.transfers === 0 ? 'Direct — no transfer' : `${t.transfers} transfer${t.transfers > 1 ? 's' : ''}`) : '—';
 
   const isFiltered = currentFilter !== 'all' && !dest.tags.includes(currentFilter);
@@ -934,8 +991,9 @@ function buildCard(dest, idx, sectionKey) {
       <div class="card-header">
         <div class="card-left">
           <div class="card-name">
-            <a href="${url}" target="_blank" rel="noopener"
-               onclick="event.stopPropagation()">${dest.name} ↗</a>
+            <a href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <span class="card-name-text">${dest.name}</span><span class="card-name-icon">↗</span>
+            </a>
           </div>
           <div class="card-quick">
             <span class="time-chip ${visibleChip}">
@@ -994,6 +1052,10 @@ function renderAll() {
     updateSectionCount(sectionKey);
   });
   document.getElementById('grid-daily').innerHTML = DATA.daily.map(buildDailyCard).join('');
+  /* FIX #4: daily-life count is now computed from DATA.daily.length
+     instead of a hardcoded "7 places" string, so it can't drift out
+     of sync if the list is edited later. */
+  document.getElementById('count-daily').textContent = `${DATA.daily.length} places`;
   updateSummary();
 }
 
@@ -1005,7 +1067,7 @@ function updateSectionCount(sectionKey) {
 }
 
 function updateSummary() {
-  const s = SUMMARIES[currentFilter];
+  const s = SUMMARIES[currentFilter][currentMode];
   document.getElementById('summaryVerdict').textContent = s.verdict;
   document.getElementById('summaryDetail').textContent  = s.detail;
 }
@@ -1021,6 +1083,13 @@ function toggleSection(key) {
   const body   = document.getElementById(`body-${key}`);
   header.classList.toggle('collapsed');
   body.classList.toggle('hidden');
+}
+
+function resetFilter() {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+  currentFilter = 'all';
+  renderAll();
 }
 
 document.querySelectorAll('.filter-btn').forEach(btn => {
