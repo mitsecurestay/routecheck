@@ -59,7 +59,7 @@
   .mode-bar {
     display: flex; align-items: center; gap: 12px; margin: 20px 0 0;
     padding: 14px 16px; background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--card-radius);
+    border-radius: var(--card-radius); flex-wrap: wrap;
   }
   .mode-label { font-size: 13px; font-weight: 600; color: var(--ink-light); }
   .toggle-wrap { display: flex; background: var(--bg); border-radius: 6px; padding: 3px; gap: 2px; }
@@ -115,9 +115,20 @@
 
   .card-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; user-select: none; }
   .card-left { flex: 1; min-width: 0; }
-  .card-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .card-name a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed var(--border); transition: color .15s, border-color .15s; }
-  .card-name a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* FIX #2: name truncates, but the off-page-link icon is now a separate
+     flex-shrink:0 element so it is never clipped by the ellipsis. */
+  .card-name { display: flex; align-items: center; gap: 3px; margin-bottom: 3px; min-width: 0; }
+  .card-name a { display: flex; align-items: center; gap: 3px; min-width: 0; color: var(--ink); text-decoration: none; transition: color .15s; }
+  .card-name a:hover { color: var(--accent); }
+  .card-name a:hover .card-name-text { border-color: var(--accent); }
+  .card-name-text {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+    font-size: 14px; font-weight: 700; border-bottom: 1px dashed var(--border);
+  }
+  .card-name-icon { flex-shrink: 0; font-size: 13px; color: var(--ink-light); }
+  .card-name a:hover .card-name-icon { color: var(--accent); }
+
   .card-quick { font-size: 13px; color: var(--ink-light); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .time-chip { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; font-size: 13px; padding: 2px 8px; border-radius: 4px; }
   .time-chip.transit { background: #EEF2FC; color: var(--transit); }
@@ -166,12 +177,16 @@
 
   .disclaimer { margin-top: 40px; font-size: 12px; color: var(--ink-light); border-top: 1px solid var(--border); padding-top: 16px; line-height: 1.6; }
   .disclaimer a { color: var(--accent); }
-  .no-results { font-size: 14px; color: var(--ink-light); padding: 16px 0; display: none; }
+  .no-results { font-size: 14px; color: var(--ink-light); padding: 16px 0; }
+  .no-results-link { color: var(--accent); font-weight: 600; cursor: pointer; }
 
   @media (max-width: 480px) {
     .filter-btn { min-width: 100px; padding: 10px 12px; font-size: 13px; }
     .detail-grid { grid-template-columns: 1fr; }
-    .mode-note { display: none; }
+    /* FIX #3: previously "display:none" on mobile, which hid the only
+       caveat that these are off-peak estimates, on the device most
+       tenants will actually use. Now wraps to its own line instead. */
+    .mode-note { display: block; width: 100%; margin-left: 0; }
     .daily-life-grid { grid-template-columns: 1fr; }
   }
 </style>
@@ -223,8 +238,8 @@
 
   <div class="summary-panel" id="summaryPanel">
     <strong>Quick verdict</strong>
-    <div class="summary-verdict" id="summaryVerdict">Excellent Red Line access via a short bus connection — strong for NIH, NRC, and downtown DC commuters.</div>
-    <div class="summary-detail" id="summaryDetail">A short walk to Ride On Route 26 provides direct service to Glenmont Metro and NRC. Once on the Red Line, many downtown DC destinations can be reached without transfers.</div>
+    <div class="summary-verdict" id="summaryVerdict"></div>
+    <div class="summary-detail" id="summaryDetail"></div>
   </div>
   <div class="cta-inline">
     <span>Applications are accepted through the official listing form.</span>
@@ -240,7 +255,7 @@
     </div>
     <div class="section-body" id="body-hospitals">
       <div class="dest-grid" id="grid-hospitals"></div>
-      <div class="no-results" id="noResults-hospitals">No hospitals match this filter.</div>
+      <div class="no-results" id="noResults-hospitals">No hospitals match this filter. <span class="no-results-link" onclick="resetFilter()">Show all destinations →</span></div>
     </div>
   </div>
 
@@ -253,7 +268,7 @@
     </div>
     <div class="section-body" id="body-federal">
       <div class="dest-grid" id="grid-federal"></div>
-      <div class="no-results" id="noResults-federal">No federal destinations match this filter.</div>
+      <div class="no-results" id="noResults-federal">No federal destinations match this filter. <span class="no-results-link" onclick="resetFilter()">Show all destinations →</span></div>
     </div>
   </div>
 
@@ -266,7 +281,7 @@
     </div>
     <div class="section-body" id="body-biotech">
       <div class="dest-grid" id="grid-biotech"></div>
-      <div class="no-results" id="noResults-biotech">No biotech destinations match this filter.</div>
+      <div class="no-results" id="noResults-biotech">No biotech destinations match this filter. <span class="no-results-link" onclick="resetFilter()">Show all destinations →</span></div>
     </div>
   </div>
 
@@ -274,7 +289,7 @@
     <div class="section-header" onclick="toggleSection('daily')">
       <span class="section-icon">🛒</span>
       <h2>Daily Life Nearby</h2>
-      <span class="section-count">7 places</span>
+      <span class="section-count" id="count-daily"></span>
       <span class="chevron">▼</span>
     </div>
     <div class="section-body" id="body-daily">
@@ -306,6 +321,15 @@ function mapsUrl(query, mode) {
 const DATA = {
   hospitals: [
     {
+      name: "Holy Cross Hospital Health Center Aspen Hill",
+      mapsQuery: "Holy Cross Hospital Health Center 13415 Connecticut Avenue Aspen Hill MD",
+      tags: ["healthcare"],
+      transit: { time: "20–30 min", transfers: 1, route: "Walk → Ride On 26 toward Aspen Hill Rd corridor, short bus or walk" },
+      drive:   { time: "10–16 min", route: "Layhill Rd → Connecticut Ave → Aspen Hill" },
+      friction: 5,
+      note: "Closest healthcare facility to Hammersmith Cir — under 16 min by car. Outpatient clinic, not a full hospital, but a strong nearby option for clinical and admin staff."
+    },
+    {
       name: "Holy Cross Hospital",
       mapsQuery: "Holy Cross Hospital Silver Spring MD",
       tags: ["healthcare"],
@@ -324,15 +348,6 @@ const DATA = {
       note: "Full-service hospital with Level III NICU and pediatric ED. Route 26 actually passes near this corridor on its way to Montgomery Mall — a genuinely useful overlap."
     },
     {
-      name: "MedStar Montgomery Medical Center",
-      mapsQuery: "MedStar Montgomery Medical Center 18101 Prince Philip Drive Olney MD",
-      tags: ["healthcare"],
-      transit: { time: "55–75 min", transfers: 2, route: "Bus and rail connections exist but are impractical for regular shifts" },
-      drive:   { time: "18–28 min", route: "Georgia Ave (Route 97) South to Olney" },
-      friction: 3,
-      note: "138-bed MedStar teaching hospital. Georgia Avenue is a direct drive. Driving is the realistic option for shift work — transit is not practical here."
-    },
-    {
       name: "Suburban Hospital (Johns Hopkins Medicine)",
       mapsQuery: "Suburban Hospital 8600 Old Georgetown Road Bethesda MD",
       tags: ["healthcare"],
@@ -342,14 +357,14 @@ const DATA = {
       note: "Johns Hopkins-affiliated hospital, located right next to the NIH/Medical Center Red Line stop. Same one-seat ride as NIH — strong commute for clinical staff."
     },
     {
-      name: "Holy Cross Hospital Health Center Aspen Hill",
-      mapsQuery: "Holy Cross Hospital Health Center 13415 Connecticut Avenue Aspen Hill MD",
+      name: "MedStar Montgomery Medical Center",
+      mapsQuery: "MedStar Montgomery Medical Center 18101 Prince Philip Drive Olney MD",
       tags: ["healthcare"],
-      transit: { time: "20–30 min", transfers: 1, route: "Walk → Ride On 26 toward Aspen Hill Rd corridor, short bus or walk" },
-      drive:   { time: "10–16 min", route: "Layhill Rd → Connecticut Ave → Aspen Hill" },
-      friction: 5,
-      note: "Closest healthcare facility to Hammersmith Cir — under 16 min by car. Outpatient clinic, not a full hospital, but a strong nearby option for clinical and admin staff."
-    },
+      transit: { time: "55–75 min", transfers: 2, route: "Bus and rail connections exist but are impractical for regular shifts" },
+      drive:   { time: "18–28 min", route: "Georgia Ave (Route 97) South to Olney" },
+      friction: 3,
+      note: "138-bed MedStar teaching hospital. Georgia Avenue is a direct drive. Driving is the realistic option for shift work — transit is not practical here."
+    }
   ],
 
   federal: [
@@ -370,6 +385,15 @@ const DATA = {
       drive:   { time: "20–30 min", route: "Layhill Rd → I-495 → Old Georgetown Rd → Rockville Pike" },
       friction: 5,
       note: "The same Route 26 bus that connects to Glenmont also runs to North Bethesda station, which sits directly across the street from NRC Headquarters. A genuine one-bus commute for NRC staff and contractors."
+    },
+    {
+      name: "Walter Reed Nat'l Military Medical Center",
+      mapsQuery: "Walter Reed National Military Medical Center Bethesda MD",
+      tags: ["federal", "contractor", "healthcare"],
+      transit: { time: "28–38 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Medical Center (same stop as NIH)" },
+      drive:   { time: "26–38 min", route: "Layhill Rd → I-495 → Wisconsin Ave NW" },
+      friction: 5,
+      note: "Shares the Medical Center Red Line stop with NIH — same direct, no-transfer commute. Strong option for military medical staff and researchers."
     },
     {
       name: "FDA White Oak Campus",
@@ -399,13 +423,13 @@ const DATA = {
       note: "Major NIH-affiliated research campus. Route 26 passes near Twinbrook, close to this campus — a workable transit option alongside the direct ICC/I-270 drive."
     },
     {
-      name: "Walter Reed Nat'l Military Medical Center",
-      mapsQuery: "Walter Reed National Military Medical Center Bethesda MD",
-      tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "28–38 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Medical Center (same stop as NIH)" },
-      drive:   { time: "26–38 min", route: "Layhill Rd → I-495 → Wisconsin Ave NW" },
-      friction: 5,
-      note: "Shares the Medical Center Red Line stop with NIH — same direct, no-transfer commute. Strong option for military medical staff and researchers."
+      name: "BWI Airport (Thurgood Marshall)",
+      mapsQuery: "Baltimore Washington International Airport",
+      tags: ["student", "healthcare", "federal", "contractor"],
+      transit: { time: "55–70 min", transfers: 1, route: "Short drive or rideshare to Georgia Ave Park & Ride, then MTA Commuter Bus 201 direct to BWI (no further transfer)" },
+      drive:   { time: "35–45 min", route: "Layhill Rd → I-495 → I-95 North to BWI" },
+      friction: 4,
+      note: "MTA Commuter Bus 201 boards right at the Georgia Ave Park & Ride and runs straight to BWI — the most direct transit option, skipping a downtown detour entirely. It's a limited-schedule commuter bus though, so check timing before relying on it. Driving is faster and simpler for most flight times."
     },
     {
       name: "NSA / Fort Meade",
@@ -415,19 +439,10 @@ const DATA = {
       drive:   { time: "28–40 min", route: "I-495 East → Baltimore-Washington Pkwy (MD-295) North → Fort Meade Rd" },
       friction: 3,
       note: "Closer from this property than from any DC location in this portfolio. I-495 to MD-295 is a steady highway route — driving is the realistic commute option."
-    },
+    }
   ],
 
   biotech: [
-    {
-      name: "Rockville Town Center / Rockville Station",
-      mapsQuery: "Rockville Town Square Rockville MD",
-      tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "32–44 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Rockville (direct, no transfer)" },
-      drive:   { time: "20–30 min", route: "Layhill Rd → I-495 → MD-200 (ICC) → Rockville Pike" },
-      friction: 4,
-      note: "Major biotech and life sciences employment hub. Direct Red Line ride from Glenmont — no transfer required once aboard."
-    },
     {
       name: "Twinbrook Research Area",
       mapsQuery: "Twinbrook Station Rockville MD",
@@ -438,6 +453,15 @@ const DATA = {
       note: "Home to numerous biotech and CRO firms. Genuinely convenient — the same Route 26 bus that connects to Glenmont also serves Twinbrook station directly, no extra transfer needed."
     },
     {
+      name: "Rockville Town Center / Rockville Station",
+      mapsQuery: "Rockville Town Square Rockville MD",
+      tags: ["federal", "contractor", "healthcare"],
+      transit: { time: "32–44 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Rockville (direct, no transfer)" },
+      drive:   { time: "20–30 min", route: "Layhill Rd → I-495 → MD-200 (ICC) → Rockville Pike" },
+      friction: 4,
+      note: "Major biotech and life sciences employment hub. Direct Red Line ride from Glenmont — no transfer required once aboard."
+    },
+    {
       name: "Shady Grove Life Sciences Center",
       mapsQuery: "Shady Grove Life Sciences Center Rockville MD",
       tags: ["federal", "contractor", "healthcare"],
@@ -445,7 +469,7 @@ const DATA = {
       drive:   { time: "25–38 min", route: "Layhill Rd → MD-200 (ICC) → I-270 South → Shady Grove Rd" },
       friction: 4,
       note: "Core of the I-270 biotech corridor — home to NCI Shady Grove and Johns Hopkins Montgomery County campus. Direct Red Line ride to the terminus station, plus a short shuttle or walk."
-    },
+    }
   ],
 
   daily: [
@@ -462,22 +486,51 @@ const DATA = {
 let currentFilter = 'all';
 let currentMode   = 'transit';
 
+/* FIX #1: SUMMARIES is now keyed by [filter][mode] instead of just
+   [filter]. Previously the verdict text was hardcoded to transit
+   language ("one bus + one direct Red Line ride") and never changed
+   when the user switched to the Driving toggle — actively misleading
+   anyone checking a driving commute. */
 const SUMMARIES = {
   all: {
-    verdict: "Excellent Red Line access via a short bus connection — strong for NIH, NRC, and downtown DC commuters.",
-    detail:  "A short walk to Ride On Route 26 provides direct service to Glenmont Metro and NRC. Once on the Red Line, many downtown DC destinations can be reached without transfers."
+    transit: {
+      verdict: "Excellent Red Line access via a short bus connection — strong for NIH, NRC, and downtown DC commuters.",
+      detail:  "A short walk to Ride On Route 26 provides direct service to Glenmont Metro and NRC. Once on the Red Line, many downtown DC destinations can be reached without transfers."
+    },
+    drive: {
+      verdict: "Solid driving access to NIH, NRC, and the I-270 biotech corridor — most destinations run 15–30 minutes by car.",
+      detail:  "Layhill Rd connects to I-495 and Georgia Ave, putting NIH, NRC, and the Rockville Pike corridor within a short drive for most tenants."
+    }
   },
   healthcare: {
-    verdict: "Best for: Holy Cross, Shady Grove, Suburban Hospital, and MedStar Montgomery staff.",
-    detail:  "Suburban Hospital shares the same direct Red Line stop as NIH. Holy Cross and Shady Grove are reachable by car or via Glenmont with one connection."
+    transit: {
+      verdict: "Best for: Holy Cross, Shady Grove, Suburban Hospital, and MedStar Montgomery staff.",
+      detail:  "Suburban Hospital shares the same direct Red Line stop as NIH. Holy Cross and Shady Grove are reachable by car or via Glenmont with one connection."
+    },
+    drive: {
+      verdict: "Best for: Holy Cross Aspen Hill, Holy Cross Hospital, and MedStar Montgomery by car.",
+      detail:  "Georgia Ave and Connecticut Ave provide direct routes to most hospitals on this list — several are under 20 minutes by car."
+    }
   },
   federal: {
-    verdict: "Best for: NIH, NRC, FDA White Oak, and NOAA employees.",
-    detail:  "NIH and the NRC are both one bus + one direct Red Line ride from this property — no transfers required once aboard at Glenmont."
+    transit: {
+      verdict: "Best for: NIH, NRC, FDA White Oak, and NOAA employees.",
+      detail:  "NIH and the NRC are both one bus + one direct Red Line ride from this property — no transfers required once aboard at Glenmont."
+    },
+    drive: {
+      verdict: "Best for: NIH, NRC, FDA White Oak, and NOAA employees by car.",
+      detail:  "I-495 and Rockville Pike put NIH and NRC within a 20–32 minute drive; FDA White Oak and NOAA are reachable via Georgia Ave and New Hampshire Ave."
+    }
   },
   contractor: {
-    verdict: "Best for: NIH, NRC, and Fort Meade contractors.",
-    detail:  "NRC contractors get a genuine one-bus commute via North Bethesda station. Fort Meade is closer from here than from any DC property in the portfolio."
+    transit: {
+      verdict: "Best for: NIH, NRC, and Fort Meade contractors.",
+      detail:  "NRC contractors get a genuine one-bus commute via North Bethesda station. Fort Meade is closer from here than from any DC property in the portfolio, though transit there is impractical."
+    },
+    drive: {
+      verdict: "Best for: NIH, NRC, and Fort Meade contractors by car.",
+      detail:  "Fort Meade is a direct 28–40 minute highway drive via I-495 and MD-295 — closer than from any DC property in the portfolio. NIH and NRC are both 20–32 minutes via I-495."
+    }
   }
 };
 
@@ -511,7 +564,9 @@ function buildCard(dest, idx, sectionKey) {
       <div class="card-header">
         <div class="card-left">
           <div class="card-name">
-            <a href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${dest.name} ↗</a>
+            <a href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <span class="card-name-text">${dest.name}</span><span class="card-name-icon">↗</span>
+            </a>
           </div>
           <div class="card-quick">
             <span class="time-chip ${visibleChip}">${isTransit ? '🚇' : '🚗'} ${visibleTime}</span>
@@ -567,6 +622,10 @@ function renderAll() {
     updateSectionCount(sectionKey);
   });
   document.getElementById('grid-daily').innerHTML = DATA.daily.map(buildDailyCard).join('');
+  /* FIX #4: daily-life count is now computed from DATA.daily.length
+     instead of a hardcoded "7 places" string, so it can't drift out
+     of sync if the list is edited later. */
+  document.getElementById('count-daily').textContent = `${DATA.daily.length} places`;
   updateSummary();
 }
 
@@ -577,7 +636,7 @@ function updateSectionCount(sectionKey) {
 }
 
 function updateSummary() {
-  const s = SUMMARIES[currentFilter];
+  const s = SUMMARIES[currentFilter][currentMode];
   document.getElementById('summaryVerdict').textContent = s.verdict;
   document.getElementById('summaryDetail').textContent  = s.detail;
 }
@@ -589,6 +648,13 @@ function toggleCard(sectionKey, idx) {
 function toggleSection(key) {
   document.querySelector(`#section-${key} .section-header`).classList.toggle('collapsed');
   document.getElementById(`body-${key}`).classList.toggle('hidden');
+}
+
+function resetFilter() {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+  currentFilter = 'all';
+  renderAll();
 }
 
 document.querySelectorAll('.filter-btn').forEach(btn => {
