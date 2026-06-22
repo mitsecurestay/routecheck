@@ -376,10 +376,10 @@ const DATA = {
       name: "Howard University",
       mapsQuery: "Howard University Washington DC",
       tags: ["student"],
-      transit: { time: "43–55 min", transfers: 2, route: "Bus P14 → College Park–U of Md, Green Line → Fort Totten, transfer Red Line → Shaw–Howard U" },
+      transit: { time: "32–42 min", transfers: 1, route: "Bus P14 → College Park–U of Md, Green Line → Shaw–Howard U (direct, no transfer)" },
       drive:   { time: "20–30 min", route: "Baltimore Ave → Rhode Island Ave NE → Georgia Ave NW" },
-      friction: 3,
-      note: "One transfer at Fort Totten onto the Red Line. Manageable daily commute."
+      friction: 4,
+      note: "Shaw–Howard U sits directly on the Green Line — no Red Line transfer needed. A single-seat ride from College Park, faster and simpler than this used to show."
     },
     {
       name: "Catholic University of America",
@@ -424,10 +424,10 @@ const DATA = {
       name: "UM Capital Region Medical Center",
       mapsQuery: "University of Maryland Capital Region Medical Center Largo MD",
       tags: ["healthcare"],
-      transit: { time: "37–49 min", transfers: 2, route: "Bus P14 → College Park–U of Md, Green Line → Suitland or transfer to Blue/Silver → Largo Town Center" },
+      transit: { time: "42–55 min", transfers: 2, route: "Bus P14 → College Park–U of Md, Green Line → L'Enfant Plaza, transfer Blue/Silver → Largo Town Center" },
       drive:   { time: "14–22 min", route: "Kenilworth Ave → US-50 East → Largo" },
       friction: 4,
-      note: "Top hospital commute from Riverdale. Much closer than from DC — straightforward drive on US-50."
+      note: "Corrected — Suitland doesn't connect to Blue/Silver; the actual transfer point is L'Enfant Plaza. Driving via US-50 is much faster and is the realistic option for shift work."
     },
     {
       name: "Adventist HealthCare White Oak Medical Center",
@@ -451,19 +451,19 @@ const DATA = {
       name: "Kaiser Permanente Capitol Hill",
       mapsQuery: "Kaiser Permanente Capitol Hill Medical Center Washington DC",
       tags: ["healthcare"],
-      transit: { time: "43–55 min", transfers: 1, route: "Bus P14 → College Park–U of Md, Green Line → Capitol South or Navy Yard area, walk or bus" },
+      transit: { time: "35–45 min", transfers: 1, route: "Bus P14 → College Park–U of Md, Green Line → Gallery Place, transfer Red Line → Union Station, walk 8 min" },
       drive:   { time: "18–28 min", route: "Baltimore Ave → New York Ave → Constitution Ave" },
       friction: 4,
-      note: "After the P14 bus connection, the Green Line runs directly through Capitol Hill with no further transfer. Solid commute."
+      note: "Kaiser Permanente Capitol Hill (700 2nd St NE) is closest to Union Station, not Capitol South — same Gallery Place/Red Line transfer used for Union Station and NoMa jobs."
     },
     {
       name: "MedStar Washington Hospital Center",
       mapsQuery: "MedStar Washington Hospital Center Washington DC",
       tags: ["healthcare"],
-      transit: { time: "45–57 min", transfers: 2, route: "Bus P14 → College Park–U of Md, Green Line → Fort Totten, transfer Red Line → NoMa, bus Irving St NW" },
+      transit: { time: "37–47 min", transfers: 2, route: "Bus P14 → College Park–U of Md, Green Line → Fort Totten, transfer Red Line → Brookland–CUA, bus or 10 min walk" },
       drive:   { time: "20–30 min", route: "Baltimore Ave → Rhode Island Ave NE → Michigan Ave NE → Irving St NW" },
-      friction: 3,
-      note: "One transfer. Michigan Ave NE corridor makes driving straightforward."
+      friction: 4,
+      note: "Corrected — NoMa is the wrong station for this address. MedStar sits at 110 Irving St NW, right next to the VA Medical Center, both closest to Brookland-CUA — the same stop used for Catholic University."
     },
     {
       name: "Children's National Hospital",
@@ -478,19 +478,19 @@ const DATA = {
       name: "Howard University Hospital",
       mapsQuery: "Howard University Hospital Washington DC",
       tags: ["healthcare"],
-      transit: { time: "45–57 min", transfers: 2, route: "Bus P14 → College Park–U of Md, Green Line → Fort Totten, transfer Red Line → Shaw–Howard U, walk 5 min" },
+      transit: { time: "32–42 min", transfers: 1, route: "Bus P14 → College Park–U of Md, Green Line → Shaw–Howard U (direct, no transfer), walk 5 min" },
       drive:   { time: "20–30 min", route: "Baltimore Ave → Rhode Island Ave NE → Georgia Ave NW" },
-      friction: 3,
-      note: "One transfer at Fort Totten. Shaw–Howard station is walkable to the hospital entrance."
+      friction: 4,
+      note: "Shaw–Howard U sits directly on the Green Line — no Red Line transfer needed, unlike this used to show. Station is a short walk to the hospital entrance."
     },
     {
       name: "Veterans Affairs Medical Center",
       mapsQuery: "Washington DC VA Medical Center 50 Irving St NW",
       tags: ["healthcare"],
-      transit: { time: "50–63 min", transfers: 2, route: "Bus P14 → College Park–U of Md, Green Line → L'Enfant Plaza, transfer Yellow/Green → Waterfront area" },
-      drive:   { time: "22–34 min", route: "Pennsylvania Ave SE → Irving St SW" },
-      friction: 3,
-      note: "One transfer at L'Enfant. Green Line is your main artery for this commute."
+      transit: { time: "32–44 min", transfers: 2, route: "Bus P14 → College Park–U of Md, Green Line → Fort Totten, transfer Red Line → Brookland–CUA, free VA shuttle (Mon–Fri)" },
+      drive:   { time: "18–28 min", route: "Baltimore Ave → Rhode Island Ave NE → Michigan Ave NE" },
+      friction: 4,
+      note: "Corrected from a prior version that routed south to Waterfront — entirely the wrong part of the city. The VA itself runs a free weekday shuttle from Brookland-CUA station, the same stop used for Catholic University and Trinity."
     }
   ],
 
@@ -499,10 +499,10 @@ const DATA = {
       name: "U.S. Capitol",
       mapsQuery: "United States Capitol Building Washington DC",
       tags: ["federal"],
-      transit: { time: "37–49 min", transfers: 1, route: "Bus P14 → College Park–U of Md, Green Line → Capitol South (direct, no transfer)" },
+      transit: { time: "45–58 min", transfers: 2, route: "Bus P14 → College Park–U of Md, Green Line → L'Enfant Plaza, transfer Blue/Orange/Silver → Capitol South" },
       drive:   { time: "16–26 min", route: "Baltimore Ave → New York Ave → Constitution Ave" },
-      friction: 5,
-      note: "After the P14 bus to College Park, the Green Line runs straight to Capitol South with no further transfer. One of the best federal commutes from Riverdale."
+      friction: 4,
+      note: "Capitol South sits on the Blue/Orange/Silver lines, not Green — this route transfers at L'Enfant Plaza for the final stretch. Still a solid federal commute, just not a zero-transfer ride."
     },
     {
       name: "Department of Justice",
@@ -526,10 +526,10 @@ const DATA = {
       name: "Library of Congress",
       mapsQuery: "Library of Congress Washington DC",
       tags: ["federal"],
-      transit: { time: "39–49 min", transfers: 1, route: "Bus P14 → College Park–U of Md, Green Line → Capitol South, walk 8 min" },
+      transit: { time: "47–60 min", transfers: 2, route: "Bus P14 → College Park–U of Md, Green Line → L'Enfant Plaza, transfer Blue/Orange/Silver → Capitol South, walk 8 min" },
       drive:   { time: "16–24 min", route: "Baltimore Ave → Constitution Ave → 1st St SE" },
-      friction: 5,
-      note: "After the P14 bus connection, it's a direct Green Line ride to Capitol South. Strong commute — Capitol Hill is Riverdale's best corridor."
+      friction: 4,
+      note: "Same L'Enfant Plaza transfer as the Capitol — Green Line doesn't reach Capitol Hill directly. Walkable to the Library from Capitol South once you're off the train."
     },
     {
       name: "Union Station / NoMa–Capitol Hill Jobs",
@@ -544,7 +544,7 @@ const DATA = {
       name: "NASA Goddard Space Flight Center",
       mapsQuery: "NASA Goddard Space Flight Center 8800 Greenbelt Rd Greenbelt MD",
       tags: ["federal", "contractor"],
-      transit: { time: "33–43 min", transfers: 1, route: "Bus P14 → College Park–U of Md, Green Line → Greenbelt (direct, 2 stops), shuttle or short rideshare to campus" },
+      transit: { time: "33–43 min", transfers: 1, route: "Bus P14 → College Park–U of Md, Green Line → Greenbelt (direct, 1 stop), shuttle or short rideshare to campus" },
       drive:   { time: "10–16 min", route: "Kenilworth Ave → Greenbelt Rd direct" },
       friction: 5,
       note: "Goddard sits right off the Green Line at Greenbelt station — 2 stops from College Park. One of the best federal research commutes in the entire DC area. Major hub for engineers, scientists, and aerospace contractors."
@@ -607,10 +607,10 @@ const DATA = {
       name: "USDA / Beltsville Agricultural Research Center",
       mapsQuery: "USDA Beltsville Agricultural Research Center Beltsville MD",
       tags: ["federal", "contractor"],
-      transit: { time: "45–60 min", transfers: 2, route: "Bus P14 → College Park–U of Md, Green Line → College Park, bus 17K or rideshare to BARC" },
+      transit: { time: "20–30 min", transfers: 0, route: "Bus P14 → College Park–U of Md (no Green Line needed — BARC is reachable from the same stop via bus 17K or rideshare)" },
       drive:   { time: "10–18 min", route: "Kenilworth Ave → Baltimore Ave → Powder Mill Rd → BARC" },
       friction: 4,
-      note: "Closest major federal research campus to Riverdale. Under 15 min by car — a standout commute that no DC property can match."
+      note: "Corrected — College Park is already the P14's destination, so no further Green Line ride is needed. Closest major federal research campus to Riverdale; under 15 min by car."
     },
     {
       name: "Fort McNair (NDW)",
@@ -715,7 +715,7 @@ const SUMMARIES = {
   student: {
     transit: {
       verdict: "Best for: University of Maryland College Park students — no Metro needed at all.",
-      detail:  "The P14 bus to UMD's campus entrance is the easiest commute on this list. Catholic U and Howard add a Red Line transfer after the same bus ride to College Park."
+      detail:  "The P14 bus to UMD's campus entrance is the easiest commute on this list. Howard is a direct Green Line ride with no further transfer; Catholic U adds a Red Line transfer at Fort Totten."
     },
     drive: {
       verdict: "Best for: UMD, Georgetown Law, and Catholic University by car.",
@@ -725,7 +725,7 @@ const SUMMARIES = {
   healthcare: {
     transit: {
       verdict: "Best for: UM Capital Region, Holy Cross, and Capitol Hill healthcare staff.",
-      detail:  "UM Capital Region is a short drive on US-50, no bus needed. Green Line (via the P14 connection) gives access to Capitol Hill medical facilities."
+      detail:  "UM Capital Region is a short drive on US-50, no bus needed. Capitol Hill facilities (Kaiser Permanente, VA Medical Center) are reachable via Green Line with one transfer — at L'Enfant Plaza or Gallery Place depending on destination."
     },
     drive: {
       verdict: "Best for: UM Capital Region, Holy Cross, and White Oak by car.",
@@ -735,7 +735,7 @@ const SUMMARIES = {
   federal: {
     transit: {
       verdict: "Best for: Capitol Hill, DOJ, Navy Yard, and FDA White Oak staff.",
-      detail:  "After the P14 bus to College Park, the Green Line runs direct to Capitol South and Navy Yard. FDA and USDA are closer from Riverdale than any DC property, and reachable by car without the bus at all."
+      detail:  "After the P14 bus to College Park, the Green Line runs direct to Navy Yard; reaching Capitol Hill needs one more transfer at L'Enfant Plaza onto the Blue/Orange/Silver lines. FDA and USDA are closer from Riverdale than any DC property, and reachable by car without the bus at all."
     },
     drive: {
       verdict: "Best for: Capitol Hill, DOJ/FBI, Navy Yard, and NASA Goddard by car.",
