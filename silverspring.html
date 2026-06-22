@@ -246,11 +246,13 @@
         <span class="transit-step">Red Line (no transfer)</span>
       </div>
       <div class="transit-detail">
-        The Ride On <b>Route 26</b> stops near Layhill Rd &amp; Bel Pre Rd, a short walk from the property, and
-        runs directly to <b>Glenmont station</b> — the Red Line terminus. The same Route 26 bus also passes
-        <b>North Bethesda station</b>, directly across the street from <b>NRC Headquarters</b> on Rockville Pike.
-        Once on the Red Line at Glenmont, it's a direct ride with no transfer to <b>NIH</b> (Medical Center station),
-        Union Station, Judiciary Square, Gallery Place, Metro Center, Farragut North, and Dupont Circle.
+        The Ride On <b>Route 26</b> bus runs both directions from a stop near the property: toward
+        <b>Glenmont station</b> one way, and toward <b>Twinbrook</b> and <b>North Bethesda station</b> the
+        other way — North Bethesda sits directly across the street from <b>NRC Headquarters</b>. For
+        <b>NIH</b> (Medical Center station) and the Rockville/Shady Grove biotech corridor, board toward
+        Twinbrook/North Bethesda — it's a far shorter ride than detouring through Glenmont. For downtown DC
+        (Union Station, Judiciary Square, Gallery Place, Metro Center, Farragut North, Dupont Circle), board
+        toward Glenmont instead.
       </div>
     </div>
 
@@ -400,10 +402,10 @@ const DATA = {
       name: "Suburban Hospital (Johns Hopkins Medicine)",
       mapsQuery: "Suburban Hospital 8600 Old Georgetown Road Bethesda MD",
       tags: ["healthcare"],
-      transit: { time: "30–42 min", transfers: 0, route: "Walk → Ride On 26 → Medical Center station (direct, same Red Line run as NIH)" },
+      transit: { time: "28–38 min", transfers: 1, route: "Walk → Ride On 26 toward North Bethesda, Red Line → Medical Center (2 stops, same run as NIH)" },
       drive:   { time: "20–30 min", route: "Layhill Rd → I-495 → Old Georgetown Rd" },
-      friction: 4,
-      note: "Johns Hopkins-affiliated hospital, located right next to the NIH/Medical Center Red Line stop. Same one-seat ride as NIH — strong commute for clinical staff."
+      friction: 5,
+      note: "Johns Hopkins-affiliated hospital, located right next to the NIH/Medical Center Red Line stop. Board the same Route 26 bus toward North Bethesda — same short ride as NIH, strong commute for clinical staff."
     },
     {
       name: "MedStar Montgomery Medical Center",
@@ -421,10 +423,10 @@ const DATA = {
       name: "NIH Main Campus",
       mapsQuery: "National Institutes of Health 9000 Rockville Pike Bethesda MD",
       tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "28–38 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Medical Center (direct, no transfer)" },
+      transit: { time: "28–38 min", transfers: 1, route: "Walk → Ride On 26 toward North Bethesda, Red Line → Medical Center (2 stops)" },
       drive:   { time: "22–32 min", route: "Layhill Rd → I-495 → Wisconsin Ave NW → Rockville Pike" },
       friction: 5,
-      note: "One of the strongest commutes on this list. Glenmont sits at the Red Line terminus — once aboard, Medical Center station is a direct ride with no transfer. Major employer of researchers, fellows, and contractors."
+      note: "One of the strongest commutes on this list. Board the same Route 26 bus toward North Bethesda (not Glenmont — that's the opposite end of the line), then just two Red Line stops to Medical Center. Major employer of researchers, fellows, and contractors."
     },
     {
       name: "U.S. Nuclear Regulatory Commission (NRC)",
@@ -439,10 +441,10 @@ const DATA = {
       name: "Walter Reed Nat'l Military Medical Center",
       mapsQuery: "Walter Reed National Military Medical Center Bethesda MD",
       tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "28–38 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Medical Center (same stop as NIH)" },
+      transit: { time: "28–38 min", transfers: 1, route: "Walk → Ride On 26 toward North Bethesda, Red Line → Medical Center (same stop as NIH)" },
       drive:   { time: "26–38 min", route: "Layhill Rd → I-495 → Wisconsin Ave NW" },
       friction: 5,
-      note: "Shares the Medical Center Red Line stop with NIH — same direct, no-transfer commute. Strong option for military medical staff and researchers."
+      note: "Shares the Medical Center Red Line stop with NIH — board the same Route 26 bus toward North Bethesda for the short two-stop ride. Strong option for military medical staff and researchers."
     },
     {
       name: "FDA White Oak Campus",
@@ -505,19 +507,19 @@ const DATA = {
       name: "Rockville Town Center / Rockville Station",
       mapsQuery: "Rockville Town Square Rockville MD",
       tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "32–44 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Rockville (direct, no transfer)" },
+      transit: { time: "32–44 min", transfers: 1, route: "Walk → Ride On 26 toward Twinbrook, Red Line → Rockville (1 stop)" },
       drive:   { time: "20–30 min", route: "Layhill Rd → I-495 → MD-200 (ICC) → Rockville Pike" },
-      friction: 4,
-      note: "Major biotech and life sciences employment hub. Direct Red Line ride from Glenmont — no transfer required once aboard."
+      friction: 5,
+      note: "Major biotech and life sciences employment hub. Board the same Route 26 bus toward Twinbrook (not Glenmont — that's the opposite end of the line), then one Red Line stop to Rockville."
     },
     {
       name: "Shady Grove Life Sciences Center",
       mapsQuery: "Shady Grove Life Sciences Center Rockville MD",
       tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "38–52 min", transfers: 0, route: "Walk → Ride On 26 → Glenmont, Red Line → Shady Grove (direct, terminus station)" },
+      transit: { time: "38–52 min", transfers: 1, route: "Walk → Ride On 26 toward Twinbrook, Red Line → Shady Grove (2 stops, terminus station)" },
       drive:   { time: "25–38 min", route: "Layhill Rd → MD-200 (ICC) → I-270 South → Shady Grove Rd" },
       friction: 4,
-      note: "Core of the I-270 biotech corridor — home to NCI Shady Grove and Johns Hopkins Montgomery County campus. Direct Red Line ride to the terminus station, plus a short shuttle or walk."
+      note: "Core of the I-270 biotech corridor — home to NCI Shady Grove and Johns Hopkins Montgomery County campus. Board the same Route 26 bus toward Twinbrook (not Glenmont), then two Red Line stops to the terminus."
     }
   ],
 
