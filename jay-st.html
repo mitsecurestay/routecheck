@@ -586,10 +586,10 @@ const DATA = {
       name: "Virginia Tech DC (Potomac Yard)",
       mapsQuery: "Virginia Tech Innovation Campus Potomac Yard Arlington VA",
       tags: ["student"],
-      transit: { time: "45–55 min", transfers: 0, route: "Blue/Silver Line direct to Potomac Yard (no transfer, long ride)" },
+      transit: { time: "45–55 min", transfers: 1, route: "Blue Line direct to Potomac Yard (no transfer; Silver Line splits off at Rosslyn and doesn't reach this far south)" },
       drive:   { time: "30–42 min", route: "Minnesota Ave NE → DC-295 South → I-395 South → Potomac Yard exit" },
       friction: 4,
-      note: "Potomac Yard sits on the same Blue/Silver Line as Jay St's home station — no transfer, just a longer ride."
+      note: "Potomac Yard is Blue/Yellow only — Silver Line turns west at Rosslyn toward Tysons/Ashburn, not south into Virginia. Board a Blue train (or transfer to Blue at Rosslyn if you're on Silver)."
     },
     {
       name: "Georgetown Law Center",
@@ -688,19 +688,19 @@ const DATA = {
       name: "MedStar Washington Hospital Center",
       mapsQuery: "MedStar Washington Hospital Center Washington DC",
       tags: ["healthcare"],
-      transit: { time: "35–45 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green/Yellow toward Georgia Ave, bus or walk" },
+      transit: { time: "28–38 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Brookland–CUA, bus or 10 min walk" },
       drive:   { time: "22–30 min", route: "Nannie Helen Burroughs Ave NE → South Dakota Ave NE → Michigan Ave NE → Irving St NW" },
-      friction: 3,
-      note: "One transfer plus a short bus/walk leg. Driving via Michigan Ave NE is the more reliable option for shift work."
+      friction: 4,
+      note: "Same Brookland-CUA stop as the VA Medical Center next door and Catholic University. One transfer at Metro Center."
     },
     {
       name: "Children's National Hospital",
       mapsQuery: "Children's National Hospital Washington DC",
       tags: ["healthcare"],
-      transit: { time: "35–45 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green/Yellow toward Georgia Ave, bus or 15 min walk" },
+      transit: { time: "28–38 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Brookland–CUA, bus or 10 min walk" },
       drive:   { time: "20–28 min", route: "Nannie Helen Burroughs Ave NE → South Dakota Ave NE → Michigan Ave NE" },
-      friction: 3,
-      note: "Same corridor as MedStar. Driving along Michigan Ave NE is faster and more predictable than transit from this address."
+      friction: 4,
+      note: "Same Brookland-CUA stop as MedStar and the VA Medical Center — all three sit in the same Michigan Ave NW cluster."
     },
     {
       name: "Howard University Hospital",
@@ -715,10 +715,10 @@ const DATA = {
       name: "Veterans Affairs Medical Center",
       mapsQuery: "Washington DC VA Medical Center 50 Irving St NW",
       tags: ["healthcare"],
-      transit: { time: "35–45 min", transfers: 1, route: "Blue/Silver → L'Enfant Plaza, transfer Green/Yellow toward Georgia Ave, bus or walk" },
+      transit: { time: "28–38 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Brookland–CUA, free VA shuttle (Mon–Fri)" },
       drive:   { time: "22–30 min", route: "Nannie Helen Burroughs Ave NE → South Dakota Ave NE → Michigan Ave NE → Irving St NW" },
-      friction: 3,
-      note: "Same Georgia Ave/Irving St corridor as MedStar and Children's National. One transfer; driving is the steadier option."
+      friction: 4,
+      note: "The VA runs a free weekday shuttle from Brookland-CUA — the same stop already used here for Catholic University and Trinity. One transfer at Metro Center."
     },
     {
       name: "Adventist HealthCare White Oak Medical Center",
@@ -790,19 +790,19 @@ const DATA = {
       name: "Pentagon",
       mapsQuery: "The Pentagon Arlington VA",
       tags: ["federal", "contractor"],
-      transit: { time: "30–40 min", transfers: 0, route: "Blue/Silver Line direct to Pentagon (no transfer)" },
+      transit: { time: "30–40 min", transfers: 1, route: "Blue Line direct to Pentagon (no transfer; Silver Line splits off at Rosslyn and doesn't reach the Pentagon)" },
       drive:   { time: "20–30 min", route: "Minnesota Ave NE → DC-295 South → I-395 South → Pentagon exit" },
       friction: 5,
-      note: "The Pentagon sits on the same Blue/Silver Line as Jay St's home station — a direct ride, no transfer. Strong commute for contractors and DoD staff."
+      note: "Pentagon is Blue/Yellow only — board a Blue train at Benning Road, or transfer to Blue at Rosslyn if you end up on a Silver train. Strong commute for contractors and DoD staff either way."
     },
     {
       name: "Reagan National Airport (DCA)",
       mapsQuery: "Ronald Reagan Washington National Airport Arlington VA",
       tags: ["student", "healthcare", "federal", "contractor"],
-      transit: { time: "35–45 min", transfers: 0, route: "Blue/Silver Line direct to Reagan National Airport (no transfer, one stop past Pentagon)" },
+      transit: { time: "35–45 min", transfers: 1, route: "Blue Line direct to Reagan National Airport (no transfer; Silver Line splits off at Rosslyn and doesn't continue south to DCA)" },
       drive:   { time: "22–32 min", route: "Minnesota Ave NE → DC-295 South → I-395 South → GW Memorial Pkwy" },
       friction: 5,
-      note: "DCA sits on the same Blue/Silver Line as Jay St's home station — no transfer needed, just a few stops past the Pentagon. A real advantage for J-1 visa holders, traveling nurses, and contractors moving in or out."
+      note: "DCA is Blue/Yellow only — board a Blue train at Benning Road, just a few stops past the Pentagon. A real advantage for J-1 visa holders, traveling nurses, and contractors moving in or out."
     },
     {
       name: "L'Enfant Plaza Federal Campus",
@@ -907,7 +907,7 @@ const DATA = {
       name: "Walter Reed Nat'l Military Medical Center",
       mapsQuery: "Walter Reed National Military Medical Center Bethesda MD",
       tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "48–60 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Medical Center (8 stops out)" },
+      transit: { time: "48–60 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Medical Center (9 stops out)" },
       drive:   { time: "30–42 min", route: "Minnesota Ave NE → East Capitol St → 16th St NW → Wisconsin Ave NW" },
       friction: 2,
       note: "One transfer at Metro Center, then a long ride out the Red Line. Budget extra time for shift starts."
@@ -916,7 +916,7 @@ const DATA = {
       name: "NIH Main Campus",
       mapsQuery: "National Institutes of Health 9000 Rockville Pike Bethesda MD",
       tags: ["federal", "contractor", "healthcare"],
-      transit: { time: "48–60 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Medical Center (8 stops out)" },
+      transit: { time: "48–60 min", transfers: 1, route: "Blue/Silver → Metro Center, transfer Red Line → Medical Center (9 stops out)" },
       drive:   { time: "30–42 min", route: "Minnesota Ave NE → East Capitol St → 16th St NW → Wisconsin Ave NW → Rockville Pike" },
       friction: 2,
       note: "Same Medical Center stop as Walter Reed, one transfer at Metro Center. A long commute from this side of the system — plan accordingly."
