@@ -72,6 +72,32 @@
   .toggle-opt.active.drive   { background: var(--drive);   color: #fff; }
   .mode-note { font-size: 12px; color: var(--ink-light); margin-left: auto; }
 
+  /* Walk/Transit Score badges — static numbers, looked up by hand at
+     walkscore.com and pasted in below. No API key, no runtime fetch. */
+  .score-badges { display: flex; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+  .score-badge { font-size: 12px; font-weight: 600; background: var(--accent-soft); color: var(--accent);
+    padding: 4px 12px; border-radius: 20px; }
+  .score-badge strong { font-weight: 800; }
+
+  .custom-route-bar {
+    display: flex; align-items: center; gap: 10px; margin-top: 12px;
+    padding: 14px 16px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--card-radius); flex-wrap: wrap;
+  }
+  .custom-route-bar label { font-size: 13px; font-weight: 600; color: var(--ink-light); flex: 0 0 auto; }
+  .custom-route-input {
+    flex: 1 1 160px; min-width: 0; padding: 9px 12px; border: 1.5px solid var(--border);
+    border-radius: var(--pill-radius); font-family: var(--font-body); font-size: 14px; color: var(--ink);
+  }
+  .custom-route-input:focus { outline: none; border-color: var(--accent); }
+  .custom-route-btn {
+    flex: 0 0 auto; padding: 9px 16px; background: var(--accent); color: #fff; border: none;
+    border-radius: var(--pill-radius); font-family: var(--font-body); font-size: 13px; font-weight: 700;
+    cursor: pointer; white-space: nowrap; transition: opacity .15s;
+  }
+  .custom-route-btn:hover { opacity: .88; }
+  .custom-route-hint { font-size: 11px; color: var(--ink-light); flex: 1 0 100%; }
+
   .summary-panel {
     background: var(--accent); color: #fff; border-radius: var(--card-radius);
     padding: 16px 20px; margin: 20px 0; font-size: 14px; line-height: 1.5; transition: background .2s;
@@ -199,6 +225,15 @@
     <h1>Does this commute work for you?</h1>
     <p class="hero-sub">Convenient access to NIH, the NRC, and Montgomery County's biotech corridor — plus a short Red Line ride into downtown DC.</p>
 
+    <!-- Walk Score® / Transit Score® sourced from walkscore.com on 2026-06-22.
+         Walk Score's usage terms require linking any displayed score back
+         to its address page on walkscore.com — that's what these two links
+         do. Re-check periodically and update the numbers if they change. -->
+    <a class="score-badges" href="https://www.walkscore.com/score/14843-hammersmith-cir-silver-spring-md-20906" target="_blank" rel="noopener" style="text-decoration:none;">
+      <span class="score-badge">🚶 Walk Score<sup>®</sup> <strong>30</strong></span>
+      <span class="score-badge">🚌 Transit Score<sup>®</sup> <strong>35</strong></span>
+    </a>
+
     <div class="transit-callout">
       <div class="transit-callout-title">🚌 Transit Access</div>
       <div class="transit-steps">
@@ -233,6 +268,13 @@
         <button class="toggle-opt drive" data-mode="drive">🚗 Driving</button>
       </div>
       <span class="mode-note">Times are typical off-peak estimates</span>
+    </div>
+
+    <div class="custom-route-bar">
+      <label for="customAddress">Check your own address:</label>
+      <input type="text" id="customAddress" class="custom-route-input" placeholder="e.g. your workplace or any address">
+      <button class="custom-route-btn" onclick="openCustomRoute()">Get Directions →</button>
+      <span class="custom-route-hint">Opens Google Maps in a new tab using the commute mode selected above.</span>
     </div>
   </div>
 
@@ -311,11 +353,18 @@
 </div>
 
 <script>
-const ORIGIN = '14843+Hammersmith+Cir+Silver+Spring+MD+20906';
+const ORIGIN = '14843 Hammersmith Cir, Silver Spring, MD 20906';
 
 function mapsUrl(query, mode) {
   const travelmode = mode === 'drive' ? 'driving' : 'transit';
-  return `https://www.google.com/maps/dir/${ORIGIN}/${encodeURIComponent(query)}/?travelmode=${travelmode}`;
+  return `https://www.google.com/maps/dir/${encodeURIComponent(ORIGIN)}/${encodeURIComponent(query)}/?travelmode=${travelmode}`;
+}
+
+function openCustomRoute() {
+  const input = document.getElementById('customAddress');
+  const value = input.value.trim();
+  if (!value) { input.focus(); return; }
+  window.open(mapsUrl(value, currentMode), '_blank', 'noopener');
 }
 
 const DATA = {
@@ -673,6 +722,10 @@ document.querySelectorAll('.toggle-opt').forEach(btn => {
     currentMode = btn.dataset.mode;
     renderAll();
   });
+});
+
+document.getElementById('customAddress').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') openCustomRoute();
 });
 
 renderAll();
